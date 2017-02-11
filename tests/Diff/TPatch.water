@@ -1,0 +1,160 @@
+// ------------------------------------------------------------------------------
+// 
+// Copyright (C) 2005-2006 Swampware, Inc.
+// 
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// 
+// ------------------------------------------------------------------------------
+using System;
+using NUnit.Framework;
+
+namespace Swampware.BambooShoot.Differences.Tests
+{
+	/// <summary>
+	/// Summary description for TPatcher.
+	/// </summary>
+	[TestFixture]
+	public class TPatcher
+	{
+
+		public TPatcher()
+		{
+		}
+
+		[Test]
+		public void Patch1()
+		{
+			PATCH(Resources.RES_1A, Resources.RES_1A);
+		}
+
+		[Test]
+		public void Patch2()
+		{
+			PATCH(Resources.RES_1A, Resources.RES_1B);
+		}
+
+		[Test]
+		public void Patch3()
+		{
+			PATCH(Resources.RES_1A, Resources.RES_1D);
+		}
+
+		[Test]
+		public void Patch4()
+		{
+			PATCH(Resources.RES_1D, Resources.RES_1A);
+		}
+
+		[Test]
+		public void Patch5()
+		{
+			PATCH(Resources.RES_2B, Resources.RES_2A);
+		}
+
+		[Test]
+		public void Patch6()
+		{
+			PATCH(Resources.RES_2C, Resources.RES_2A);
+		}
+
+		[Test]
+		public void Patch7()
+		{
+			PATCH(Resources.RES_2A, Resources.RES_2B);
+		}
+
+		[Test]
+		public void Patch8()
+		{
+			PATCH(Resources.RES_2A, Resources.RES_2C);
+		}
+
+		[Test]
+		public void Patch9()
+		{
+			PATCH(Resources.RES_3A, Resources.RES_3B);
+		}
+
+		private void PATCH(string resource1, string resource2)
+		{
+			System.Console.WriteLine(":PRINT " + resource1 + " diff " + resource2);
+
+			System.IO.StreamReader reader1 = new System.IO.StreamReader( READ(resource1) );
+			System.IO.StreamReader reader2 = new System.IO.StreamReader( READ(resource2) );
+
+			Swampware.BambooShoot.Differences.DiffList diffList = Differ.Diff(reader1, reader2);
+
+			foreach(Swampware.BambooShoot.Differences.DiffItem diffItem in diffList)
+			{
+				switch(diffItem.Status)
+				{
+					case Swampware.BambooShoot.Differences.DiffStatus.Inserted :
+					{
+						System.Console.Write("+");
+						System.Console.Write("\t");
+						System.Console.Write(diffItem.Position);
+						System.Console.Write("\t");
+						System.Console.WriteLine(diffItem.Value.ToString());
+						break;
+					}
+					case Swampware.BambooShoot.Differences.DiffStatus.Deleted :
+					{
+						System.Console.Write("-");
+						System.Console.Write("\t");
+						System.Console.Write(diffItem.Position);
+						System.Console.Write("\t");
+						System.Console.WriteLine(diffItem.Value.ToString());
+						break;
+					}
+				}
+
+			}
+			System.Console.WriteLine();
+			System.Console.WriteLine();
+
+
+			reader1.BaseStream.Position = 0;
+			reader2.BaseStream.Position = 0;
+
+
+			System.IO.TextReader patchedReader = Patcher.Patch(reader1, diffList);
+
+
+			Swampware.BambooShoot.Text.TextReader textReader1 = new Swampware.BambooShoot.Text.TextReader(reader2);
+			Swampware.BambooShoot.Text.TextReader textReader2 = new Swampware.BambooShoot.Text.TextReader(patchedReader);
+
+			string totalline1 = "";
+			string totalline2 = "";
+
+			string line1;
+			string line2;
+			while((line1 = textReader1.ReadLine()) != null)
+			{
+				line2 = textReader2.ReadLine();
+
+				totalline1 += line1 + System.Environment.NewLine;
+				totalline2 += line2 + System.Environment.NewLine;
+
+				Assert.AreEqual(totalline1, totalline2);
+			}
+		}
+
+		public static System.IO.Stream READ(string resource)
+		{
+			return typeof(Resources).Assembly.GetManifestResourceStream(resource);
+		}
+
+	}
+}

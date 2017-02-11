@@ -1,0 +1,223 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B45444FD-CF2F-40C4-A2BE-ED0DFAF63073}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Water</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Water</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Blocks\Block.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Blocks\BlockBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Blocks\BlockDefinition.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Blocks\UserDefinedBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Comma.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Conditionals\IfBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Conditionals\SwitchBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Environment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ErrorHandling\TryCatchBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Evaluator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Functions\Function.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Functions\FunctionBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Identifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Instructions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interpreter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iteration\ForBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iteration\ForeachBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iteration\WhileBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="List.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ListComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Method.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Operator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Operators\AssignOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Operators\ConstantOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Operators\LoadBlockOperator.cs" />
+    <Compile Include="Operators\LoadMethodOperator.cs" />
+    <Compile Include="Operators\LoadOperatorOperator.cs" />
+    <Compile Include="Operators\NewOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Operators\TypeofOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Operators\VarOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Printer.cs" />
+    <Compile Include="Quote.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Statement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StatementIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StatementParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TextReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TextWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

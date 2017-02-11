@@ -1,0 +1,279 @@
+library test
+library filesystem
+library stream
+library string
+
+
+
+test parse-statement
+	var statement (parse-statement "+ a b")
+	assert.equals '(+ a b) statement.Expression
+end_test
+
+test parse
+	assert.equals '(+ a b) (parse "(+ a b)")
+end_test
+
+test parser
+	var line "echo \"some \\\" text\" again"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "echo" "${statement.Expression[0]}"
+	assert.equals "some \" text" statement.Expression[1]
+	assert.equals "again" "${statement.Expression[2]}"
+end_test
+
+test parser
+	var line "print (abc)"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "print" "${statement.Expression[0]}"
+	assert.equals "abc" "${statement.Expression[1][0]}"
+end_test
+
+test parser
+	var line "\"\\\\\" test"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "\\" statement.Expression[0]
+	assert.equals "test" "${statement.Expression[1]}"
+end_test
+
+test parser
+	var line "(test) (multiple) (lists)"
+
+	var statement (parse-statement (string-reader line))
+	assert.equals 1 statement.Expression.Count
+	assert.equals "test" "${statement.Expression[0]}"
+end_test
+
+test parser
+	var line "(test single list)"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals 3 statement.Expression.Count
+	assert.equals "test" "${statement.Expression[0]}"
+	assert.equals "single" "${statement.Expression[1]}"
+	assert.equals "list" "${statement.Expression[2]}"
+end_test
+
+test parser
+	var line "var x { Name: \"abc\" }"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "abc" statement.Expression[2]["Name"]
+end_test
+
+test parser
+	var line "var x { Name: \"a b c\" Scope: local }"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "a b c" statement.Expression[2]["Name"]
+	assert.equals "local" "${statement.Expression[2][\"Scope\"]}"
+end_test
+
+test parser
+	var line "var x { Name: \"abc\" Items:(a b c) }"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "abc" statement.Expression[2]["Name"]
+	assert.equals "a" "${statement.Expression[2][\"Items\"][0]}"
+end_test
+
+test parser
+	var line "((aaa) (bbb) (ccc))"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "aaa" "${statement.Expression[0][0]}"
+	assert.equals "bbb" "${statement.Expression[1][0]}"
+	assert.equals "ccc" "${statement.Expression[2][0]}"
+end_test
+
+test parser
+	var line "((aaa) \r\n (bbb) \n (ccc))"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "aaa" "${statement.Expression[0][0]}"
+	assert.equals "bbb" "${statement.Expression[1][0]}"
+	assert.equals "ccc" "${statement.Expression[2][0]}"
+end_test
+
+test parser
+	var line "var x { Name: \r\n \"a b c\" \n\n Scope: local \r\n}"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "a b c" statement.Expression[2]["Name"]
+	assert.equals "local" "${statement.Expression[2][\"Scope\"]}"
+end_test
+
+test parser
+	var line "echo \"some \\\\ text\" again"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "echo" "${statement.Expression[0]}"
+	assert.equals "some \\ text" statement.Expression[1]
+	assert.equals "again" "${statement.Expression[2]}"
+end_test
+
+test parser
+	var line "print '(a b c)"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "print" "${statement.Expression[0]}"
+	assert.equals "a" "${statement.Expression[1].Expression[0]}"
+end_test
+
+test parser
+	var line "var VAR (MyCommand val1 val2 val3)"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "var" "${statement.Expression[0]}"
+	assert.equals "VAR" "${statement.Expression[1]}"
+	assert.equals "MyCommand" "${statement.Expression[2][0]}"
+	assert.equals "val1" "${statement.Expression[2][1]}"
+	assert.equals "val2" "${statement.Expression[2][2]}"
+	assert.equals "val3" "${statement.Expression[2][3]}"
+end_test
+
+test parser
+	var line "var VAR ( MyCommand \"val1\" \"val2\" \"val3\" )"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "var" "${statement.Expression[0]}"
+	assert.equals "VAR" "${statement.Expression[1]}"
+	assert.equals "MyCommand" "${statement.Expression[2][0]}"
+	assert.equals "val1" "${statement.Expression[2][1]}"
+	assert.equals "val2" "${statement.Expression[2][2]}"
+	assert.equals "val3" "${statement.Expression[2][3]}"
+end_test
+
+test parser
+	var line "var \"VAR\" (MyCommand \"val1\" \"val2\" \"val3\")"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "var" "${statement.Expression[0]}"
+	assert.equals "VAR" statement.Expression[1]
+	assert.equals "MyCommand" "${statement.Expression[2][0]}"
+	assert.equals "val1" "${statement.Expression[2][1]}"
+	assert.equals "val2" "${statement.Expression[2][2]}"
+	assert.equals "val3" "${statement.Expression[2][3]}"
+end_test
+
+test parser
+	var line "var VAR (MyCommand val1 val2 (Command2 val3))"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "var" "${statement.Expression[0]}"
+	assert.equals "VAR" "${statement.Expression[1]}"
+	assert.equals "MyCommand" "${statement.Expression[2][0]}"
+	assert.equals "val1" "${statement.Expression[2][1]}"
+	assert.equals "val2" "${statement.Expression[2][2]}"
+	assert.equals "Command2" "${statement.Expression[2][3][0]}"
+	assert.equals "val3" "${statement.Expression[2][3][1]}"
+end_test
+
+test parser
+	var line "var VAR \"\\\\\\\"\""
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "var" "${statement.Expression[0]}"
+	assert.equals "VAR" "${statement.Expression[1]}"
+	assert.equals "\\\"" statement.Expression[2]
+end_test
+
+test parser
+	var line "echo 5"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "echo" "${statement.Expression[0]}"
+	assert.equals 5 statement.Expression[1]
+end_test
+
+test parser
+	var line "print 1"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "print" "${statement.Expression[0]}"
+	assert.equals 1 statement.Expression[1]
+end_test
+
+test parser
+	var line "echo 5.5"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "echo" "${statement.Expression[0]}"
+	assert.equals 5.5 statement.Expression[1]
+end_test
+
+test parser
+	var line "echo true"
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "echo" "${statement.Expression[0]}"
+	assert.equals true statement.Expression[1]
+end_test
+
+test parser
+	var line "echo \"true\""
+
+	var statement (parse-statement (string-reader line))
+
+	assert.equals "echo" (statement.Expression[0].ToString)
+	assert.equals "true" statement.Expression[1]
+end_test
+
+test parser
+	var path "samples/Sample1.water"
+
+	var x (parse-script (stream-reader (file.to-stream path)))
+	assert.equals (generate x) (generate (parse-script (string-reader (generate x))))
+end_test
+
+test parser
+	var path "samples/Sample2.water"
+
+	var x (parse-script (stream-reader (file.to-stream path)))
+	assert.equals (generate x) (generate (parse-script (string-reader (generate x))))
+end_test
+
+test parser
+	var path "samples/Sample3.water"
+
+	var x (parse-script (stream-reader (file.to-stream path)))
+	assert.equals (generate x) (generate (parse-script (string-reader (generate x))))
+end_test
+
+test parser
+	var path "samples/Sample4.water"
+
+	var x (parse-script (stream-reader (file.to-stream path)))
+	assert.equals (generate x) (generate (parse-script (string-reader (generate x))))
+end_test
+
+test parser
+	var path "samples/Sample5.water"
+
+	var x (parse-script (stream-reader (file.to-stream path)))
+	assert.equals (generate x) (generate (parse-script (string-reader (generate x))))
+end_test

@@ -1,0 +1,2 @@
+var temp '{ A: "a" B: "b" C: "c" }
+print temp

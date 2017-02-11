@@ -1,0 +1,11 @@
+LineGraph
+{
+	AxisForeColor: White;
+	AxisLineColor: White;
+	Colors: CornflowerBlue OrangeRed Green Purple Yellow Blue DarkOrange Teal Red YellowGreen Indigo Orange;
+	GridLineColor: Silver;
+	LineWidth: 2;
+	Padding: 10;
+	ShowPoints: false;
+	TickSize: 10;
+}

@@ -1,0 +1,14 @@
+library math
+
+
+
+var alpha "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+print alpha
+= alpha "abcdefghijklmnopqrstuvwxyz"
+print alpha
+
+var a 3
+print a
+= a 5
+= a (+ 2 (+ 2 1))
+print a

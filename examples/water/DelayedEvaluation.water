@@ -1,0 +1,23 @@
+library math
+
+
+;
+; Delayed evaluation of expressions
+;
+var x '(+ 1 2)
+var y '(* 3 ,x)
+print y
+print ,y
+print ,(* 3 (+ 1 2))
+
+
+
+;
+; Delayed evaluation of function parameters
+;
+function xyz 'n
+	print n
+	print ,n
+end_function
+
+xyz (+ 1 2)

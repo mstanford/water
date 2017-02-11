@@ -1,0 +1,68 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CF3C2780-9491-4504-B8D4-09A4639CC65E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bamboo.Jobs</RootNamespace>
+    <AssemblyName>Bamboo.Jobs</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Day.cs" />
+    <Compile Include="Job.cs" />
+    <Compile Include="JobReader.cs" />
+    <Compile Include="JobType.cs" />
+    <Compile Include="JobWriter.cs" />
+    <Compile Include="Process.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scheduler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bamboo.DataStructures\Bamboo.DataStructures.csproj">
+      <Project>{C7230AAE-DC2A-4FF8-954A-0DE335143AE1}</Project>
+      <Name>Bamboo.DataStructures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bamboo.Sql2\Bamboo.Sql2.csproj">
+      <Project>{C2E15E60-B864-480F-B631-F783FBECC751}</Project>
+      <Name>Bamboo.Sql2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bamboo.Threading\Bamboo.Threading.csproj">
+      <Project>{6704E226-3660-4311-9DDA-AEFD65184A88}</Project>
+      <Name>Bamboo.Threading</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

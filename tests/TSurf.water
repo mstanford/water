@@ -1,0 +1,141 @@
+library test
+
+include "..\\scripts\\Surf.water"
+
+assembly Surf "..\\source\\Surf\\bin\\Debug\\Surf.dll"
+
+
+
+test Compare
+	var a (surf.tuple '(1 2))
+	var b (surf.tuple '(1))
+	assert.equals (surf._compare a b) 1
+end_test
+
+test Compare
+	var a (surf.tuple '(1 2))
+	var b 1
+	assert.equals (surf._compare a b) 1
+end_test
+
+test Compare
+	var a (surf.tuple '(1 2))
+	var b (surf.tuple '(1 2 3))
+	assert.equals (surf._compare a b) -1
+end_test
+
+test Compare
+	var a (surf.tuple '(1 2))
+	var b (surf.tuple '(2 3))
+	assert.equals (surf._compare a b) -1
+end_test
+
+test Compare
+	var a (surf.set '(1 2))
+	var b (surf.tuple '(1 2))
+	assert.equals (surf._compare a b) 0
+end_test
+
+test Compare
+	var a (surf.set '())
+	var b (surf.tuple '())
+	assert.equals (surf._compare a b) 0
+end_test
+
+
+
+test Print Set
+	var a (surf.set '("a" "b" "c"))
+	assert.equals (surf.print a) "{ \"a\", \"b\", \"c\" }"
+end_test
+
+test Print Tuple
+	var a (surf.tuple '(1 2))
+	assert.equals (surf.print a) "( 1, 2 )"
+end_test
+
+test Print Relation
+	var tuples '()
+	tuples.Add (surf.tuple '( "a" 97 ))
+	tuples.Add (surf.tuple '( "b" 98 ))
+	tuples.Add (surf.tuple '( "c" 99 ))
+	var relation (surf.set tuples)
+	assert.equals (surf.print relation) "{ ( \"a\", 97 ), ( \"b\", 98 ), ( \"c\", 99 ) }"
+end_test
+
+
+
+test Union
+	var a (surf.set '("a" "b" "c"))
+	var b (surf.set '("b" "c" "d"))
+	var c (surf.union a b)
+	assert.equals c.Count 4
+	assert.equals c[0] "a"
+	assert.equals c[1] "b"
+	assert.equals c[2] "c"
+	assert.equals c[3] "d"
+end_test
+
+test Intersection
+	var a (surf.set '("a" "b" "c"))
+	var b (surf.set '("b" "c" "d"))
+	var c (surf.intersection a b)
+	assert.equals c.Count 2
+	assert.equals c[0] "b"
+	assert.equals c[1] "c"
+end_test
+
+test Difference
+	var a (surf.set '("a" "b" "c"))
+	var b (surf.set '("b" "c" "d"))
+	var c (surf.difference a b)
+	assert.equals c.Count 1
+	assert.equals c[0] "a"
+end_test
+
+test Domain
+	var tuples '()
+	tuples.Add (surf.tuple '( "a" 97 ))
+	tuples.Add (surf.tuple '( "b" 98 ))
+	tuples.Add (surf.tuple '( "c" 99 ))
+	var fn (surf.set tuples)
+	var domain (surf.domain fn)
+	assert.equals (surf.print domain) "{ \"a\", \"b\", \"c\" }"
+end_test
+
+test Range
+	var tuples '()
+	tuples.Add (surf.tuple '( "a" 97 ))
+	tuples.Add (surf.tuple '( "b" 98 ))
+	tuples.Add (surf.tuple '( "c" 99 ))
+	var fn (surf.set tuples)
+	var range (surf.range fn)
+	assert.equals (surf.print range) "{ 97, 98, 99 }"
+end_test
+
+test Transpose
+	var tuples '()
+	tuples.Add (surf.tuple '( "a" 97 ))
+	tuples.Add (surf.tuple '( "b" 98 ))
+	tuples.Add (surf.tuple '( "c" 99 ))
+	var fn (surf.set tuples)
+	var fn2 (surf.transpose fn)
+	assert.equals (surf.print fn2) "{ ( 97, \"a\" ), ( 98, \"b\" ), ( 99, \"c\" ) }"
+end_test
+
+test Compose
+	var tuples '()
+	tuples.Add (surf.tuple '( "a" 97 ))
+	tuples.Add (surf.tuple '( "b" 98 ))
+	tuples.Add (surf.tuple '( "c" 99 ))
+	var a (surf.set tuples)
+
+	= tuples '()
+	tuples.Add (surf.tuple '( 97 61 ))
+	tuples.Add (surf.tuple '( 98 62 ))
+	tuples.Add (surf.tuple '( 99 63 ))
+	var b (surf.set tuples)
+
+	var c (surf.compose a b)
+	assert.equals (surf.print c) "{ ( \"a\", 61 ), ( \"b\", 62 ), ( \"c\", 63 ) }"
+end_test

@@ -1,0 +1,45 @@
+;
+; Build.water
+;
+library Water
+library VisualStudio
+library Inspector
+
+
+var path "source\\water.sln"
+
+
+inspector.csharp.inspect-solution (file.get-folder path)
+
+
+;var build-results-11 (visual-studio.sln2005.compile path "DEBUG" "bin\\1.1" (new (typeof Bamboo.CSharp.Compilers.CSharp11.CSharp11Compiler Bamboo.CSharp)))
+;foreach file in (folder.get-files "scripts")
+;	file.copy file "bin\\1.1\\scripts\\${(file.get-name file)}"
+;end_foreach
+;foreach file in (folder.get-files "scripts\\libraries")
+;	file.copy file "bin\\1.1\\scripts\\libraries\\${(file.get-name file)}"
+;end_foreach
+
+var build-results-20 (visual-studio.sln2005.compile path "DEBUG" "bin\\2.0" (new (typeof Bamboo.CSharp.Compilers.CSharp20.CSharp20Compiler Bamboo.CSharp)))
+foreach file in (folder.get-files "scripts")
+	file.copy file "bin\\2.0\\scripts\\${(file.get-name file)}"
+end_foreach
+foreach file in (folder.get-files "scripts\\libraries")
+	file.copy file "bin\\2.0\\scripts\\libraries\\${(file.get-name file)}"
+end_foreach
+
+print ""
+print "BUILD REPORT"
+print ""
+print "Errors: ${build-results-20.Errors.Count}"
+print "Warnings: ${build-results-20.Warnings.Count}"
+print ""
+foreach build-error in build-results-20.Errors
+	if(! build-error.IsWarning)
+		print build-error.Text
+		print ""
+	end_if
+end_foreach
+if(== build-results-20.Errors.Count 0)
+	exit
+end_if

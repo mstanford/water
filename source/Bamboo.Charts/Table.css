@@ -1,0 +1,27 @@
+Table
+{
+	BackColor: White;
+	BorderColor: Black;
+	BorderWidth: 1;
+	Font: "Courier New" 11;
+	ForeColor: Black;
+	OuterBorder: true;
+	VerticalBorder: true;
+	HorizontalBorder: true;
+	Padding: 1;
+	Precision: 2;
+}
+
+Header
+{
+	BackColor: Chartreuse;
+	ForeColor: Green;
+	TextAlign: TopLeft;
+}
+
+Cell
+{
+	BackColor: White;
+	ForeColor: Black;
+	TextAlign: TopRight;
+}

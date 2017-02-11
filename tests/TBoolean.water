@@ -1,0 +1,44 @@
+library test
+
+
+
+test boolean
+
+	;
+	; and
+	;
+	assert.true (and TRUE TRUE)
+	assert.false (and FALSE TRUE)
+	assert.false (and TRUE FALSE)
+	assert.false (and FALSE FALSE)
+
+	;
+	; equals
+	;
+	assert.true (equals 5 5)
+
+	;
+	; not
+	;
+	assert.true (not FALSE)
+	assert.false (not TRUE)
+
+	;
+	; or
+	;
+	assert.true (or TRUE TRUE)
+	assert.true (or FALSE TRUE)
+	assert.true (or TRUE FALSE)
+	assert.false (or FALSE FALSE)
+
+	;
+	; null
+	;
+	assert.true (is-null null)
+
+	;
+	; not-null
+	;
+	assert.true (not (is-null 5))
+
+end_test

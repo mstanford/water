@@ -1,0 +1,41 @@
+library Parsing
+
+
+
+var tokens '(
+	( COMMA               "," )
+
+	( NEWLINE             (| "\r\n" "\n") )
+
+	( BOOLEAN             (| "true" "True" "false" "False") )
+
+	( INTEGER             (| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) )
+	( FLOAT               ((| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) "." (+ (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))) )
+
+	( STRING               (* (^ "\"" "," "\r" "\n") ) )
+	( QUOTED_STRING        ("\"" (* (| (| (^ "\"" "\\") "/" "-") ("\\" (.)) ) ) "\"") )
+)
+generate-csharp-tokenizer tokens "Csv" "Bamboo.Csv2" ".\\"
+
+
+
+var productions '(
+	( Row   (CellList RowEnd) )
+	( Row   EPSILON           )
+
+	( RowEnd   NEWLINE )
+	( RowEnd   EOF     )
+
+	( CellList   (Cell CellListTail) )
+
+	( CellListTail   (COMMA Cell CellListTail) )
+	( CellListTail   EPSILON )
+
+	( Cell   BOOLEAN )
+	( Cell   INTEGER )
+	( Cell   FLOAT )
+	( Cell   STRING )
+	( Cell   QUOTED_STRING )
+	( Cell   EPSILON )
+)
+generate-csharp-parser tokens productions "Csv" "Bamboo.Csv2" ".\\"

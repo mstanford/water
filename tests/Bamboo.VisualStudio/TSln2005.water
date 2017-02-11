@@ -1,0 +1,304 @@
+library test
+library filesystem
+library string
+
+
+
+test sln2005
+	var path "samples/Sln2005/ACLChange.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/AsynchronousTasks.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/ClientConfiguration.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/Compression.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/ConsoleSample.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/CreatingMasterDetails.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/DriveInfoSample.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/FTPSample.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/GenericsSample.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/NetworkSample.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/PlayingSounds.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/RegularExpressions.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/StopwatchSample.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/Transactions.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingBindingNavigator.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingBindingSource.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingClickOnce.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingDataGridView.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingLayoutPanels.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingMaskedTextBox.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingMenusStatusStripsToolStrips.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingSplitContainer.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test
+
+test sln2005
+	var path "samples/Sln2005/UsingWebBrowser.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var stream (memory-stream)
+	var encoding ((property (typeof System.Text.Encoding) UTF8))
+	var writer (new (typeof System.IO.StreamWriter) stream encoding)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	= stream.Position 0
+	assert.equals s (stream.to-string stream)
+end_test

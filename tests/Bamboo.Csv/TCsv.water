@@ -1,0 +1,173 @@
+library test
+library csv
+
+
+
+test csv-parser
+	var s "Number\n\"123\""
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 2 table.Count
+	assert.equals 1 table[0].Count
+	assert.equals 123 table[1][0]
+end_test
+
+test csv-parser
+	var s "\"Number\"\r\n\"5\"\r\n"
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 2 table.Count
+	assert.equals 1 table[1].Count
+	assert.equals 5 table[1][0]
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csv-parser
+	var s "\"Number\",\"Number2\"\r\n\"3\",\"4\"\r\n"
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 2 table.Count
+	assert.equals 2 table[1].Count
+	assert.equals 3 table[1][0]
+	assert.equals 4 table[1][1]
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csv-parser
+	var s "\"Number\",\"Number2\"\r\n\"4\",\"3\"\r\n\"2\",\"5\"\r\n\"6\",\"1\"\r\n"
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 4 table.Count
+	assert.equals 2 table[1].Count
+	assert.equals 2 table[2].Count
+	assert.equals 2 table[3].Count
+	assert.equals 4 table[1][0]
+	assert.equals 3 table[1][1]
+	assert.equals 2 table[2][0]
+	assert.equals 5 table[2][1]
+	assert.equals 6 table[3][0]
+	assert.equals 1 table[3][1]
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csv-parser
+	var s "\"Letter\"\r\n\"a\"\r\n"
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 2 table.Count
+	assert.equals 1 table[1].Count
+	assert.equals "a" table[1][0]
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csv-parser
+	var s "\"Letter\",\"Letter2\"\r\n\"a\",\"b\"\r\n"
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 2 table.Count
+	assert.equals 2 table[0].Count
+	assert.equals "a" table[1][0]
+	assert.equals "b" table[1][1]
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csv-parser
+	var s "\"Letter\",\"Letter2\"\r\n\"a\",\"b\"\r\n\"c\",\"d\"\r\n\"e\",\"f\"\r\n"
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 4 table.Count
+	assert.equals 2 table[1].Count
+	assert.equals 2 table[2].Count
+	assert.equals 2 table[3].Count
+	assert.equals "a" table[1][0]
+	assert.equals "b" table[1][1]
+	assert.equals "c" table[2][0]
+	assert.equals "d" table[2][1]
+	assert.equals "e" table[3][0]
+	assert.equals "f" table[3][1]
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csv-parser
+	var s "\"Letter\",\"Letter2\"\r\n\"a\"\"a\",\"b\"\r\n\"c\",\"d\"\r\n\"e\",\"f\"\r\n"
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 4 table.Count
+	assert.equals 2 table[1].Count
+	assert.equals 2 table[2].Count
+	assert.equals 2 table[3].Count
+	assert.equals "a\"a" table[1][0]
+	assert.equals "b" table[1][1]
+	assert.equals "c" table[2][0]
+	assert.equals "d" table[2][1]
+	assert.equals "e" table[3][0]
+	assert.equals "f" table[3][1]
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csv-parser
+	var s "\"Letter\",\"Letter2\"\r\n\"a	\r\n1\",\"	b\"\r\n\"c,\",\"d\"\r\n\"e\",\"f\"\r\n"
+
+	var reader (new (typeof System.IO.StringReader) s)
+	var table ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+
+	assert.equals 4 table.Count
+	assert.equals 2 table[1].Count
+	assert.equals 2 table[2].Count
+	assert.equals 2 table[3].Count
+	assert.equals "a\t\r\n1" table[1][0]
+	assert.equals "\tb" table[1][1]
+	assert.equals "c," table[2][0]
+	assert.equals "d" table[2][1]
+	assert.equals "e" table[3][0]
+	assert.equals "f" table[3][1]
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+	assert.equals s (writer.ToString)
+end_test

@@ -1,0 +1,28 @@
+library math
+
+
+;
+; Fibonacci
+;
+; 5/10/07
+;
+
+print "usage: print (fibonacci 4)"
+
+function fibonacci n
+	var sequence '()
+	for i from 0 to n
+		sequence.Add (calc-fibonacci i)
+	end_for
+	return sequence
+end_function
+
+function calc-fibonacci n
+	if(equals n 0)
+		return 0
+	else_if(equals n 1)
+		return 1
+	else_if(> n 1)
+		return (+ (calc-fibonacci (- n 1)) (calc-fibonacci (- n 2)))
+	end_if
+end_function

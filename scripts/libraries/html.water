@@ -1,0 +1,15 @@
+library Water
+
+
+
+module html
+
+	function encode s
+		return ((method (typeof System.Web.HttpUtility System.Web) HtmlEncode) s)
+	end_function
+
+	function decode s
+		return ((method (typeof System.Web.HttpUtility System.Web) HtmlDecode) s)
+	end_function
+
+end_module

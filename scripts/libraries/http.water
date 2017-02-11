@@ -1,0 +1,62 @@
+library Water
+library string
+
+
+
+;
+; http
+;
+module http
+
+	function get url
+		var httpWebRequest ((method (typeof System.Net.WebRequest System) Create) url)
+		= httpWebRequest.Method "GET"
+		var httpWebResponse (httpWebRequest.GetResponse)
+		var stream (httpWebResponse.GetResponseStream)
+
+		var transfer-encoding httpWebResponse.Headers["Transfer-Encoding"]
+		if(not-null transfer-encoding)
+			if(== (string.to-lower transfer-encoding) "chunked")
+				var stream2 (new (typeof System.IO.MemoryStream))
+				var n (stream.ReadByte)
+				while(!= n -1)
+					stream2.WriteByte (to-byte n)
+					= n (stream.ReadByte)
+				end_while
+				return (stream2.ToArray)
+			end_if
+		end_if
+
+		var bytes (byte-array (to-int httpWebResponse.ContentLength))
+		var offset 0
+		var count bytes.Length
+		var bytesRead (stream.Read bytes offset count)
+		while(> count 0)
+			= offset (+ offset bytesRead)
+			= count (- count bytesRead)
+			= bytesRead (stream.Read bytes offset count)
+		end_while
+		httpWebResponse.Close
+		return bytes
+	end_function
+
+	function post url content-type bytes
+		var httpWebRequest ((method (typeof System.Net.WebRequest System) Create) url)
+		= httpWebRequest.Method "POST"
+		= httpWebRequest.ContentType content-type
+		= httpWebRequest.ContentLength bytes.Length
+		var stream (httpWebRequest.GetRequestStream)
+		stream.Write bytes 0 bytes.Length
+		stream.Close
+		var httpWebResponse (httpWebRequest.GetResponse)
+		httpWebResponse.Close
+	end_function
+
+	function delete url
+		var httpWebRequest ((method (typeof System.Net.WebRequest System) Create) url)
+		= httpWebRequest.Method "DELETE"
+		var httpWebResponse (httpWebRequest.GetResponse)
+		httpWebResponse.Close
+	end_function
+
+end_module

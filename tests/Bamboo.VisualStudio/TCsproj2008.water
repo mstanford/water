@@ -1,0 +1,40 @@
+library test
+library filesystem
+library string
+
+
+
+assembly Bamboo.VisualStudio "C:\\Working\\Water\\source\\Bamboo.VisualStudio\\bin\\Debug\\Bamboo.VisualStudio.dll"
+
+test csproj2008
+	foreach path in (folder.get-files "samples\\Csproj2008")
+		if(string.ends-with path ".csproj")
+print path
+			var project ((method (typeof Bamboo.VisualStudio.VisualStudio2008.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+			var s (file.to-string path)
+			var writer (string-writer)
+			((method (typeof Bamboo.VisualStudio.VisualStudio2008.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+
+var r1 (string-reader s)
+var r2 (string-reader (writer.ToString))
+
+for i from 1 to 1000
+	var l1 (r1.ReadLine)
+	var l2 (r2.ReadLine)
+	if(and (is-null l1) (is-null l2))
+		break
+	end_if
+
+	print "${i}   ${path}"
+	print l1
+	print l2
+	print ""
+	assert.equals l1 l2
+end_for
+
+print s
+print (writer.ToString)
+			assert.equals s (writer.ToString)
+		end_if
+	end_foreach
+end_test

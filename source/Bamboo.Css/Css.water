@@ -1,0 +1,51 @@
+library Parsing
+
+
+
+var tokens '(
+	( LEFT_CURLY_BRACE    "{" )
+	( RIGHT_CURLY_BRACE   "}" )
+	( COLON               ":" )
+	( SEMICOLON           ";" )
+	( LEFT_BRACKET        "[" )
+	( RIGHT_BRACKET       "]" )
+	( EQUALS              "=" )
+
+	( BOOLEAN             (| "true" "false") )
+
+	( IDENTIFIER          (+ (| "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z") ) )
+	( STRING              ("\"" (+ (| " " "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z") ) "\"") )
+
+	( INTEGER             (| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) )
+	( FLOAT               ((| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) "." (+ (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))) )
+)
+generate-csharp-tokenizer tokens "Css" "Bamboo.Css" "."
+
+
+
+var productions '(
+	( RuleList   (Rule RuleList) )
+	( RuleList   EPSILON         )
+
+	( Rule   (Selector LEFT_CURLY_BRACE DeclarationList RIGHT_CURLY_BRACE) )
+
+	( Selector   (IDENTIFIER SelectorTail) )
+
+	( SelectorTail   (LEFT_BRACKET IDENTIFIER EQUALS STRING RIGHT_BRACKET) )
+	( SelectorTail   EPSILON                                               )
+
+	( DeclarationList   (Declaration DeclarationList) )
+	( DeclarationList   EPSILON                       )
+
+	( Declaration   (IDENTIFIER COLON ValueList SEMICOLON) )
+
+	( ValueList   (Value ValueList) )
+	( ValueList   EPSILON           )
+
+	( Value   IDENTIFIER )
+	( Value   STRING )
+	( Value   INTEGER )
+	( Value   FLOAT )
+	( Value   BOOLEAN )
+)
+generate-csharp-parser tokens productions "Css" "Bamboo.Css" "."

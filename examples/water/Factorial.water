@@ -1,0 +1,18 @@
+library math
+
+
+;
+; Factorial
+;
+; 5/10/07
+;
+
+print "usage: print (factorial 4)"
+
+function factorial n
+	if(equals n 0)
+		return 1
+	else
+		return (* n (factorial (- n 1)))
+	end_if
+end_function

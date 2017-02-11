@@ -1,0 +1,271 @@
+library reflection
+library test
+
+assembly Surf "..\\..\\source\\Surf\\bin\\Debug\\Surf.dll"
+assembly Bamboo.Parsing "..\\..\\source\\Bamboo.Parsing\\bin\\Debug\\Bamboo.Parsing.dll"
+
+include "..\\..\\scripts\\libraries\\Parsing.water"
+include "..\\..\\scripts\\libraries\\Surf.water"
+
+
+
+
+
+var PLP_productions '(
+	( program		(stmt_list $$)								)
+	( stmt_list		(stmt stmt_list)							)
+	( stmt_list		EPSILON										)
+	( stmt			(id := expr)								)
+	( stmt			(read id)									)
+	( stmt			(write expr)								)
+	( expr			(term term_tail)							)
+	( term_tail		(add_op term term_tail)						)
+	( term_tail		EPSILON										)
+	( term			(factor factor_tail)						)
+	( factor_tail	(mult_op factor factor_tail)				)
+	( factor_tail	EPSILON										)
+	( factor		( LEFT_PAREN expr RIGHT_PAREN)				)
+	( factor		id											)
+	( factor		number										)
+	( add_op		+											)
+	( add_op		-											)
+	( mult_op		*											)
+	( mult_op		/											)
+)
+
+; PLP p.75
+test First
+
+	var grammar (create-grammar PLP_productions)
+	var FIRST ((method (typeof Bamboo.Parsing.LL.Algorithms Bamboo.Parsing) First) grammar)
+
+	var F (surf.apply FIRST "program")
+	assert.equals F.Count 4
+	assert.equals F[0] "$$"
+	assert.equals F[1] "id"
+	assert.equals F[2] "read"
+	assert.equals F[3] "write"
+
+	= F (surf.apply FIRST "stmt_list")
+	assert.equals F.Count 4
+	assert.equals F[0] "EPSILON"
+	assert.equals F[1] "id"
+	assert.equals F[2] "read"
+	assert.equals F[3] "write"
+
+	= F (surf.apply FIRST "stmt")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "read"
+	assert.equals F[2] "write"
+
+	= F (surf.apply FIRST "expr")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FIRST "term_tail")
+	assert.equals F.Count 3
+	assert.equals F[0] "-"
+	assert.equals F[1] "+"
+	assert.equals F[2] "EPSILON"
+
+	= F (surf.apply FIRST "term")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FIRST "factor_tail")
+	assert.equals F.Count 3
+	assert.equals F[0] "*"
+	assert.equals F[1] "/"
+	assert.equals F[2] "EPSILON"
+
+	= F (surf.apply FIRST "factor")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FIRST "add_op")
+	assert.equals F.Count 2
+	assert.equals F[0] "-"
+	assert.equals F[1] "+"
+
+	= F (surf.apply FIRST "mult_op")
+	assert.equals F.Count 2
+	assert.equals F[0] "*"
+	assert.equals F[1] "/"
+
+end_test
+
+; PLP p.75
+test Follow
+
+	var grammar (create-grammar PLP_productions)
+	var FIRST ((method (typeof Bamboo.Parsing.LL.Algorithms Bamboo.Parsing) First) grammar)
+	var FOLLOW ((method (typeof Bamboo.Parsing.LL.Algorithms Bamboo.Parsing) Follow) grammar FIRST)
+
+	var F (surf.apply FOLLOW "id")
+	assert.equals F.Count 10
+	assert.equals F[0] "-"
+	assert.equals F[1] "$$"
+	assert.equals F[2] "*"
+	assert.equals F[3] "/"
+	assert.equals F[4] ":="
+	assert.equals F[5] "+"
+	assert.equals F[6] "id"
+	assert.equals F[7] "read"
+	assert.equals F[8] "RIGHT_PAREN"
+	assert.equals F[9] "write"
+
+	= F (surf.apply FOLLOW "number")
+	assert.equals F.Count 9
+	assert.equals F[0] "-"
+	assert.equals F[1] "$$"
+	assert.equals F[2] "*"
+	assert.equals F[3] "/"
+	assert.equals F[4] "+"
+	assert.equals F[5] "id"
+	assert.equals F[6] "read"
+	assert.equals F[7] "RIGHT_PAREN"
+	assert.equals F[8] "write"
+
+	= F (surf.apply FOLLOW "read")
+	assert.equals F.Count 1
+	assert.equals F[0] "id"
+
+	= F (surf.apply FOLLOW "write")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FOLLOW "LEFT_PAREN")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FOLLOW "RIGHT_PAREN")
+	assert.equals F.Count 9
+	assert.equals F[0] "-"
+	assert.equals F[1] "$$"
+	assert.equals F[2] "*"
+	assert.equals F[3] "/"
+	assert.equals F[4] "+"
+	assert.equals F[5] "id"
+	assert.equals F[6] "read"
+	assert.equals F[7] "RIGHT_PAREN"
+	assert.equals F[8] "write"
+
+	= F (surf.apply FOLLOW ":=")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FOLLOW "+")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FOLLOW "-")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FOLLOW "*")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FOLLOW "/")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FOLLOW "$$")
+	assert.equals F.Count 0
+
+	= F (surf.apply FOLLOW "program")
+	assert.equals F.Count 0
+
+	= F (surf.apply FOLLOW "stmt_list")
+	assert.equals F.Count 1
+	assert.equals F[0] "$$"
+
+	= F (surf.apply FOLLOW "stmt")
+	assert.equals F.Count 4
+	assert.equals F[0] "$$"
+	assert.equals F[1] "id"
+	assert.equals F[2] "read"
+	assert.equals F[3] "write"
+
+	= F (surf.apply FOLLOW "expr")
+	assert.equals F.Count 5
+	assert.equals F[0] "$$"
+	assert.equals F[1] "id"
+	assert.equals F[2] "read"
+	assert.equals F[3] "RIGHT_PAREN"
+	assert.equals F[4] "write"
+
+	= F (surf.apply FOLLOW "term_tail")
+	assert.equals F.Count 5
+	assert.equals F[0] "$$"
+	assert.equals F[1] "id"
+	assert.equals F[2] "read"
+	assert.equals F[3] "RIGHT_PAREN"
+	assert.equals F[4] "write"
+
+	= F (surf.apply FOLLOW "term")
+	assert.equals F.Count 7
+	assert.equals F[0] "-"
+	assert.equals F[1] "$$"
+	assert.equals F[2] "+"
+	assert.equals F[3] "id"
+	assert.equals F[4] "read"
+	assert.equals F[5] "RIGHT_PAREN"
+	assert.equals F[6] "write"
+
+	= F (surf.apply FOLLOW "factor_tail")
+	assert.equals F.Count 7
+	assert.equals F[0] "-"
+	assert.equals F[1] "$$"
+	assert.equals F[2] "+"
+	assert.equals F[3] "id"
+	assert.equals F[4] "read"
+	assert.equals F[5] "RIGHT_PAREN"
+	assert.equals F[6] "write"
+
+	= F (surf.apply FOLLOW "factor")
+	assert.equals F.Count 9
+	assert.equals F[0] "-"
+	assert.equals F[1] "$$"
+	assert.equals F[2] "*"
+	assert.equals F[3] "/"
+	assert.equals F[4] "+"
+	assert.equals F[5] "id"
+	assert.equals F[6] "read"
+	assert.equals F[7] "RIGHT_PAREN"
+	assert.equals F[8] "write"
+
+	= F (surf.apply FOLLOW "add_op")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+	= F (surf.apply FOLLOW "mult_op")
+	assert.equals F.Count 3
+	assert.equals F[0] "id"
+	assert.equals F[1] "LEFT_PAREN"
+	assert.equals F[2] "number"
+
+end_test

@@ -1,0 +1,190 @@
+module xmlsql
+
+	function _create-query-tree query
+		var query-tree (new (typeof Bamboo.Trees.Tree Bamboo.Trees))
+		foreach column in query.Select
+			var identifiers (string.split column.Identifier ".")
+			query-tree.Add identifiers (list.last identifiers)
+		end_foreach
+		if(!= query-tree.Nodes.Count 1)
+			throw "Invalid query."
+		end_if
+		var node (list.first query-tree.Nodes)
+		if(!= node.Name query.From)
+			throw "Invalid query.  Expected: FROM ${node.Name}.  Was: FROM ${query.From}."
+		end_if
+		return node
+	end_function
+
+	function _read-xml xml-element query-tree
+		if(!= query-tree.Name xml-element.Name)
+			throw "Invalid query."
+		end_if
+		return '{ Name: ,query-tree.Name Value: null Nodes: ,(xmlsql._read-elements xml-element.Elements query-tree.Nodes) }
+	end_function
+
+	function _read-elements elements nodes
+		var results '()
+		foreach node in nodes
+			foreach element in elements
+				if(== node.Name element.Name)
+					var result '{ Name: ,node.Name Value: null Nodes: () }
+
+					;This is the value.
+					if(and (not-null element.Value) (> element.Value.Length 0))
+						= result.Value element.Value
+					end_if
+
+					;Add child nodes from attributes and elements.
+					foreach child-result in (xmlsql._read-attributes element.Attributes node.Nodes)
+						result.Nodes.Add child-result
+					end_foreach
+					foreach child-result in (xmlsql._read-elements element.Elements node.Nodes)
+						result.Nodes.Add child-result
+					end_foreach
+
+					results.Add result
+				end_if
+			end_foreach
+		end_foreach
+		return results
+	end_function
+
+	function _read-attributes attributes nodes
+		var results '()
+		foreach node in nodes
+			foreach attribute in attributes
+				if(== node.Name attribute.Name)
+
+					;These are unique child nodes.
+					if(not-null node.Value)
+						results.Add '{ Name: ,"@${attribute.Name}" Value: ,attribute.Value Nodes: () }
+					end_if
+
+				end_if
+			end_foreach
+		end_foreach
+		return results
+	end_function
+
+	function _write-xml results-tree query-tree
+		if(!= results-tree.Name query-tree.Name)
+			throw "Invalid query."
+		end_if
+		return (xmlsql._write-element results-tree query-tree)
+	end_function
+
+	function _write-element results-tree query-tree
+		var element (xml.element results-tree.Name)
+		;Set value
+		if(not-null results-tree.Value)
+			= element.Value results-tree.Value
+		end_if
+		;Add children
+		foreach result-node in results-tree.Nodes
+			foreach query-node in query-tree
+				if(== result-node.Name query-node.Name)
+					element.Elements.Add (xmlsql._write-element result-node query-node)
+				else_if(string.starts-with result-node.Name "@")
+					var name (string.right result-node.Name "@")
+					if(== name query-node.Name)
+						element.Attributes.Add (xml.attribute name result-node.Value)
+					end_if
+				end_if
+			end_foreach
+		end_foreach
+		return element
+	end_function
+
+	function _denormalize query-tree results-tree
+		var table null
+		if(not-null results-tree.Value)
+			if(== results-tree.Name query-tree.Name)
+				var value-table (query.table)
+				value-table.AddColumn result-node.Name
+				value-table.AddRow '(,result-node.Value)
+				= table (xmlsql._join table value-table)
+			else_if(== results-tree.Name "@${query-tree.Name}")
+				var value-table (query.table)
+				value-table.AddColumn (string.right result-node.Name "@")
+				value-table.AddRow '(,result-node.Value)
+				= table (xmlsql._join table value-table)
+			end_if
+		end_if
+		foreach query-node in query-tree.Nodes
+			var child-tables '()
+			foreach result-node in results-tree.Nodes
+				var query-node-table (xmlsql._denormalize query-node result-node)
+				if(not-null query-node-table)
+					child-tables.Add query-node-table
+				end_if
+			end_foreach
+			= table (xmlsql._join table (xmlsql._union child-tables))
+		end_foreach
+		return table
+	end_function
+
+	function _join ?table-a ?table-b
+		if(is-null table-a)
+			return table-b
+		end_if
+		if(is-null table-b)
+			return table-a
+		end_if
+
+		var table-c (query.table)
+		foreach column-a in table-a.Columns
+			table-c.AddColumn column-a.Name
+		end_foreach
+		foreach column-b in table-b.Columns
+			table-c.AddColumn column-b.Name
+		end_foreach
+		foreach row-a in table-a.Rows
+			foreach row-b in table-b.Rows
+				table-c.AddRow (row-a.merge row-b)
+			end_foreach
+		end_foreach
+		return table-c
+	end_function
+
+	function _union tables
+		if(== tables.Count 0)
+			return null
+		end_if
+		var union-table (query.table)
+
+;TODO what if columns are not the same.
+		foreach column in tables[0].Columns
+			union-table.AddColumn column.Name
+		end_foreach
+
+		foreach table in tables
+			foreach row in table.Rows
+				union-table.AddRow row
+			end_foreach
+		end_foreach
+		return union-table
+	end_function
+
+;TODO
+	function _normalize
+
+	end_function
+
+	function to-table sql xml
+		var query (query.parse sql)
+		var query-tree (xmlsql._create-query-tree query)
+		var results-tree (xmlsql._read-xml xml query-tree)
+		var table (xmlsql._denormalize query-tree results-tree)
+		return (table.Select query)
+	end_function
+
+	function from-table sql table
+		var query (query.parse sql)
+		var query-tree (xmlsql._create-query-tree query)
+throw "Not implemented."
+;Don't do a clr stack trace on error.
+
+	end_function
+
+end_module

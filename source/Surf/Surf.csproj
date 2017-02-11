@@ -1,0 +1,73 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{907993AA-6B30-4286-8E2E-69E4A04FF925}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Surf</RootNamespace>
+    <AssemblyName>Surf</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bitmap.cs" />
+    <Compile Include="Comparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Evaluator.cs" />
+    <Compile Include="Generator.cs" />
+    <Compile Include="Interpreter.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="NodeType.cs" />
+    <Compile Include="Operators.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="Printer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Set.cs" />
+    <Compile Include="TextReader.cs" />
+    <Compile Include="Token.cs" />
+    <Compile Include="Tokenizer.cs" />
+    <Compile Include="TokenType.cs" />
+    <Compile Include="Tuple.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Water\Water.csproj">
+      <Project>{B45444FD-CF2F-40C4-A2BE-ED0DFAF63073}</Project>
+      <Name>Water</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

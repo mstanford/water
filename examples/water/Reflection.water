@@ -1,0 +1,16 @@
+function print-object object
+	var type (get-type object)
+	print "TYPE: ${type}"
+
+	var properties (get-properties object)
+	foreach property-name in properties
+		print "   PROPERTY: ${property-name}"
+	end_foreach
+	print ""
+end_function
+
+print-object '{
+	Name:	"Ice"
+	Home:	"North Pole"
+	Color:	"Blue"
+}

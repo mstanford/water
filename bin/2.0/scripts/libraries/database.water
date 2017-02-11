@@ -1,0 +1,43 @@
+library Water
+
+
+
+; Database Methods
+load-method database.sql.execute-query (typeof Bamboo.Sql.Command Bamboo.Sql) ExecuteReader
+load-method database.sql.execute-non-query (typeof Bamboo.Sql.Command Bamboo.Sql) ExecuteNonQuery
+
+module database.sql
+
+	function shrink connectionstring database
+		database.sql.execute-non-query "${connectionstring}" "DBCC SHRINKDATABASE (${database})"
+	end_function
+
+	function offline connectionstring database
+		database.sql.execute-non-query "${connectionstring}" "EXEC sp_dboption '${database}', 'offline', 'TRUE'"
+	end_function
+
+	function online connectionstring database
+		database.sql.execute-non-query "${connectionstring}" "EXEC sp_dboption '${database}', 'offline', 'FALSE'"
+	end_function
+
+	function rename connectionstring old_name new_name
+		database.sql.execute-non-query "${connectionstring}" "EXEC sp_renamedb '${old_name}', '${new_name}'"
+	end_function
+
+	function attach connectionstring database path
+		database.sql.execute-non-query "${connectionstring}" "EXEC sp_attach_db @dbname = N'${database}', @filename1 = N'${path}\\${database}_Data.MDF', @filename2 = N'${path}\\${database}_Log.LDF'"
+	end_function
+
+	function detach connectionstring database
+		database.sql.execute-non-query "${connectionstring}" "EXEC sp_detach_db N'${database}'"
+	end_function
+
+	function backup connectionstring database pickupfolder dropfolder
+		database.sql.detach connectionstring database
+		folder.delete "${dropfolder}\\${database}"
+		file.copy "${pickupfolder}\\${database}_Data.MDF" "${dropfolder}\\${database}\\${database}_Data.MDF"
+		file.copy "${pickupfolder}\\${database}_Log.LDF" "${dropfolder}\\${database}\\${database}_Log.LDF"
+		database.sql.attach connectionstring database
+	end_function
+
+end_module

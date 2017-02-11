@@ -1,0 +1,22 @@
+test TappedStream
+	var stream (memory-stream)
+	var readStream (memory-stream)
+	var writeStream (memory-stream)
+	var tappedStream (new (typeof Bamboo.WebServer.TappedStream Bamboo.WebServer) stream readStream writeStream)
+
+	var writer (new (typeof System.IO.StreamWriter) tappedStream)
+	writer.Write "ABC"
+	writer.Flush
+
+	assert.equals "ABC" (bytes.to-string (stream.to-bytes writeStream))
+	assert.equals "" (bytes.to-string (stream.to-bytes readStream))
+
+	set stream.Position 0
+
+	var reader (new (typeof System.IO.StreamReader) tappedStream)
+	var content (reader.ReadToEnd)
+	assert.equals "ABC" content
+
+	assert.equals "ABC" (bytes.to-string (stream.to-bytes writeStream))
+	assert.equals "ABC" (bytes.to-string (stream.to-bytes readStream))
+end_test

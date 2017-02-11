@@ -1,0 +1,120 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{865C5CA5-402D-411B-87D8-335BB27D5C9B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Bamboo.WebServer</RootNamespace>
+    <AssemblyName>Bamboo.WebServer</AssemblyName>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Security, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BufferedStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ChunkedStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContentTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Cookie.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HttpPreProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HttpProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HttpReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HttpRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HttpResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HttpServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HttpServerWorker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HttpWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LoggingPreProcessor.cs" />
+    <Compile Include="NetworkStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Ports.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Processors\BasicAuthenticationProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Processors\DebugProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Processors\DictionaryHttpProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Processors\FileHttpProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Processors\ResourceHttpProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SecureHttpServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SecureHttpServerWorker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StatusCodes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TappedStream.cs" />
+    <Compile Include="ThreadPool.cs" />
+    <Compile Include="ThreadTask.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

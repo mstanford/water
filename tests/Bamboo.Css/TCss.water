@@ -1,0 +1,24 @@
+library filesystem
+library reflection
+library stream
+library test
+
+assembly Bamboo.Css "..\\..\\source\\Bamboo.Css\\bin\\Debug\\Bamboo.Css.dll"
+
+
+
+
+
+test CssReader CssWriter
+	var stream (file.open-read "data\\Table.css")
+	var reader (new (typeof Bamboo.Css.CssReader Bamboo.Css) stream)
+	var stylesheet (reader.Read)
+
+	var stream2 (memory-stream)
+	var writer (new (typeof Bamboo.Css.CssWriter Bamboo.Css) stream2)
+	writer.Write stylesheet
+
+	= stream.Position 0
+	= stream2.Position 0
+	assert.equals (stream.to-string stream) (stream.to-string stream2)
+end_test

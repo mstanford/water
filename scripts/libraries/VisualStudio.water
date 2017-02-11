@@ -1,0 +1,511 @@
+library Water
+library filesystem
+library math
+library string
+
+
+
+function csc-1.1 output references sources
+	var compiler (new (typeof Bamboo.CSharp.Compilers.CSharp11.CSharp11Compiler Bamboo.CSharp))
+	var compilerParameters (new (typeof Bamboo.CSharp.Compilers.CompilerParameters Bamboo.CSharp))
+	= compilerParameters.Assembly output
+	foreach reference in references
+		var ignore (compilerParameters.References.Add reference)
+	end_foreach
+	foreach source in sources
+		var ignore (compilerParameters.Sources.Add source)
+	end_foreach
+	compiler.Compile compilerParameters
+
+	var report '{ Output: () Errors: () Warnings: () }
+	foreach output in compilerParameters.Output
+		report.Output.Add output
+	end_foreach
+	foreach build-error in compilerParameters.Errors
+		if build-error.IsWarning
+			report.Warnings.Add build-error
+		else
+			report.Errors.Add build-error
+		end_if
+	end_foreach
+	return report
+end_function
+
+function csc-2.0 output references sources
+	var compiler (new (typeof Bamboo.CSharp.Compilers.CSharp20.CSharp20Compiler Bamboo.CSharp))
+	var compilerParameters (new (typeof Bamboo.CSharp.Compilers.CompilerParameters Bamboo.CSharp))
+	= compilerParameters.Assembly output
+	foreach reference in references
+		var ignore (compilerParameters.References.Add reference)
+	end_foreach
+	foreach source in sources
+		var ignore (compilerParameters.Sources.Add source)
+	end_foreach
+	compiler.Compile compilerParameters
+
+	var report '{ Output: () Errors: () Warnings: () }
+	foreach output in compilerParameters.Output
+		report.Output.Add output
+	end_foreach
+	foreach build-error in compilerParameters.Errors
+		if build-error.IsWarning
+			report.Warnings.Add build-error
+		else
+			report.Errors.Add build-error
+		end_if
+	end_foreach
+	return report
+end_function
+
+function csc-3.5 output references sources
+	var compiler (new (typeof Bamboo.CSharp.Compilers.CSharp35.CSharp20Compiler Bamboo.CSharp))
+	var compilerParameters (new (typeof Bamboo.CSharp.Compilers.CompilerParameters Bamboo.CSharp))
+	= compilerParameters.Assembly output
+	foreach reference in references
+		var ignore (compilerParameters.References.Add reference)
+	end_foreach
+	foreach source in sources
+		var ignore (compilerParameters.Sources.Add source)
+	end_foreach
+	compiler.Compile compilerParameters
+
+	var report '{ Output: () Errors: () Warnings: () }
+	foreach output in compilerParameters.Output
+		report.Output.Add output
+	end_foreach
+	foreach build-error in compilerParameters.Errors
+		if build-error.IsWarning
+			report.Warnings.Add build-error
+		else
+			report.Errors.Add build-error
+		end_if
+	end_foreach
+	return report
+end_function
+
+
+
+
+
+module visual-studio
+
+	function csproj.read path
+		if((method (typeof Bamboo.VisualStudio.CSharpProjectDetector Bamboo.VisualStudio) Is2003) path)
+			var project ((method (typeof Bamboo.VisualStudio.VisualStudio2003.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+			return project
+		else_if((method (typeof Bamboo.VisualStudio.CSharpProjectDetector Bamboo.VisualStudio) Is2005) path)
+			var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+			return project
+		else_if((method (typeof Bamboo.VisualStudio.CSharpProjectDetector Bamboo.VisualStudio) Is2008) path)
+			var project ((method (typeof Bamboo.VisualStudio.VisualStudio2008.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+			return project
+		else
+			throw "Unknown project format."
+		end_if
+	end_function
+
+	function csproj2003.read path
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2003.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	end_function
+
+	function csproj2003.write project writer
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2003.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	end_function
+
+	function csproj2003.compile filename configuration output project_build_tracker ?compiler
+		if(is-null compiler)
+			= compiler (new (typeof Bamboo.CSharp.Compilers.CSharp11.CSharp11Compiler Bamboo.CSharp))
+		end_if
+		var report '{ Errors: () Warnings: () }
+		var builder (new (typeof Bamboo.VisualStudio.VisualStudio2003.CSharpProject.ProjectBuilder Bamboo.VisualStudio) compiler)
+		builder.Build "${(current-directory)}\\${filename}" configuration "${(current-directory)}\\${output}" project_build_tracker
+		foreach output in builder.Output
+			print output.Text
+		end_foreach
+		foreach build-error in builder.Errors
+			if build-error.IsWarning
+				report.Warnings.Add build-error
+			else
+				report.Errors.Add build-error
+			end_if
+		end_foreach
+		return report
+	end_function
+
+	function csproj2003.rename path new-name
+		var root (string.last-left path "\\")
+		var name (string.last-right path "\\")
+		var new-path "${root}\\${new-name}.csproj"
+		var project (visual-studio.csproj2003.read path)
+		= project.Name "${new-name}"
+		= project.Settings.AssemblyName "${new-name}"
+		= project.Settings.RootNamespace "${new-name}"
+		var writer (file.create-text new-path)
+		visual-studio.csproj2003.write project writer
+		writer.Close
+		file.delete path
+		if(file.exists "${path}.user")
+			file.move "${path}.user" "${new-path}.user"
+		end_if
+		if(folder.exists "${root}\\bin")
+			folder.delete "${root}\\bin"
+		end_if
+		if(folder.exists "${root}\\obj")
+			folder.delete "${root}\\obj"
+		end_if
+	end_function
+
+
+
+	function csproj2005.read path
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	end_function
+
+	function csproj2005.write project writer
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	end_function
+
+	function csproj2005.compile filename configuration output project_build_tracker ?compiler
+		if(is-null compiler)
+			= compiler (new (typeof Bamboo.CSharp.Compilers.CSharp20.CSharp20Compiler Bamboo.CSharp))
+		end_if
+		var report '{ Errors: () Warnings: () }
+		var builder (new (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectBuilder Bamboo.VisualStudio) compiler)
+		builder.Build "${(current-directory)}\\${filename}" configuration "${(current-directory)}\\${output}" project_build_tracker
+		foreach output in builder.Output
+			print output.Text
+		end_foreach
+		foreach build-error in builder.Errors
+			if build-error.IsWarning
+				report.Warnings.Add build-error
+			else
+				report.Errors.Add build-error
+			end_if
+		end_foreach
+		return report
+	end_function
+
+
+
+	function csproj2008.read path
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2008.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	end_function
+
+	function csproj2008.write project writer
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2008.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	end_function
+
+	function csproj2008.compile filename configuration output project_build_tracker ?compiler
+		if(is-null compiler)
+			= compiler (new (typeof Bamboo.CSharp.Compilers.CSharp35.CSharp35Compiler Bamboo.CSharp))
+		end_if
+		var report '{ Errors: () Warnings: () }
+		var builder (new (typeof Bamboo.VisualStudio.VisualStudio2008.CSharpProject.ProjectBuilder Bamboo.VisualStudio) compiler)
+		builder.Build "${(current-directory)}\\${filename}" configuration "${(current-directory)}\\${output}" project_build_tracker
+		foreach output in builder.Output
+			print output.Text
+		end_foreach
+		foreach build-error in builder.Errors
+			if build-error.IsWarning
+				report.Warnings.Add build-error
+			else
+				report.Errors.Add build-error
+			end_if
+		end_foreach
+		return report
+	end_function
+
+
+
+	function sln.read path
+		if((method (typeof Bamboo.VisualStudio.SolutionDetector Bamboo.VisualStudio) Is2003) path)
+			var project ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+			return project
+		else_if((method (typeof Bamboo.VisualStudio.SolutionDetector Bamboo.VisualStudio) Is2005) path)
+			var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+			return project
+;		else_if((method (typeof Bamboo.VisualStudio.SolutionDetector Bamboo.VisualStudio) Is2008) path)
+;			var project ((method (typeof Bamboo.VisualStudio.VisualStudio2008.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+;			return project
+		else
+			throw "Unknown solution format."
+		end_if
+	end_function
+
+	function sln2003.read path
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	end_function
+
+	function sln2003.write solution writer
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	end_function
+
+	function sln2003.read-projects path
+		var solution (visual-studio.sln2003.read path)
+		var projects '()
+		foreach project in solution.Projects
+			projects.Add (visual-studio.csproj2003.read "${(file.get-folder path)}${project.Path}")
+		end_foreach
+		return projects
+	end_function
+
+	function sln2003.sort-projects projects
+		var projects_to_resolve (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+		foreach project in projects
+			var project_to_resolve (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+			= project_to_resolve.Name project.Name
+			= project_to_resolve.Guid project.ProjectGuid
+			= project_to_resolve.Tag project
+
+			foreach reference in project.References
+				if (> reference.Project.Length 0)
+					var dependency (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+					= dependency.Name reference.Name
+					= dependency.ProjectGuid (guid reference.Project)
+					project_to_resolve.Dependencies.Add dependency
+				end_if
+			end_foreach
+
+			projects_to_resolve.Add project_to_resolve
+		end_foreach
+		var resolved_projects ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects_to_resolve)
+		var results '()
+		foreach resolved_project in resolved_projects
+			results.Add resolved_project.Tag
+		end_foreach
+		return results
+	end_function
+
+	function sln2003.compile filename configuration output ?compiler
+		var report '{ Errors: () Warnings: () }
+		var project-build-tracker (new (typeof Bamboo.VisualStudio.ProjectBuildTracker Bamboo.VisualStudio))
+		var projects (visual-studio.sln2003.sort-projects (visual-studio.sln2003.read-projects filename))
+		foreach project in projects
+			var source-path (string.last-left filename "\\")
+			print "building ${project.Name}"
+			var project-report (visual-studio.csproj2003.compile "${source-path}\\${project.Name}\\${project.Name}.csproj" configuration output project-build-tracker compiler)
+			foreach build-error in project-report.Errors
+				report.Errors.Add build-error
+			end_foreach
+			foreach warning in project-report.Warnings
+				report.Warnings.Add warning
+			end_foreach
+		end_foreach
+		return report
+	end_function
+
+
+
+	function sln2005.read path
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	end_function
+
+	function sln2005.write solution writer
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2005.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	end_function
+
+	function sln2005.read-projects path
+		var solution (visual-studio.sln2005.read path)
+		var projects '()
+		foreach project in solution.Projects
+			projects.Add (visual-studio.csproj2005.read "${(file.get-folder path)}${project.Path}")
+		end_foreach
+		return projects
+	end_function
+
+	function sln2005.sort-projects projects
+		var projects_to_resolve (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+		foreach project in projects
+			var project_to_resolve (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+			= project_to_resolve.Name project.Name
+			= project_to_resolve.Guid project.ProjectGuid
+			= project_to_resolve.Tag project
+
+			foreach reference in project.ProjectReferences
+				if (> reference.Project.Length 0)
+					var dependency (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+					= dependency.Name reference.Name
+					= dependency.ProjectGuid (guid reference.Project)
+					project_to_resolve.Dependencies.Add dependency
+				end_if
+			end_foreach
+
+			projects_to_resolve.Add project_to_resolve
+		end_foreach
+		var resolved_projects ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects_to_resolve)
+		var results '()
+		foreach resolved_project in resolved_projects
+			results.Add resolved_project.Tag
+		end_foreach
+		return results
+	end_function
+
+	function sln2005.compile filename configuration output ?compiler
+		var report '{ Errors: () Warnings: () }
+		var project-build-tracker (new (typeof Bamboo.VisualStudio.ProjectBuildTracker Bamboo.VisualStudio))
+		var projects (visual-studio.sln2005.sort-projects (visual-studio.sln2005.read-projects filename))
+		foreach project in projects
+			var source-path (string.last-left filename "\\")
+			print "building ${project.Name}"
+			var project-report (visual-studio.csproj2005.compile "${source-path}\\${project.Name}\\${project.Name}.csproj" configuration output project-build-tracker compiler)
+			foreach build-error in project-report.Errors
+				report.Errors.Add build-error
+			end_foreach
+			foreach warning in project-report.Warnings
+				report.Warnings.Add warning
+			end_foreach
+		end_foreach
+		return report
+	end_function
+
+
+
+	function sln2008.read path
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2008.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	end_function
+
+	function sln2008.write solution writer
+		return ((method (typeof Bamboo.VisualStudio.VisualStudio2008.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	end_function
+
+	function sln2008.read-projects path
+		var solution (visual-studio.sln2008.read path)
+		var projects '()
+		foreach project in solution.Projects
+			projects.Add (visual-studio.csproj2008.read "${(file.get-folder path)}${project.Path}")
+		end_foreach
+		return projects
+	end_function
+
+	function sln2008.sort-projects projects
+		var projects_to_resolve (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+		foreach project in projects
+			var project_to_resolve (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+			= project_to_resolve.Name project.Name
+			= project_to_resolve.Guid project.ProjectGuid
+			= project_to_resolve.Tag project
+
+			foreach reference in project.ProjectReferences
+				if (> reference.Project.Length 0)
+					var dependency (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+					= dependency.Name reference.Name
+					= dependency.ProjectGuid (guid reference.Project)
+					project_to_resolve.Dependencies.Add dependency
+				end_if
+			end_foreach
+
+			projects_to_resolve.Add project_to_resolve
+		end_foreach
+		var resolved_projects ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects_to_resolve)
+		var results '()
+		foreach resolved_project in resolved_projects
+			results.Add resolved_project.Tag
+		end_foreach
+		return results
+	end_function
+
+	function sln2008.compile filename configuration output ?compiler
+		var report '{ Errors: () Warnings: () }
+		var project-build-tracker (new (typeof Bamboo.VisualStudio.ProjectBuildTracker Bamboo.VisualStudio))
+		var projects (visual-studio.sln2008.sort-projects (visual-studio.sln2008.read-projects filename))
+		foreach project in projects
+			var source-path (string.last-left filename "\\")
+			print "building ${project.Name}"
+			var project-report (visual-studio.csproj2008.compile "${source-path}\\${project.Name}\\${project.Name}.csproj" configuration output project-build-tracker compiler)
+			foreach build-error in project-report.Errors
+				report.Errors.Add build-error
+			end_foreach
+			foreach warning in project-report.Warnings
+				report.Warnings.Add warning
+			end_foreach
+		end_foreach
+		return report
+	end_function
+
+
+
+	function csproj2003.lines-of-code filename
+		var project (visual-studio.csproj2003.read filename)
+		var count 0
+		var path (string.last-left filename "\\")
+		foreach item in project.Items
+			if(string.ends-with item.Include ".cs")
+				var file-stream (file.open-read "${path}\\${item.Include}")
+				var reader (stream-reader file-stream)
+				while(not-null (reader.ReadLine))
+					= count (+ count 1)
+				end_while
+				file-stream.Close
+			end_if
+		end_foreach
+		return count
+	end_function
+
+	function sln2003.lines-of-code filename
+		var count 0
+		var projects (visual-studio.sln2003.sort-projects (visual-studio.sln2003.read-projects filename))
+		foreach project in projects
+			var source-path (string.last-left filename "\\")
+			var path "${source-path}\\${project.Name}\\${project.Name}.csproj"
+			= count (+ count (visual-studio.csproj2003.lines-of-code path))
+		end_foreach
+		return count
+	end_function
+
+	function csproj2005.lines-of-code filename
+		var project (visual-studio.csproj2005.read filename)
+		var count 0
+		var path (string.last-left filename "\\")
+		foreach item in project.Items
+			if(string.ends-with item.Include ".cs")
+				var file-stream (file.open-read "${path}\\${item.Include}")
+				var reader (stream-reader file-stream)
+				while(not-null (reader.ReadLine))
+					= count (+ count 1)
+				end_while
+				file-stream.Close
+			end_if
+		end_foreach
+		return count
+	end_function
+
+	function sln2005.lines-of-code filename
+		var count 0
+		var projects (visual-studio.sln2005.sort-projects (visual-studio.sln2005.read-projects filename))
+		foreach project in projects
+			var source-path (string.last-left filename "\\")
+			var path "${source-path}\\${project.Name}\\${project.Name}.csproj"
+			= count (+ count (visual-studio.csproj2005.lines-of-code path))
+		end_foreach
+		return count
+	end_function
+
+	function csproj2008.lines-of-code filename
+		var project (visual-studio.csproj2008.read filename)
+		var count 0
+		var path (string.last-left filename "\\")
+		foreach item in project.Items
+			if(string.ends-with item.Include ".cs")
+				var file-stream (file.open-read "${path}\\${item.Include}")
+				var reader (stream-reader file-stream)
+				while(not-null (reader.ReadLine))
+					= count (+ count 1)
+				end_while
+				file-stream.Close
+			end_if
+		end_foreach
+		return count
+	end_function
+
+	function sln2008.lines-of-code filename
+		var count 0
+		var projects (visual-studio.sln2008.sort-projects (visual-studio.sln2008.read-projects filename))
+		foreach project in projects
+			var source-path (string.last-left filename "\\")
+			var path "${source-path}\\${project.Name}\\${project.Name}.csproj"
+			= count (+ count (visual-studio.csproj2008.lines-of-code path))
+		end_foreach
+		return count
+	end_function
+
+end_module

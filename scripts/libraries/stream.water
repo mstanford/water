@@ -1,0 +1,86 @@
+library Water
+library bytes
+
+
+
+;
+; streams
+;
+module stream
+
+	function to-bytes stream
+		var stream2 (stream.copy stream)
+		var result (stream2.ToArray)
+		stream2.Close
+		return result
+	end_function
+
+	function to-file stream path
+		var stream2 (file.create path)
+		stream.copy stream stream2
+		stream2.Close
+	end_function
+
+	function to-string stream
+		var reader (stream-reader stream)
+		return (reader.ReadToEnd)
+	end_function
+
+	function copy source ?target
+		if(is-null target)
+			= target (memory-stream)
+			;
+			var bytes (byte-array source.Length)
+			var position source.Position
+			= source.Position 0
+			var bytes-read (source.Read bytes 0 bytes.Length)
+			= source.Position position
+			target.Write bytes 0 bytes.Length
+			;
+			return target
+		else
+			;
+			var bytes (byte-array source.Length)
+			var position source.Position
+			= source.Position 0
+			var bytes-read (source.Read bytes 0 bytes.Length)
+			= source.Position position
+			target.Write bytes 0 bytes.Length
+			;
+		end_if
+	end_function
+
+end_module
+
+function memory-stream
+	return (new (typeof System.IO.MemoryStream))
+end_function
+
+function stream-reader stream
+	return (new (typeof System.IO.StreamReader) stream)
+end_function
+
+function stream-writer stream
+	return (new (typeof System.IO.StreamWriter) stream)
+end_function
+
+;
+; checksums
+;
+function sha1 stream-or-bytes
+	var cryptoServiceProvider (new (typeof System.Security.Cryptography.SHA1CryptoServiceProvider))
+	var hashBytes (cryptoServiceProvider.ComputeHash stream-or-bytes)
+	var s ((method (typeof System.BitConverter) ToString) hashBytes)
+	= s (s.Replace "-" "")
+	= s (s.ToLower)
+	return s
+end_function
+
+function md5 stream-or-bytes
+	var cryptoServiceProvider (new (typeof System.Security.Cryptography.MD5CryptoServiceProvider))
+	var hashBytes (cryptoServiceProvider.ComputeHash stream-or-bytes)
+	var s ((method (typeof System.BitConverter) ToString) hashBytes)
+	= s (s.Replace "-" "")
+	= s (s.ToLower)
+	return s
+end_function

@@ -1,0 +1,244 @@
+library test
+library query
+
+
+
+test TableScanIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	TableScanIterator.Open
+	assert.equals (TableScanIterator.GetNext) '(1 2 3)
+	assert.null (TableScanIterator.GetNext)
+	TableScanIterator.Close
+end_test
+
+test TableScanIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	TableScanIterator.Open
+	assert.equals (TableScanIterator.GetNext) '(1 2 3)
+	assert.equals (TableScanIterator.GetNext) '(4 5 6)
+	assert.null (TableScanIterator.GetNext)
+	TableScanIterator.Close
+end_test
+
+test WhereIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var EqualsPredicate (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 0 1)
+	var WhereIterator (new (typeof Bamboo.Query.Iterators.WhereIterator Bamboo.Query) TableScanIterator EqualsPredicate)
+	WhereIterator.Open
+	assert.equals (WhereIterator.GetNext) '(1 2 3)
+	assert.null (WhereIterator.GetNext)
+	WhereIterator.Close
+end_test
+
+test WhereIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var OrPredicate (new (typeof Bamboo.Query.Predicates.OrPredicate Bamboo.Query) (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 0 1) (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 0 4))
+	var WhereIterator (new (typeof Bamboo.Query.Iterators.WhereIterator Bamboo.Query) TableScanIterator OrPredicate)
+	WhereIterator.Open
+	assert.equals (WhereIterator.GetNext) '(1 2 3)
+	assert.equals (WhereIterator.GetNext) '(4 5 6)
+	assert.null (WhereIterator.GetNext)
+	WhereIterator.Close
+end_test
+
+test TopIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var TopIterator (new (typeof Bamboo.Query.Iterators.TopIterator Bamboo.Query) TableScanIterator 0)
+	TopIterator.Open
+	assert.null (TopIterator.GetNext)
+	TopIterator.Close
+end_test
+
+test TopIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var TopIterator (new (typeof Bamboo.Query.Iterators.TopIterator Bamboo.Query) TableScanIterator 1)
+	TopIterator.Open
+	assert.equals (TopIterator.GetNext) '(1 2 3)
+	assert.null (TopIterator.GetNext)
+	TopIterator.Close
+end_test
+
+test TopIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var TopIterator (new (typeof Bamboo.Query.Iterators.TopIterator Bamboo.Query) TableScanIterator 2)
+	TopIterator.Open
+	assert.equals (TopIterator.GetNext) '(1 2 3)
+	assert.equals (TopIterator.GetNext) '(4 5 6)
+	assert.null (TopIterator.GetNext)
+	TopIterator.Close
+end_test
+
+test TopIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var TopIterator (new (typeof Bamboo.Query.Iterators.TopIterator Bamboo.Query) TableScanIterator 3)
+	TopIterator.Open
+	assert.equals (TopIterator.GetNext) '(1 2 3)
+	assert.equals (TopIterator.GetNext) '(4 5 6)
+	assert.null (TopIterator.GetNext)
+	TopIterator.Close
+end_test
+
+test UnionIterator
+	var table-a (query.table '("A" "B" "C"))
+	table-a.AddRow '(1 2 3)
+	table-a.AddRow '(4 5 6)
+	var TableScanIterator-a (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table-a)
+
+	var table-b (query.table '("D" "E" "F"))
+	table-b.AddRow '(7 8 9)
+	table-b.AddRow '(10 11 12)
+	var TableScanIterator-b (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table-b)
+
+	var UnionIterator (new (typeof Bamboo.Query.Iterators.UnionIterator Bamboo.Query) TableScanIterator-a TableScanIterator-b)
+	UnionIterator.Open
+	assert.equals (UnionIterator.GetNext) '(1 2 3)
+	assert.equals (UnionIterator.GetNext) '(4 5 6)
+	assert.equals (UnionIterator.GetNext) '(7 8 9)
+	assert.equals (UnionIterator.GetNext) '(10 11 12)
+	assert.null (UnionIterator.GetNext)
+	UnionIterator.Close
+end_test
+
+test UnionIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator-a (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var TableScanIterator-b (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var UnionIterator (new (typeof Bamboo.Query.Iterators.UnionIterator Bamboo.Query) TableScanIterator-a TableScanIterator-b)
+	UnionIterator.Open
+	assert.equals (UnionIterator.GetNext) '(1 2 3)
+	assert.equals (UnionIterator.GetNext) '(4 5 6)
+	assert.equals (UnionIterator.GetNext) '(1 2 3)
+	assert.equals (UnionIterator.GetNext) '(4 5 6)
+	assert.null (UnionIterator.GetNext)
+	UnionIterator.Close
+end_test
+
+test SelectIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '(1 2 3)
+	table.AddRow '(4 5 6)
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var SelectIterator (new (typeof Bamboo.Query.Iterators.SelectIterator Bamboo.Query) TableScanIterator '(0 2))
+	SelectIterator.Open
+	assert.equals '(1 3) (SelectIterator.GetNext)
+	assert.equals '(4 6) (SelectIterator.GetNext)
+	assert.null (SelectIterator.GetNext)
+	SelectIterator.Close
+end_test
+
+test NestedLoopJoinIterator
+	var table-a (query.table '("A" "B" "C"))
+	table-a.AddRow '(1 2 3)
+	table-a.AddRow '(4 5 6)
+	var TableScanIterator-a (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table-a)
+	var table-b (query.table '("D" "E" "F"))
+	table-b.AddRow '(1 11 111)
+	table-b.AddRow '(4 44 444)
+	var TableScanIterator-b (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table-b)
+	var NestedLoopJoinIterator (new (typeof Bamboo.Query.Iterators.NestedLoopJoinIterator Bamboo.Query) TableScanIterator-a TableScanIterator-b 0 0)
+	NestedLoopJoinIterator.Open
+	assert.equals '(1 2 3 1 11 111) (NestedLoopJoinIterator.GetNext)
+	assert.equals '(4 5 6 4 44 444) (NestedLoopJoinIterator.GetNext)
+	assert.null (NestedLoopJoinIterator.GetNext)
+	NestedLoopJoinIterator.Close
+end_test
+
+test HashJoinIterator
+	var table-a (query.table '("A" "B" "C"))
+	table-a.AddRow '(1 2 3)
+	table-a.AddRow '(4 5 6)
+	var TableScanIterator-a (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table-a)
+	var table-b (query.table '("D" "E" "F"))
+	table-b.AddRow '(1 11 111)
+	table-b.AddRow '(4 44 444)
+	var TableScanIterator-b (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table-b)
+	var HashJoinIterator (new (typeof Bamboo.Query.Iterators.HashJoinIterator Bamboo.Query) TableScanIterator-a TableScanIterator-b 0 0)
+	HashJoinIterator.Open
+	assert.equals '(1 2 3 1 11 111) (HashJoinIterator.GetNext)
+	assert.equals '(4 5 6 4 44 444) (HashJoinIterator.GetNext)
+	assert.null (HashJoinIterator.GetNext)
+	HashJoinIterator.Close
+end_test
+
+test GroupIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '("A1" "B1" 0)
+	table.AddRow '("A1" "B2" 1)
+	table.AddRow '("A2" "B1" 2)
+	table.AddRow '("A2" "B2" 3)
+	table.AddRow '("A1" "B1" 4)
+	table.AddRow '("A1" "B1" 5)
+	table.AddRow '("A1" "B1" 6)
+	table.AddRow '("A1" "B2" 7)
+	table.AddRow '("A1" "B2" 8)
+	table.AddRow '("A2" "B1" 9)
+
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var count-function (new (typeof Bamboo.Query.Aggregators.CountAggregator Bamboo.Query) 2)
+	var GroupIterator (new (typeof Bamboo.Query.Iterators.GroupIterator Bamboo.Query) TableScanIterator '(0 1) '(,count-function))
+
+	GroupIterator.Open
+	assert.equals '("A1" "B1" 4) (GroupIterator.GetNext)
+	assert.equals '("A1" "B2" 3) (GroupIterator.GetNext)
+	assert.equals '("A2" "B1" 2) (GroupIterator.GetNext)
+	assert.equals '("A2" "B2" 1) (GroupIterator.GetNext)
+	assert.null (GroupIterator.GetNext)
+	GroupIterator.Close
+end_test
+
+test HashGroupIterator
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '("A1" "B1" 0)
+	table.AddRow '("A1" "B2" 1)
+	table.AddRow '("A2" "B1" 2)
+	table.AddRow '("A2" "B2" 3)
+	table.AddRow '("A1" "B1" 4)
+	table.AddRow '("A1" "B1" 5)
+	table.AddRow '("A1" "B1" 6)
+	table.AddRow '("A1" "B2" 7)
+	table.AddRow '("A1" "B2" 8)
+	table.AddRow '("A2" "B1" 9)
+
+	var TableScanIterator (new (typeof Bamboo.Query.Iterators.TableScanIterator Bamboo.Query) table)
+	var count-function (new (typeof Bamboo.Query.Aggregators.CountAggregator Bamboo.Query) 2)
+	var HashGroupIterator (new (typeof Bamboo.Query.Iterators.HashGroupIterator Bamboo.Query) TableScanIterator '(0 1) '(,count-function))
+
+	HashGroupIterator.Open
+	var results '()
+	for i from 1 to 4
+		var value (HashGroupIterator.GetNext)
+		results.Add value
+	end_for
+	results.Sort
+	assert.equals '("A1" "B1" 4) results[0]
+	assert.equals '("A1" "B2" 3) results[1]
+	assert.equals '("A2" "B1" 2) results[2]
+	assert.equals '("A2" "B2" 1) results[3]
+	assert.null (HashGroupIterator.GetNext)
+	HashGroupIterator.Close
+end_test

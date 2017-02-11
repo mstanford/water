@@ -1,0 +1,68 @@
+;
+; math operators
+;
+load-method + (typeof Water.Instructions Water) Add
+load-method - (typeof Water.Instructions Water) Subtract
+load-method * (typeof Water.Instructions Water) Multiply
+load-method / (typeof Water.Instructions Water) Divide
+load-method % (typeof Water.Instructions Water) Remainder
+load-method > (typeof Water.Instructions Water) GreaterThan
+load-method < (typeof Water.Instructions Water) LessThan
+load-method >= (typeof Water.Instructions Water) GreaterThanOrEquals
+load-method <= (typeof Water.Instructions Water) LessThanOrEquals
+load-method sqrt (typeof Water.Instructions Water) SquareRoot
+
+load-method mean (typeof Water.Instructions Water) Mean
+load-method std-dev (typeof Water.Instructions Water) StandardDeviation
+load-method stddev (typeof Water.Instructions Water) StandardDeviation
+load-method variance (typeof Water.Instructions Water) Variance
+
+function ^ a b
+	return ((method (typeof System.Math) Pow) (to-double a) (to-double b))
+end_function
+
+function ln n
+	return ((method (typeof System.Math) Log) (to-double n))
+end_function
+
+load-method abs (typeof System.Math) Abs
+load-method math.min (typeof System.Math) Min
+load-method math.max (typeof System.Math) Max
+load-method e (typeof System.Math) Exp
+load-method log10 (typeof System.Math) Log10
+load-method round (typeof System.Math) Round
+
+function avg a b
+	return (div (+ a b) 2)
+end_function
+
+function between b a c
+	if(> a c)
+		return (and (< b a) (> b c))
+	else
+		return (and (< b c) (> b a))
+	end_if
+end_function
+
+function truncate-digits d precision
+	var digits (^ 10 precision)
+	return (to-decimal (div (to-int (* d digits)) digits))
+end_function
+
+
+
+constant _Random (new (typeof System.Random))
+
+function random n m
+	return (_Random.Next n m)
+end_function
+
+function rand
+	return (_Random.NextDouble)
+end_function
+
+
+
+function fraction
+	return (new (typeof Bamboo.Measurement.Fraction Bamboo.Measurement))
+end_function

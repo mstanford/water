@@ -1,0 +1,137 @@
+library test
+library query
+
+
+
+test QueryPlan
+	var query "SELECT R.A FROM R"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( (1 2 3) (4 5 6) ))
+
+	var queryPlan ((method (typeof Bamboo.Query.Planning.Planner Bamboo.Query) Plan) queryObject database)
+
+	assert.equals queryPlan.Name "SELECT"
+	assert.equals queryPlan.Indexes.Length 1
+	assert.equals queryPlan.Indexes[0] 0
+	assert.equals queryPlan.Node.Name "TABLE_SCAN"
+end_test
+
+test QueryPlan
+	var query "SELECT R.B, R.A FROM R"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( (1 2 3) (4 5 6) ))
+
+	var queryPlan ((method (typeof Bamboo.Query.Planning.Planner Bamboo.Query) Plan) queryObject database)
+
+	assert.equals queryPlan.Name "SELECT"
+	assert.equals queryPlan.Indexes.Length 2
+	assert.equals queryPlan.Indexes[0] 1
+	assert.equals queryPlan.Indexes[1] 0
+	assert.equals queryPlan.Node.Name "TABLE_SCAN"
+end_test
+
+test QueryPlan
+	var query "SELECT R.C, S.E FROM R JOIN S ON R.A = S.D"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( (1 2 3) (4 5 6) ))
+	database.Add "S" (query.table '( "D" "E" "F" ) '( (1 11 111) (4 44 444) ))
+
+	var queryPlan ((method (typeof Bamboo.Query.Planning.Planner Bamboo.Query) Plan) queryObject database)
+
+	assert.equals queryPlan.Indexes.Length 2
+	assert.equals queryPlan.Indexes[0] 2
+	assert.equals queryPlan.Indexes[1] 4
+end_test
+
+test QueryPlan
+	var query "SELECT S.D, S.E, S.F, R.A, R.B, R.C FROM R JOIN S ON R.A = S.D"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( (1 2 3) (4 5 6) ))
+	database.Add "S" (query.table '( "D" "E" "F" ) '( (1 11 111) (4 44 444) ))
+
+	var queryPlan ((method (typeof Bamboo.Query.Planning.Planner Bamboo.Query) Plan) queryObject database)
+
+	assert.equals queryPlan.Indexes.Length 6
+	assert.equals queryPlan.Indexes[0] 3
+	assert.equals queryPlan.Indexes[1] 4
+	assert.equals queryPlan.Indexes[2] 5
+	assert.equals queryPlan.Indexes[3] 0
+	assert.equals queryPlan.Indexes[4] 1
+	assert.equals queryPlan.Indexes[5] 2
+end_test
+
+test QueryPlan
+	var query "SELECT R.A, R.B, R.C, S.D, S.E, S.F, T.G, T.H, T.I FROM R JOIN S ON R.A = S.D JOIN T ON R.A = T.G"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( (1 2 3) (4 5 6) ))
+	database.Add "S" (query.table '( "D" "E" "F" ) '( (1 11 111) (4 44 444) ))
+	database.Add "T" (query.table '( "G" "H" "I" ) '( (1 1a 1aa) (4 4d 4dd) ))
+
+	var queryPlan ((method (typeof Bamboo.Query.Planning.Planner Bamboo.Query) Plan) queryObject database)
+
+	assert.equals queryPlan.Indexes.Length 9
+	assert.equals queryPlan.Indexes[0] 0
+	assert.equals queryPlan.Indexes[1] 1
+	assert.equals queryPlan.Indexes[2] 2
+	assert.equals queryPlan.Indexes[3] 3
+	assert.equals queryPlan.Indexes[4] 4
+	assert.equals queryPlan.Indexes[5] 5
+	assert.equals queryPlan.Indexes[6] 6
+	assert.equals queryPlan.Indexes[7] 7
+	assert.equals queryPlan.Indexes[8] 8
+end_test
+
+test QueryPlan
+	var query "SELECT R.A, R.B, R.C, S.D, S.E, S.F, T.G, T.H, T.I FROM R JOIN S ON R.A = S.D JOIN T ON S.D = T.G"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( (1 2 3) (4 5 6) ))
+	database.Add "S" (query.table '( "D" "E" "F" ) '( (1 11 111) (4 44 444) ))
+	database.Add "T" (query.table '( "G" "H" "I" ) '( (1 1a 1aa) (4 4d 4dd) ))
+
+	var queryPlan ((method (typeof Bamboo.Query.Planning.Planner Bamboo.Query) Plan) queryObject database)
+
+	assert.equals queryPlan.Indexes.Length 9
+	assert.equals queryPlan.Indexes[0] 0
+	assert.equals queryPlan.Indexes[1] 1
+	assert.equals queryPlan.Indexes[2] 2
+	assert.equals queryPlan.Indexes[3] 3
+	assert.equals queryPlan.Indexes[4] 4
+	assert.equals queryPlan.Indexes[5] 5
+	assert.equals queryPlan.Indexes[6] 6
+	assert.equals queryPlan.Indexes[7] 7
+	assert.equals queryPlan.Indexes[8] 8
+end_test
+
+test QueryPlan
+	var query "SELECT SUM(C), A, B FROM R GROUP BY B, A"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	var table (query.table '("A" "B" "C"))
+	table.AddRow '("A1" "B1" 0)
+	table.AddRow '("A1" "B2" 1)
+	table.AddRow '("A2" "B1" 2)
+	table.AddRow '("A2" "B2" 3)
+	table.AddRow '("A1" "B1" 4)
+	table.AddRow '("A1" "B1" 5)
+	table.AddRow '("A1" "B1" 6)
+	table.AddRow '("A1" "B2" 7)
+	table.AddRow '("A1" "B2" 8)
+	table.AddRow '("A2" "B1" 9)
+
+	var database (query.database)
+	database.Add "R" table
+
+	var queryPlan ((method (typeof Bamboo.Query.Planning.Planner Bamboo.Query) Plan) queryObject database)
+end_test

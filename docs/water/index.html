@@ -1,0 +1,299 @@
+<html>
+	<head>
+		<style type="text/css">
+		body { font-family:Sans-Serif; }
+		a { color: blue; }
+		a:Visited { color: blue; }
+		</style>
+	</head>
+	<body>
+		<table width=600px>
+			<tr>
+				<td align=center colspan=2>
+					<font size="6">Water</font>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<table>
+						<tr>
+							<td>
+								<font size=2>
+									"Empty your mind, be formless, shapeless, like water. If you put water into 
+									a cup, it becomes the cup. You put water into a bottle and it becomes the 
+									bottle. You put it in a teapot it becomes the teapot. Now, water can flow or 
+									it can crash. Be water my friend."  - Bruce Lee
+								</font>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Introduction</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					Water is a simple scripting language designed to perform a variety of tasks.  
+					Water is implemented in C# for use with .NET/Mono.  Water allows easy access 
+					to .NET libraries and supports .NET datatypes.  In addition to piggy-backing 
+					on .NET, Water is better suited for tasks where a csproj and an edit/compile 
+					development cycle don't add value.  Water is useful for experimenting with 
+					algorithms, unit testing, performance testing, text processing, code generation, 
+					or just having fun!
+<br>
+<br>
+
+					Water expressions are evaluated by typing a command followed by a list of arguments.
+<pre>
+>print "a"
+a
+</pre>
+<br>
+
+					In Water all statements begin with an operator (a.k.a. prefix-notation).
+<pre>
++ 1 1
+</pre>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Constants and Variables</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					In Water there are two types of stored data:  variables and constants.  Constants are declared 
+					with the <b>constant</b> operator and variables with the <b>var</b> operator.
+<br>
+<br>
+					To reassign a variable use the assignment operator <b>=</b>.  To set a property of a variable use the <b>set</b> operator.
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Datatypes</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					Water has primitive datatypes and composite datatype.  Composite datatypes are lists and 
+					dictionaries composed of one or more primitive or composite datatypes.  Comments begin with
+					a semi-colon.
+					<br>
+					<br>
+					Primitives:
+<pre>
+null - Has no value.
+
+boolean - true/false
+
+integer - 0, 1, ... , n
+
+float - 0.001, 3.14, 555.55
+
+string - "Hello World!", "C:\\Temp"
+
+identifier - n, person, print
+</pre>
+					<br>
+					Composites:
+<pre>
+list - (a b c)
+
+dictionary - { a: "a" b: 5 }
+</pre>
+					<br>
+					Comments:
+<pre>
+; Comment
+</pre>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Conditional Statements</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+				    Water supports 2 types of conditional evaluation if statements and 
+				    switch statements.
+<pre>
+if true
+    print "TRUE"
+else
+    print "FALSE"
+end_if
+
+
+
+swith n
+    case 1
+        print "1"
+    case 2
+        print "2"
+    default
+        print "unknown"
+end_switch
+</pre>
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Iterative Statements</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+				    Water supports 3 types of loops:  foreach, while, and for.
+<pre>
+foreach item in list
+    print item
+end_foreach
+
+
+
+while true
+    print "still going..."
+end_while
+
+
+
+for i from 1 to 10
+    print i
+end_for
+</pre>
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Functions</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+				    Functions can contain any number of statements that are executed together when 
+				    the function is called.  Functions must be defiend before they are called.  The function...
+<pre>
+function print-hello who
+    print "Hello, ${who}."
+end_function
+</pre>
+                    will evaluate its contents when called...
+<pre>
+>print-hello "world"
+"Hello, world."
+</pre>
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<div style="font-size:11">Copyright © 2006-2008 Swampware, Inc.</div>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap width=30px>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

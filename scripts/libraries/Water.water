@@ -1,0 +1,64 @@
+function generate object ?writer
+	if(is-null writer)
+		return ((method (typeof Water.Generator Water) Generate) object)
+	else
+		var writer2 (new (typeof Water.TextWriter Water) writer)
+		((method (typeof Water.Generator Water) Generate) object writer2)
+	end_if
+end_function
+
+function parse reader
+	var reader2 (new (typeof Water.TextReader Water) reader)
+	var parser (new (typeof Water.Parser Water) reader2)
+	if(reader2.CanRead)
+		return (parser.Parse)
+	else
+		return null
+	end_if
+end_function
+
+function parse-statement reader
+	var reader2 (new (typeof Water.TextReader Water) reader)
+	var parser (new (typeof Water.StatementParser Water) reader2)
+	if(reader2.CanRead)
+		return (parser.Parse)
+	else
+		return null
+	end_if
+end_function
+
+function parse-script reader
+	var reader2 (new (typeof Water.TextReader Water) reader)
+	var parser (new (typeof Water.StatementParser Water) reader2)
+	var statements '()
+	while(reader2.CanRead)
+		var statement (parser.Parse)
+		statements.Add statement.Statement
+	end_while
+	return statements
+end_function
+
+function object.to-string object
+	var writer (string-writer)
+	generate object writer
+	writer.Flush
+	var result (writer.ToString)
+	writer.Close
+	return result
+end_function
+
+function object.to-bytes object
+	return (string.to-bytes (object.to-string object))
+end_function
+
+function string.to-object string
+	var reader (string-reader string)
+	= reader (new (typeof Water.TextReader Water) reader)
+	var result (parse reader)
+	reader.Close
+	return result
+end_function
+
+function bytes.to-object bytes
+	return (object.from-string (bytes.to-string bytes))
+end_function

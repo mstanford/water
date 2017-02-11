@@ -1,0 +1,95 @@
+;
+; Versioned Backup
+;
+; 1-29-07
+;
+function backup.versioned-backup catalog-name target-folder drop-folder
+	print "backup \"${catalog-name}\" \"${target-folder}\" \"${drop-folder}\""
+	backup.backup catalog-name target-folder drop-folder
+end_function
+
+;
+; Unversioned Backup
+;
+; 1-29-07
+;
+function backup.unversioned-backup catalog-name target-folder drop-folder
+	print "delete ${drop-folder}\\${catalog-name}"
+	folder.delete "${drop-folder}\\${catalog-name}"
+
+	print "backup \"${catalog-name}\" \"${target-folder}\" \"${drop-folder}\""
+
+	backup.backup catalog-name target-folder drop-folder
+end_function
+
+;
+; Backup Backup
+;
+; 1-29-07
+;
+function backup.backup catalog-name target-folder drop-folder
+	var destination-path (backup.get-destination catalog-name drop-folder)
+	var destination-filename (backup.get-destination-filename catalog-name)
+	zip "${destination-path}\${destination-filename}" "${target-folder}"
+	var head (backup.get-head drop-folder)
+	if (not (folder.exists head))
+		folder.create head
+	end_if
+	file.copy "${destination-path}\${destination-filename}" "${head}\${catalog-name}.zip"
+end_function
+
+;
+; Backup GetDestinationFilename
+;
+; 1-29-07
+;
+function backup.get-destination-filename catalog-name
+	var today (now)
+	var year today.Year
+	var month (backup.double-digit today.Month)
+	var day (backup.double-digit today.Day)
+	var hour (backup.double-digit today.Hour)
+	var minute (backup.double-digit today.Minute)
+	var second (backup.double-digit today.Second)
+	return "${catalog-name}_${year}_${month}_${day}_${hour}_${minute}_${second}.zip"
+end_function
+
+;
+; Backup Double Digit
+;
+; 1-29-07
+;
+function backup.double-digit number
+	if (< number 10)
+		return "0${number}"
+	else
+		return number
+	end_if
+end_function
+
+;
+; Backup GetDestination
+;
+; 1-29-07
+;
+function backup.get-destination catalog-name drop-folder
+	if (drop-folder.EndsWith "\\")
+		return "${drop-folder}${catalog-name}"
+	else
+		return "${drop-folder}\${catalog-name}"
+	end_if
+end_function
+
+;
+; Backup GetHead
+;
+; 1-29-07
+;
+function backup.get-head drop-folder
+	var head "HEAD"
+	if (drop-folder.EndsWith "\\")
+		return "${drop-folder}${head}"
+	else
+		return "${drop-folder}\${head}"
+	end_if
+end_function

@@ -1,0 +1,284 @@
+library VisualStudio
+
+load-method     File.Exit      (typeof bamboo.Instructions bamboo)     FileExit
+load-method     load-image     (typeof bamboo.Instructions bamboo)     LoadImage
+
+
+
+function File.New
+	var control (new (typeof bamboo.Controls.Editor.EditorControl bamboo))
+	Workspace.AddDocument control
+end_function
+
+function File.Open ?path
+	if(is-null path)
+		var openFileDialog (new (typeof System.Windows.Forms.OpenFileDialog System.Windows.Forms))
+		= openFileDialog.Filter "All files (*.*)|*.*"
+		var result (openFileDialog.ShowDialog)
+		if(!= (to-string result) "OK")
+			openFileDialog.Dispose
+			return
+		end_if
+		= path openFileDialog.FileName
+		openFileDialog.Dispose
+	end_if
+
+	var path_lower (path.ToLower)
+	if(or (path_lower.EndsWith ".dll") (path_lower.EndsWith ".exe"))
+		View.AssemblyExplorer path
+	else
+
+;TODO
+;	//TODO if file is already open, select it and exit.
+;	if(Workspace.FindWindow(fileInfo.FullName) != null)
+;	{
+;		Workspace.SelectWindow(fileInfo.FullName);
+;		return null;
+;	}
+;
+;	var container (Workspace.FindWindow fileInfo.FullName)
+;	if(not-null container)
+;		container.Activate
+;		return
+;	end_if
+
+		var control (new (typeof bamboo.Controls.Editor.EditorControl bamboo))
+		control.FileOpen path
+		Workspace.AddDocument control
+	end_if
+end_function
+
+function File.Close
+	var document Workspace.ActiveDocument
+	if(not-null document)
+		document.Close
+	end_if
+end_function
+
+function Project.Open ?path
+	if(is-null path)
+		var openFileDialog (new (typeof System.Windows.Forms.OpenFileDialog System.Windows.Forms))
+		= openFileDialog.Filter "All files (*.*)|*.*"
+		var result (openFileDialog.ShowDialog)
+		if(!= (to-string result) "OK")
+			openFileDialog.Dispose
+			return
+		end_if
+		= path openFileDialog.FileName
+		openFileDialog.Dispose
+	end_if
+
+	View.ProjectExplorer
+
+	var container (Workspace.FindWindow "View.ProjectExplorer")
+	var projectExplorer container.Controls[0]
+
+	projectExplorer.CloseProject
+
+	projectExplorer.OpenProject path
+
+	View.ProjectExplorer
+end_function
+
+function Project.Close
+	var container (Workspace.FindWindow "View.ProjectExplorer")
+	if(not-null container)
+		var projectExplorer container.Controls[0]
+		projectExplorer.CloseProject
+	end_if
+end_function
+
+function Project.Find
+
+;	foreach(SearchFile searchFile in files)
+;	{
+;		using(System.IO.StreamReader reader = System.IO.File.OpenText(searchFile.Filename))
+;		{
+;			int line = 1;
+;
+;			while(reader.Peek() != -1)
+;			{
+;				string text = reader.ReadLine();
+;
+;				//TODO implement search algorithm.
+;				//TODO caseSensitive
+;
+;				int column = text.IndexOf(pattern);
+;				if(column != -1)
+;				{
+;					searchResults.Add(new SearchResult(searchFile.Filename, line, column + 1, text));
+;				}
+;
+;				line++;
+;			}
+;
+;			reader.Close();
+;		}
+;	}
+
+end_function
+
+function View.AssemblyExplorer path
+	var control (new (typeof bamboo.Controls.AssemblyExplorer.AssemblyExplorerControl bamboo))
+	control.FileOpen path
+	Workspace.AddDocument control
+end_function
+
+function View.CommandWindow ?pane
+	var container (Workspace.FindWindow "View.CommandWindow")
+	if(not-null container)
+		container.Activate
+		return
+	end_if
+
+	var control (new (typeof bamboo.Controls.CommandWindow.CommandWindowControl bamboo))
+
+	var image (load-image (typeof bamboo.Instructions bamboo) "bamboo.Images.CommandWindow.bmp")
+
+	if(is-null pane)
+		Add.Pane control image "Bottom"
+	else
+		Add.Pane control image pane
+	end_if
+end_function
+
+function View.OutputWindow ?pane
+	var container (Workspace.FindWindow "View.OutputWindow")
+	if(not-null container)
+		container.Activate
+		return
+	end_if
+
+	var control (new (typeof bamboo.Controls.OutputWindow.OutputWindowControl bamboo))
+
+	var image (load-image (typeof bamboo.Instructions bamboo) "bamboo.Images.OutputWindow.bmp")
+
+	if(is-null pane)
+		Add.Pane control image "Bottom"
+	else
+		Add.Pane control image pane
+	end_if
+end_function
+
+function View.ProjectExplorer ?pane
+	var container (Workspace.FindWindow "View.ProjectExplorer")
+	if(not-null container)
+		container.Activate
+		return
+	end_if
+
+	var control (new (typeof bamboo.Controls.ProjectExplorer.ProjectExplorerControl bamboo))
+
+	var image (load-image (typeof bamboo.Instructions bamboo) "bamboo.Images.ProjectExplorer.bmp")
+
+	if(is-null pane)
+		Add.Pane control image "Right"
+	else
+		Add.Pane control image pane
+	end_if
+end_function
+
+function View.PropertyBrowser ?pane
+	var container (Workspace.FindWindow "View.PropertyBrowser")
+	if(not-null container)
+		container.Activate
+		return
+	end_if
+
+	var control (new (typeof bamboo.Controls.PropertyBrowser.PropertyBrowserControl bamboo))
+
+	var image (load-image (typeof bamboo.Instructions bamboo) "bamboo.Images.PropertyBrowser.bmp")
+
+	if(is-null pane)
+		Add.Pane control image "Left"
+	else
+		Add.Pane control image pane
+	end_if
+end_function
+
+function View.SearchResults ?pane
+	var container (Workspace.FindWindow "View.SearchResults")
+	if(not-null container)
+		container.Activate
+		return
+	end_if
+
+	var control (new (typeof bamboo.Controls.SearchResults.SearchResultsControl bamboo))
+
+	var image (load-image (typeof bamboo.Instructions bamboo) "bamboo.Images.SearchResults.bmp")
+
+	if(is-null pane)
+		Add.Pane control image "Bottom"
+	else
+		Add.Pane control image pane
+	end_if
+end_function
+
+function View.TaskList ?pane
+	var container (Workspace.FindWindow "View.TaskList")
+	if(not-null container)
+		container.Activate
+		return
+	end_if
+
+	var control (new (typeof bamboo.Controls.TaskList.TaskListControl bamboo))
+
+	var image (load-image (typeof bamboo.Instructions bamboo) "bamboo.Images.TaskList.bmp")
+
+	if(is-null pane)
+		Add.Pane control image "Bottom"
+	else
+		Add.Pane control image pane
+	end_if
+end_function
+
+function View.StartPage ?pane
+	var container (Workspace.FindWindow "View.StartPage")
+	if(not-null container)
+		container.Activate
+		return
+	end_if
+
+	var control (new (typeof bamboo.StartPage bamboo))
+
+	if(is-null pane)
+		Add.Pane control null "Document"
+	else
+		Add.Pane control null pane
+	end_if
+end_function
+
+function Window.CloseAllDocuments
+
+;TODO
+;	System.Collections.ArrayList editors = new System.Collections.ArrayList();
+;	foreach(Bamboo.Editors.IEditor editor in this._editors)
+;	{
+;		editors.Add(editor);
+;	}
+;	foreach(Bamboo.Editors.IEditor editor in editors)
+;	{
+;		Bamboo.Workspaces.Window window = Workspace.FindWindow(editor.Filename);
+;		if(window != null)
+;		{
+;			//TODO if you can't close, return false;
+;			window.Close();
+;		}
+;	}
+
+end_function
+
+function Add.Pane control ?image pane
+	switch pane
+		case "Left"
+			Workspace.AddLeft control image
+		case "Right"
+			Workspace.AddRight control image
+		case "Bottom"
+			Workspace.AddBottom control image
+		case "Document"
+			Workspace.AddDocument control
+		default
+			throw "Invalid pane: ${pane}"
+	end_switch
+end_function

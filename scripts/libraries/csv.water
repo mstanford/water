@@ -1,0 +1,44 @@
+library Water
+library string
+
+
+
+function csv.read reader
+	return ((method (typeof Bamboo.Csv.CsvParser Bamboo.Csv) Parse) reader)
+end_function
+
+function csv.write table writer
+	return ((method (typeof Bamboo.Csv.CsvGenerator Bamboo.Csv) Generate) table writer)
+end_function
+
+function csv.print table
+	var writer (string-writer)
+	csv.write table writer
+	var s (writer.ToString)
+	writer.Close
+	print s
+end_function
+
+function file.to-csv path
+	var stream (file.open-read path)
+	var reader (stream-reader stream)
+	var table (csv.read reader)
+	stream.Close
+	return table
+end_function
+
+function csv.to-file path table
+	var stream (file.create path)
+	var writer (stream-writer stream)
+	csv.write table writer
+	stream.Close
+end_function
+
+function csv.to-bytes table
+	var stream (memory-stream)
+	var writer (stream-writer stream)
+	csv.write table writer
+	var bytes (stream.ToArray)
+	stream.Close
+	return bytes
+end_function

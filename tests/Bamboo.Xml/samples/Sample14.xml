@@ -1,0 +1,5 @@
+<World name="a">
+	<Continent name="b">
+		<Country name="c" />
+	</Continent>
+</World>

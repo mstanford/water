@@ -1,0 +1,18 @@
+//Copyright
+using System;
+
+namespace Tests.Data
+{
+	/// <summary>
+	/// Summary description for A1.
+	/// </summary>
+	public class A1
+	{
+		public A1()
+		{
+			//
+			// TODO: Add constructor logic here
+			//
+		}
+	}
+}

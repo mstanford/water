@@ -1,0 +1,34 @@
+library Water
+
+
+
+module bytes
+
+	function to-file bytes path
+		var stream (file.create path)
+		stream.Write bytes 0 bytes.Length
+		stream.Close
+	end_function
+
+	function to-stream bytes
+		return (memory-stream bytes)
+	end_function
+
+	function to-string bytes
+		var utf8 (property (typeof System.Text.Encoding) UTF8)
+		return (utf8.GetString bytes)
+	end_function
+
+end_module
+
+function byte-array length
+	return ((method (typeof System.Array) CreateInstance) (typeof System.Byte) (to-int length))
+end_function
+
+function bytes.to-base64-string bytes
+	return ((method (typeof System.Convert) ToBase64String) bytes)
+end_function
+
+function base64-string.to-bytes s
+	return ((method (typeof System.Convert) FromBase64String) s)
+end_function

@@ -1,0 +1,48 @@
+library Parsing
+
+
+
+var tokens '(
+	( LESS_THAN              "<" )
+	( GREATER_THAN           ">" )
+	( LESS_THAN_FORWARD_SLASH   "</" )
+	( EQUALS                 "=" )
+
+	( FORWARD_SLASH   "/" )
+
+	( INTEGER             (| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) )
+	( FLOAT               ((| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) "." (+ (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))) )
+
+	( STRING               (+ (^ "<" ">" "=" "\"" " " "\t" "\r" "\n") ) )
+	( QUOTED_STRING        ("\"" (* (| (^ "\"" "\\") ("\\" (.)) ) ) "\"") )
+)
+;generate-csharp-tokenizer tokens "Html" "Bamboo.Html" ".\\"
+
+
+
+var productions '(
+	( Node   StartTag )
+	( Node   EndTag )
+	( Node   Content )
+
+	( Content   STRING )
+	( Content   INTEGER )
+	( Content   FLOAT )
+
+	( StartTag   (LESS_THAN STRING AttributeList GREATER_THAN) )
+
+	( EndTag   (LESS_THAN_FORWARD_SLASH STRING GREATER_THAN) )
+
+	( Attribute   (STRING AttributeTail) )
+
+	( AttributeTail   (EQUALS AttributeTail2) )
+	( AttributeTail   EPSILON )
+
+	( AttributeTail2   QUOTED_STRING )
+	( AttributeTail2   STRING )
+	( AttributeTail2   INTEGER )
+
+	( AttributeList   (Attribute AttributeList) )
+	( AttributeList   EPSILON )
+)
+generate-csharp-parser tokens productions "Html" "Bamboo.Html" ".\\"

@@ -1,0 +1,45 @@
+library Water
+
+
+
+; Water.Tests
+block test *tags
+	evaluate-block _Statements false
+end_block
+
+
+function assert.true a
+	if(== a false)
+		throw "Object is not true."
+	end_if
+end_function
+
+function assert.false a
+	if(== a true)
+		throw "Object is not false."
+	end_if
+end_function
+
+function assert.equals a b
+	if(!= a b)
+		throw "Objects are not equal."
+	end_if
+end_function
+
+function assert.not-equals a b
+	if(== a b)
+		throw "Objects are equal."
+	end_if
+end_function
+
+function assert.not-null a
+	if(is-null a)
+		throw "Object is null."
+	end_if
+end_function
+
+function assert.null ?a
+	if(not-null a)
+		throw "Object is not null."
+	end_if
+end_function

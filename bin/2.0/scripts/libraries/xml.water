@@ -1,0 +1,95 @@
+library Water
+library string
+
+
+
+function xml.element name
+	var element (new (typeof Bamboo.Xml.XmlElement Bamboo.Xml))
+	= element.Name name
+	return element
+end_function
+
+function xml.attribute name value
+	var attribute (new (typeof Bamboo.Xml.XmlAttribute Bamboo.Xml))
+	= attribute.Name name
+	= attribute.Value value
+	return attribute
+end_function
+
+function bytes.to-xml bytes
+	var stream (memory-stream bytes)
+	var xml ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	stream.Close
+	return xml
+end_function
+
+function file.to-xml file
+	var stream (file.open-read file)
+	var xml ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	stream.Close
+	return xml
+end_function
+
+function xml.to-bytes xml
+	var stream (memory-stream)
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) xml stream
+	= stream.Position 0
+	var bytes (stream.ToArray)
+	stream.Close
+	return bytes
+end_function
+
+function string.to-xml string
+	var reader (string-reader string)
+	var xml ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) reader)
+	reader.Close
+	return xml
+end_function
+
+function xml.to-string xml
+	var stream (memory-stream)
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) xml stream
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+	return s
+end_function
+
+function object.to-xml name object
+	if(is-list object)
+		var element (xml.element name)
+		foreach item in object
+			element.Elements.Add (object.to-xml (noun.singular name) item)
+		end_foreach
+		return element
+	else_if(is-atom object)
+		var element (xml.element name)
+		= element.Value (to-string object)
+		return element
+	else
+		var element (xml.element name)
+		foreach object-property in (get-properties object)
+			var property-value (get-property-value object object-property)
+			element.Elements.Add (object.to-xml object-property property-value)
+		end_foreach
+		return element
+	end_if
+end_function
+
+function xml.to-object xml
+	if(== xml.Elements.Count 0)
+		return xml.Value
+	else_if(== (noun.plural xml.Elements[0].Name) xml.Name)
+		var list '()
+		foreach element in xml.Elements
+			list.Add (xml.to-object element)
+		end_foreach
+		return list
+	else
+		var object '{}
+		foreach element in xml.Elements
+			object.Add element.Name (xml.to-object element)
+		end_foreach
+		return object
+	end_if
+end_function

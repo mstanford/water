@@ -1,0 +1,19 @@
+library test
+
+
+
+test assert
+
+	assert.equals 5 5
+
+	assert.not-equals 5 6
+
+	assert.false FALSE
+
+	assert.true TRUE
+
+	assert.null (print "blah")
+
+	assert.not-null 5
+
+end_test

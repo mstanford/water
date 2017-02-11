@@ -1,0 +1,331 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{87C5C1ED-E57F-4D0D-BD17-6AB2A7D03376}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Bamboo.VisualStudio</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Bamboo.VisualStudio</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Bamboo.CSharp\Bamboo.CSharp.csproj">
+      <Name>Bamboo.CSharp</Name>
+      <Project>{D294134D-DF11-426E-B195-12715A50E73E}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CSharpProjectDetector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Path.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectBuildTracker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectDependencies\Project.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectDependencies\ProjectCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectDependencies\ProjectDependency.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectDependencies\ProjectDependencyCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectDependencies\ProjectDependencyResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SolutionDetector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\ProjectBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ErrorCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\Config.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\ConfigCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\Folder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\FolderCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\Item.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\ItemCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\Project.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\ProjectCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\Reference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\ReferenceCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\Models\Settings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Output.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\ProjectReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\ProjectReferenceRules.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\CSharpProject\ProjectWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\Solution\Models\Config.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\Solution\Models\ConfigCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\Solution\Models\Project.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\Solution\Models\ProjectCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\Solution\Models\Solution.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\Solution\SolutionBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\Solution\SolutionReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2003\Solution\SolutionWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\ProjectBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\BootstrapperFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\BootstrapperPackage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\Config.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\ConfigCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\Folder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\FolderCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\Import.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\Item.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\ItemCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\Project.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\ProjectCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\ProjectReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\ProjectReferenceCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\Reference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\ReferenceCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\Models\Settings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\ProjectReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\ProjectReferenceRules.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\CSharpProject\ProjectWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\Solution\Models\Config.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\Solution\Models\ConfigCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\Solution\Models\Project.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\Solution\Models\ProjectCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\Solution\Models\Solution.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\Solution\SolutionBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\Solution\SolutionReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2005\Solution\SolutionWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2008\CppProject\Models\Configuration.cs" />
+    <Compile Include="VisualStudio2008\CppProject\Models\File.cs" />
+    <Compile Include="VisualStudio2008\CppProject\Models\FileFilter.cs" />
+    <Compile Include="VisualStudio2008\CppProject\Models\Project.cs" />
+    <Compile Include="VisualStudio2008\CppProject\ProjectBuilder.cs" />
+    <Compile Include="VisualStudio2008\CppProject\ProjectReader.cs" />
+    <Compile Include="VisualStudio2008\CppProject\ProjectWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualStudio2008\CSharpProject\Models\BootstrapperFile.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\BootstrapperPackage.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\Config.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\Folder.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\Import.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\Item.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\Project.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\ProjectReference.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\Reference.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\Models\Settings.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\ProjectBuilder.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\ProjectReader.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\ProjectReferenceRules.cs" />
+    <Compile Include="VisualStudio2008\CSharpProject\ProjectWriter.cs" />
+    <Compile Include="VisualStudio2008\Solution\Models\Config.cs" />
+    <Compile Include="VisualStudio2008\Solution\Models\Project.cs" />
+    <Compile Include="VisualStudio2008\Solution\Models\Solution.cs" />
+    <Compile Include="VisualStudio2008\Solution\SolutionBuilder.cs" />
+    <Compile Include="VisualStudio2008\Solution\SolutionReader.cs" />
+    <Compile Include="VisualStudio2008\Solution\SolutionWriter.cs" />
+    <Compile Include="VisualStudioDetector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

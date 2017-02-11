@@ -1,0 +1,82 @@
+library test
+library query
+
+
+
+test Evaluator
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( ( 1 2 3 ) ))
+
+	var query "SELECT A, B, C FROM R"
+	var table (query.evaluate query database)
+
+	assert.equals table.Columns.Count 3
+	assert.equals table.Columns[0].Name "A"
+	assert.equals table.Columns[1].Name "B"
+	assert.equals table.Columns[2].Name "C"
+
+	assert.equals table.Rows.Count 1
+	assert.equals '(1 2 3) table.Rows[0]
+
+	table.Close
+	assert.equals table.Columns.Count 0
+
+	database.Close
+
+end_test
+
+test Evaluator
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( ( 1 2 3 ) ( 4 5 6 ) ))
+	database.Add "S" (query.table '( "D" "E" "F" ) '( ( 1 11 111 ) ( 4 44 444 ) ))
+
+	var query "SELECT R.A, R.B, R.C, S.D, S.E, S.F FROM R JOIN S ON R.A = S.D"
+	var table (query.evaluate query database)
+
+	assert.equals table.Columns.Count 6
+	assert.equals table.Columns[0].Name "A"
+	assert.equals table.Columns[1].Name "B"
+	assert.equals table.Columns[2].Name "C"
+	assert.equals table.Columns[3].Name "D"
+	assert.equals table.Columns[4].Name "E"
+	assert.equals table.Columns[5].Name "F"
+
+	assert.equals table.Rows.Count 2
+	assert.equals '(1 2 3 1 11 111) table.Rows[0]
+	assert.equals '(4 5 6 4 44 444) table.Rows[1]
+
+	table.Close
+	assert.equals table.Columns.Count 0
+
+	database.Close
+
+end_test
+
+test Evaluator
+
+	var database (query.database)
+	database.Add "R" (query.table '( "A" "B" "C" ) '( ( 1 2 3 ) ( 4 5 6 ) ))
+	database.Add "S" (query.table '( "D" "E" "F" ) '( ( 1 11 111 ) ( 4 44 444 ) ))
+
+	var query "SELECT R.A, R.B, R.C, S.D, S.E, S.F FROM R JOIN S ON R.A = S.D WHERE R.A = 1"
+	var table (query.evaluate query database)
+
+	assert.equals table.Columns.Count 6
+	assert.equals table.Columns[0].Name "A"
+	assert.equals table.Columns[1].Name "B"
+	assert.equals table.Columns[2].Name "C"
+	assert.equals table.Columns[3].Name "D"
+	assert.equals table.Columns[4].Name "E"
+	assert.equals table.Columns[5].Name "F"
+
+	assert.equals table.Rows.Count 1
+	assert.equals '(1 2 3 1 11 111) table.Rows[0]
+
+	table.Close
+	assert.equals table.Columns.Count 0
+
+	database.Close
+
+end_test

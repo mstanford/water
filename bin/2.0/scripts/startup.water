@@ -1,0 +1,156 @@
+load-operator   =          Water.Operators.AssignOperator     Water
+load-operator   constant   Water.Operators.ConstantOperator   Water
+load-operator   new        Water.Operators.NewOperator        Water
+load-operator   typeof     Water.Operators.TypeofOperator     Water
+load-operator   var        Water.Operators.VarOperator        Water
+
+
+
+load-block   Water.Blocks.BlockBlock             Water
+load-block   Water.Conditionals.IfBlock          Water
+load-block   Water.Conditionals.SwitchBlock      Water
+load-block   Water.ErrorHandling.TryCatchBlock   Water
+load-block   Water.Functions.FunctionBlock       Water
+load-block   Water.Iteration.ForBlock            Water
+load-block   Water.Iteration.ForeachBlock        Water
+load-block   Water.Iteration.WhileBlock          Water
+
+load-method   and                  (typeof Water.Instructions Water)   And
+load-method   break                (typeof Water.Instructions Water)   Break
+load-method   equals               (typeof Water.Instructions Water)   Equals
+load-method   throw                (typeof Water.Instructions Water)   Error
+load-method   is-null              (typeof Water.Instructions Water)   IsNull
+load-method   not                  (typeof Water.Instructions Water)   Not
+load-method   or                   (typeof Water.Instructions Water)   Or
+load-method   return               (typeof Water.Instructions Water)   Return
+load-method   trace                (typeof Water.Instructions Water)   Trace
+load-method   no-trace             (typeof Water.Instructions Water)   NoTrace
+
+;TODO DELETE load-method   get-type             (typeof Water.Instructions Water)   GetType
+;TODO DELETE load-method   get-properties       (typeof Water.Instructions Water)   GetProperties
+load-method   get-property-value   (typeof Water.Instructions Water)   GetPropertyValue
+load-method   is-dictionary        (typeof Water.Instructions Water)   IsDictionary
+load-method   is-string            (typeof Water.Instructions Water)   IsString
+load-method   is-decimal           (typeof Water.Instructions Water)   IsDecimal
+load-method   is-double            (typeof Water.Instructions Water)   IsDouble
+load-method   is-int               (typeof Water.Instructions Water)   IsInt
+load-method   is-atom              (typeof Water.Instructions Water)   IsAtom
+load-method   evaluate-block       (typeof Water.Blocks.Block   Water)   EvaluateBlock
+
+function method type 'method-name
+	return (new (typeof Water.Method Water) type "${method-name}")
+end_function
+
+function is-list item
+	var type "${(item.GetType)}"
+	if(== type "Water.List")
+		return true
+	else
+		return ((method (typeof Water.Instructions Water) IsList) item)
+	end_if
+end_function
+
+
+
+; library
+constant _Libraries '{}
+function library 'name ?path
+	if(is-null _Libraries[name.Value])
+		_Libraries.Add name.Value name.Value
+		if(is-null path)
+			include "${_StartupPath}scripts\\libraries\\${name}.water"
+		else
+			include path
+		end_if
+	end_if
+end_function
+
+
+; module
+block module name
+	var _Namespace name.Value
+	evaluate-block _Statements false
+end_block
+
+
+function not-null ?value
+	return (not (is-null value))
+end_function
+
+function not-equals a b
+	return (not (equals a b))
+end_function
+
+constant == equals
+constant ! not
+
+function != a b
+	return (! (== a b))
+end_function
+
+
+; type conversion
+;todo load-method
+function to-char x
+	return ((method (typeof System.Convert) ToChar) x)
+end_function
+
+function to-float x
+	return ((method (typeof System.Convert) ToSingle) x)
+end_function
+
+function to-int x
+	return ((method (typeof System.Convert) ToInt32) x)
+end_function
+
+function to-double x
+	return ((method (typeof System.Convert) ToDouble) x)
+end_function
+
+function to-decimal x
+	return ((method (typeof System.Convert) ToDecimal) x)
+end_function
+
+function to-byte x
+	return ((method (typeof System.Convert) ToByte) x)
+end_function
+
+function to-uint x
+	return ((method (typeof System.Convert) ToUInt32) x)
+end_function
+
+function to-string object
+	return "${object}"
+end_function
+
+
+; Guid
+function guid s
+	return (new (typeof System.Guid) s)
+end_function
+
+load-method guid.new (typeof System.Guid) NewGuid
+
+
+; DateTime
+function now
+	return (property (typeof System.DateTime) Now)
+end_function
+
+function utc-now
+	return (property (typeof System.DateTime) UtcNow)
+end_function
+
+load-method datetime.parse (typeof System.DateTime) Parse
+
+
+; regular expressions
+function regex s
+	var options (enum (typeof System.Text.RegularExpressions.RegexOptions System) Compiled)
+	return (new (typeof System.Text.RegularExpressions.Regex System) s options)
+end_function
+
+
+function sleep millisecondsTimeout
+	((method (typeof System.Threading.Thread) Sleep) millisecondsTimeout)
+end_function

@@ -1,0 +1,283 @@
+library math
+
+
+
+function matrix.print A
+	var stream (memory-stream)
+	var writer (stream-writer stream)
+	for i from 0 to (- A.Count 1)
+		var row A[i]
+		for j from 0 to (- row.Count 1)
+			var cell "${(row[j].ToString)}"
+			if(== cell.Length 1)
+				writer.Write " ${cell}      "
+			else_if(== cell.Length 2)
+				writer.Write " ${cell}     "
+			else_if(== cell.Length 3)
+				writer.Write " ${cell}    "
+			else_if(== cell.Length 4)
+				writer.Write " ${cell}   "
+			else_if(== cell.Length 5)
+				writer.Write " ${cell}  "
+			else
+				writer.Write " ${cell} "
+			end_if
+		end_for
+		writer.WriteLine ""
+	end_for
+	writer.Flush
+	= stream.Position 0
+	print (stream.to-string stream)
+	stream.Close
+end_function
+
+function matrix.transpose A
+	var At '()
+	for i from 0 to (- A.Count 1)
+		var row A[i]
+		for j from 0 to (- row.Count 1)
+			if(== i 0)
+				var vector '()
+				At.Add vector
+			end_if
+			At[j].Add row[j]
+		end_for
+	end_for
+	return At
+end_function
+
+function matrix.copy A
+	var B '()
+	for i from 0 to (- A.Count 1)
+		var vector '()
+		B.Add vector
+		for j from 0 to (- A[i].Count 1)
+			vector.Add A[i][j]
+		end_for
+	end_for
+	return B
+end_function
+
+function matrix.zero n m
+	var A '()
+	for i from 0 to (- n 1)
+		var vector '()
+		A.Add vector
+		for j from 0 to (- m 1)
+			vector.Add 0
+		end_for
+	end_for
+	return A
+end_function
+
+function matrix.identity n
+	var A '()
+	for i from 0 to (- n 1)
+		var vector '()
+		A.Add vector
+		for j from 0 to (- n 1)
+			if(== i j)
+				vector.Add 1
+			else
+				vector.Add 0
+			end_if
+		end_for
+	end_for
+	return A
+end_function
+
+function matrix.add A B
+	var C '()
+	for i from 0 to (- A.Count 1)
+		C.Add (vector.add A[i] B[i])
+	end_for
+	return C
+end_function
+
+function vector.add a b
+	var c '()
+	for i from 0 to (- a.Count 1)
+		c.Add (+ a[i] b[i])
+	end_for
+	return c
+end_function
+
+function matrix.subtract A B
+	var C '()
+	for i from 0 to (- A.Count 1)
+		C.Add (vector.subtract A[i] B[i])
+	end_for
+	return C
+end_function
+
+function vector.subtract a b
+	var c '()
+	for i from 0 to (- a.Count 1)
+		c.Add (- a[i] b[i])
+	end_for
+	return c
+end_function
+
+function matrix.multiply-scalar A l
+	var C '()
+	for i from 0 to (- A.Count 1)
+		C.Add '()
+		var row A[i]
+		for j from 0 to (- row.Count 1)
+			C[i].Add (* row[j] l)
+		end_for
+	end_for
+	return C
+end_function
+
+function vector.multiply-scalar a l
+	var c '()
+	for i from 0 to (- a.Count 1)
+		c.Add (* a[i] l)
+	end_for
+	return c
+end_function
+
+function matrix.multiply A B
+	var Bt (matrix.transpose B)
+	var C '()
+	for i from 0 to (- A.Count 1)
+		var vector '()
+		C.Add vector
+		for j from 0 to (- Bt.Count 1)
+			vector.Add (vector.multiply A[i] Bt[j])
+		end_for
+	end_for
+	return C
+end_function
+
+function vector.multiply a b
+	var c 0
+	for i from 0 to (- a.Count 1)
+		subst c (+ c (* a[i] b[i]))
+	end_for
+	return c
+end_function
+
+function matrix.determinant A
+	if(and (== A.Count 2) (== A[0].Count 2))
+		return (- (* A[0][0] A[1][1]) (* A[0][1] A[1][0]))
+	else
+		var detA 0
+		for i from 0 to (- A[0].Count 1)
+			if(== (math.mod i 2) 0)
+				subst detA (+ detA (* A[0][i] (matrix.determinant (matrix._slice-matrix A i))))
+			else
+				subst detA (- detA (* A[0][i] (matrix.determinant (matrix._slice-matrix A i))))
+			end_if
+		end_for
+		return detA
+	end_if
+end_function
+
+function matrix._slice-matrix A k
+	var B '()
+	for i from 1 to (- A.Count 1)
+		var vector '()
+		B.Add vector
+		for j from 0 to (- A[i].Count 1)
+			if(not (== j k))
+				vector.Add A[i][j]
+			end_if
+		end_for
+	end_for
+	return B
+end_function
+
+function matrix.is-singular A
+	return (== (matrix.determinant A) 0)
+end_function
+
+function matrix.is-nonsingular A
+	return (not (== (matrix.determinant A) 0))
+end_function
+
+function matrix.is-symmetric A
+	return (== A (matrix.transpose A))
+end_function
+
+function matrix.is-square A
+	return (== A.Count A[0].Count)
+end_function
+
+function matrix.gaussian-elimination A B
+	if(not (matrix.is-square A))
+		throw "Matrix must be square."
+	end_if
+	var Af (matrix._fractionalize A)
+	var Bf (matrix._fractionalize B)
+	for i from 0 to (- Af.Count 1)
+		var l Af[i][i]
+		matrix._divide-row Af[i] l
+		matrix._divide-row Bf[i] l
+		for ii from 0 to (- Af.Count 1)
+			if(not (== ii i))
+				var l Af[ii][i]
+				matrix._subtract-row Af[ii] (vector.multiply-scalar Af[i] l)
+				matrix._subtract-row Bf[ii] (vector.multiply-scalar Bf[i] l)
+			end_if
+		end_for
+	;
+	; To print each step.
+	;
+	;matrix.print-augmented Af Bf
+	end_for
+	return Bf
+end_function
+
+function matrix._fractionalize A
+	var Af '()
+	for i from 0 to (- A.Count 1)
+		var vector '()
+		Af.Add vector
+		for j from 0 to (- A[i].Count 1)
+			vector.Add (int.to-fraction A[i][j])
+		end_for
+	end_for
+	return Af
+end_function
+
+function matrix._divide-row a l
+	var c '()
+	for i from 0 to (- a.Count 1)
+		c.Add (div a[i] l)
+	end_for
+	a.Clear
+	foreach x in c
+		a.Add x
+	end_foreach
+end_function
+
+function matrix._subtract-row a b
+	var c '()
+	for i from 0 to (- a.Count 1)
+		c.Add (- a[i] b[i])
+	end_for
+	a.Clear
+	foreach x in c
+		a.Add x
+	end_foreach
+end_function
+
+function matrix.has-inverse A
+	return (matrix.is-nonsingular A)
+end_function
+
+function matrix.inverse A
+	return (matrix.gaussian-inverse A)
+end_function
+
+function matrix.gaussian-inverse A
+	if(not (matrix.is-square A))
+		throw "Matrix must be square."
+	end_if
+	if(not (matrix.is-nonsingular A))
+		throw "Matrix must be nonsingular."
+	end_if
+	return (matrix.gaussian-elimination A (matrix.identity A.Count))
+end_function

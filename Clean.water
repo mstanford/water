@@ -1,0 +1,13 @@
+library filesystem
+library string
+
+
+
+foreach folder in (folder.get-folders "source")
+	foreach folder in (folder.get-folders folder)
+		var name (folder.get-name folder)
+		if(or (== (string.to-lower name) "bin") (== (string.to-lower name) "obj"))
+			folder.delete folder
+		end_if
+	end_foreach
+end_foreach

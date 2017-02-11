@@ -1,0 +1,364 @@
+library filesystem
+library list
+library reflection
+library Surf
+
+
+
+constant alphabet (surf.set '(" " "\t" "\r" "\n" "`" "~" "!" "@" "#" "$" "%" "^" "&" "*" "(" ")" "-" "_" "=" "+" "[" "{" "]" "}" "\\" "|" ";" ":" "'" "\"" "," "<" "." ">" "/" "?" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z"))
+
+function alternation token-type a b
+	return (new (typeof Bamboo.Parsing.RegularExpressions.Alternation Bamboo.Parsing) token-type a b)
+end_function
+
+function concatenation token-type a b
+	return (new (typeof Bamboo.Parsing.RegularExpressions.Concatenation Bamboo.Parsing) token-type a b)
+end_function
+
+function literal token-type s
+	return (new (typeof Bamboo.Parsing.RegularExpressions.Literal Bamboo.Parsing) token-type s)
+end_function
+
+function repitition token-type expression
+	return (new (typeof Bamboo.Parsing.RegularExpressions.Repitition Bamboo.Parsing) token-type expression)
+end_function
+
+function optional token-type expression
+	return (new (typeof Bamboo.Parsing.RegularExpressions.Optional Bamboo.Parsing) token-type expression)
+end_function
+
+function complement token-type expression
+	return (new (typeof Bamboo.Parsing.RegularExpressions.Complement Bamboo.Parsing) token-type expression)
+end_function
+
+function regular-definition
+	return (new (typeof Bamboo.Parsing.RegularExpressions.RegularDefinition Bamboo.Parsing))
+end_function
+
+function nfa re
+	return ((method (typeof Bamboo.Parsing.FiniteAutomata.Algorithms Bamboo.Parsing) NFA) re)
+end_function
+
+function dfa re
+	return ((method (typeof Bamboo.Parsing.FiniteAutomata.Algorithms Bamboo.Parsing) DFA) re)
+end_function
+
+; Convert a token definition to a regular expression.
+function create-regular-expression token-type expression tokentypes
+	if(is expression System.String)
+		return (literal token-type expression)
+	else_if(is expression Water.Identifier)
+		var aliasedExpression tokentypes[expression.Value]
+		if(is-null aliasedExpression)
+			throw "Identifier is not defined: ${expression.Value}"
+		end_if
+		return (create-regular-expression token-type aliasedExpression tokentypes)
+	else_if(is expression Water.List)
+		var head (list.first expression)
+		var tail (list.not-first expression)
+		if(is head Water.Identifier)
+			if(== head.Value "|")
+				if(== tail.Count 0)
+					throw "Invalid expression: ${(generate expression)}"
+				end_if
+				var a (list.first tail)
+				= tail (list.not-first tail)
+				var b (list.first tail)
+				= tail (list.not-first tail)
+				var expression2 (alternation token-type (create-regular-expression token-type a tokentypes) (create-regular-expression token-type b tokentypes))
+				while(> tail.Count 0)
+					= b (list.first tail)
+					= tail (list.not-first tail)
+					= expression2 (alternation token-type expression2 (create-regular-expression token-type b tokentypes))
+				end_while
+				return expression2
+			else_if(== head.Value "*")
+				if(!= tail.Count 1)
+					throw "Invalid expression: ${(generate expression)}"
+				end_if
+				var subexpression (create-regular-expression token-type (list.first tail) tokentypes)
+				return (repitition token-type subexpression)
+			else_if(== head.Value "+")
+				if(!= tail.Count 1)
+					throw "Invalid expression: ${(generate expression)}"
+				end_if
+				return (concatenation token-type (create-regular-expression token-type (list.first tail) tokentypes) (repitition token-type (create-regular-expression token-type (list.first tail) tokentypes)))
+			else_if(== head.Value "?")
+				if(!= tail.Count 1)
+					throw "Invalid expression: ${(generate expression)}"
+				end_if
+				var subexpression (create-regular-expression token-type (list.first tail) tokentypes)
+				return (optional token-type subexpression)
+			else_if(== head.Value "^")
+				var l '(|)
+				foreach ch in (alphabet.Difference (surf.set tail))
+					l.Add ch
+				end_foreach
+				return (create-regular-expression token-type l tokentypes)
+			else_if(== head.Value ".")
+				if(!= tail.Count 0)
+					throw "Invalid expression: ${(generate expression)}"
+				end_if
+				var l '(|)
+				foreach ch in alphabet
+					l.Add ch
+				end_foreach
+				return (create-regular-expression token-type l tokentypes)
+			end_if
+		end_if
+		var b (list.first tail)
+		= tail (list.not-first tail)
+		var expression2 (concatenation token-type (create-regular-expression token-type head tokentypes) (create-regular-expression token-type b tokentypes))
+		while(> tail.Count 0)
+			= b (list.first tail)
+			= tail (list.not-first tail)
+			= expression2 (concatenation token-type expression2 (create-regular-expression token-type b tokentypes))
+		end_while
+		return expression2
+	else
+		throw "Invalid expression: ${(generate expression)}"
+	end_if
+end_function
+
+function get-tokentypes token-definitions
+	var tokentypes '{}
+	foreach token-definition in token-definitions
+		var expressions (token-definition.NotFirst)
+		if(!= expressions.Count 1)
+			throw "Invalid token definition: ${(generate token-definition)}"
+		end_if
+		var identifier token-definition[0].Value
+		tokentypes.Add identifier expressions[0]
+	end_foreach
+	return tokentypes
+end_function
+
+; Convert tokens to regular expressions and then dfa.
+function create-dfa token-definitions
+	var tokentypes (get-tokentypes token-definitions)
+
+	var regular-expression null
+	foreach token-definition in token-definitions
+		var definition (list.first (list.not-first token-definition))
+		var token-type token-definition[0].Value
+		var re (create-regular-expression token-type definition tokentypes)
+		if(is-null regular-expression)
+			= regular-expression re
+		else
+			= regular-expression (alternation "" regular-expression re)
+		end_if
+	end_foreach
+
+	return (dfa (nfa regular-expression))
+end_function
+
+function generate-csharp-tokenizer tokens name namespace path
+
+	var finite-automata (create-dfa tokens)
+
+	var writer (file.create-text "${path}\\${name}Tokenizer.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.TokenizerGenerator Bamboo.Parsing) Generate) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Token.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.TokenGenerator Bamboo.Parsing) Generate) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}TokenType.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.TokenTypeGenerator Bamboo.Parsing) Generate) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}TextReader.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.TextReaderGenerator Bamboo.Parsing) Generate) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+end_function
+
+function generate-cplusplus-tokenizer tokens name namespace path
+
+	var finite-automata (create-dfa tokens)
+
+	var writer (file.create-text "${path}\\${name}Tokenizer.h")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.TokenizerGenerator Bamboo.Parsing) GenerateHeader) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Tokenizer.cpp")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.TokenizerGenerator Bamboo.Parsing) GenerateClass) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Token.h")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.TokenGenerator Bamboo.Parsing) GenerateHeader) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}TokenType.h")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.TokenTypeGenerator Bamboo.Parsing) GenerateHeader) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}TextReader.h")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.TextReaderGenerator Bamboo.Parsing) GenerateHeader) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}TextReader.cpp")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.TextReaderGenerator Bamboo.Parsing) GenerateClass) name namespace finite-automata writer)
+	writer.Flush
+	writer.Close
+
+end_function
+
+function generate-csharp-parser tokens productions name namespace path
+
+	var grammar (create-grammar productions)
+	var FIRST ((method (typeof Bamboo.Parsing.LL.Algorithms Bamboo.Parsing) First) grammar)
+	var FOLLOW ((method (typeof Bamboo.Parsing.LL.Algorithms Bamboo.Parsing) Follow) grammar FIRST)
+	var PREDICT ((method (typeof Bamboo.Parsing.LL.Algorithms Bamboo.Parsing) Predict) grammar FIRST FOLLOW)
+
+	var writer (file.create-text "${path}\\${name}Parser.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.ParserGenerator Bamboo.Parsing) Generate) name namespace grammar FIRST FOLLOW PREDICT writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}NodeType.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.NodeTypeGenerator Bamboo.Parsing) Generate) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Node.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.NodeGenerator Bamboo.Parsing) Generate) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}NodePrinter.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.NodePrinterGenerator Bamboo.Parsing) Generate) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Generator.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.GeneratorGenerator Bamboo.Parsing) Generate) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Evaluator.cs")
+	((method (typeof Bamboo.Parsing.Generators.CSharp.EvaluatorGenerator Bamboo.Parsing) Generate) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+end_function
+
+function generate-cplusplus-parser tokens productions name namespace path
+
+	var grammar (create-grammar productions)
+	var FIRST ((method (typeof Bamboo.Parsing.LL.Algorithms Bamboo.Parsing) First) grammar)
+	var FOLLOW ((method (typeof Bamboo.Parsing.LL.Algorithms Bamboo.Parsing) Follow) grammar FIRST)
+
+	var writer (file.create-text "${path}\\${name}Parser.h")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.ParserGenerator Bamboo.Parsing) GenerateHeader) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Parser.cpp")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.ParserGenerator Bamboo.Parsing) GenerateClass) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}NodeType.h")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.NodeTypeGenerator Bamboo.Parsing) GenerateHeader) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Node.h")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.NodeGenerator Bamboo.Parsing) GenerateHeader) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Generator.h")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.GeneratorGenerator Bamboo.Parsing) GenerateHeader) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+	= writer (file.create-text "${path}\\${name}Generator.cpp")
+	((method (typeof Bamboo.Parsing.Generators.CPlusPlus.GeneratorGenerator Bamboo.Parsing) GenerateClass) name namespace grammar writer)
+	writer.Flush
+	writer.Close
+
+end_function
+
+
+function create-grammar _productions
+	var grammar (new (typeof Bamboo.Parsing.Grammars.Grammar Bamboo.Parsing))
+
+	foreach _production in _productions
+		var nonterminal (to-string _production[0])
+		grammar.Nonterminals.Add nonterminal
+	end_foreach
+
+	foreach _production in _productions
+		var _expression _production[1]
+		hunt-terminals _expression grammar
+	end_foreach
+
+	= grammar.StartSymbol (to-string _productions[0][0])
+
+	foreach _production in _productions
+		grammar.Productions.Add (create-production _production)
+	end_foreach
+
+	return grammar
+end_function
+
+function create-production _production
+	var nonterminal (to-string _production[0])
+	var expression (create-expression _production[1])
+	var production (new (typeof Bamboo.Parsing.Grammars.Production Bamboo.Parsing) nonterminal expression)
+	return production
+end_function
+
+function create-expression expression
+	if(is expression Water.List)
+		if(== expression.Count 1)
+			return (create-expression expression[0])
+		end_if
+		var head expression[0]
+		var tail (list.not-first expression)
+		var s_head (to-string head)
+;TODO
+		if(== s_head "|")
+			var subExpressions '()
+			foreach	subExpression in tail
+				subExpressions.Add (create-expression subExpression)
+			end_foreach
+			return (new (typeof Bamboo.Parsing.Grammars.Alternation Bamboo.Parsing) subExpressions)
+		else_if(== s_head "*")
+			return (new (typeof Bamboo.Parsing.Grammars.Repitition Bamboo.Parsing) (create-expression tail))
+		else
+			var subExpressions '()
+			foreach	subExpression in expression
+				subExpressions.Add (create-expression subExpression)
+			end_foreach
+			return (new (typeof Bamboo.Parsing.Grammars.Concatenation Bamboo.Parsing) subExpressions)
+		end_if
+	else
+		return (new (typeof Bamboo.Parsing.Grammars.Symbol Bamboo.Parsing) (to-string expression))
+	end_if
+end_function
+
+function hunt-terminals expression grammar
+	if(is expression Water.List)
+		foreach item in expression
+			hunt-terminals item grammar
+		end_foreach
+	else
+		var symbol (to-string expression)
+		if(not (grammar.Nonterminals.Contains symbol))
+			grammar.Terminals.Add symbol
+		end_if
+	end_if
+end_function

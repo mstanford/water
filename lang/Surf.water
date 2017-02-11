@@ -1,0 +1,66 @@
+library Parsing
+
+
+
+var tokens '(
+	( LEFT_CURLY_BRACE    "{" )
+	( RIGHT_CURLY_BRACE   "}" )
+	( LEFT_PAREN          "(" )
+	( RIGHT_PAREN         ")" )
+
+	( COMMA               "," )
+	( ASSIGNMENT          ":=" )
+
+	( UNION               "|" )
+	( INTERSECTION        "&" )
+	( DIFFERENCE          "^" )
+
+	( EQUALS              "=" )
+
+	( BOOLEAN             (| "true" "false") )
+
+	( IDENTIFIER          (+ (| "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z") ) )
+
+	( INTEGER             (| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) )
+	( FLOAT               ((| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) "." (+ (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))) )
+
+	( CHARACTER           ("\'" (| "\\" "." "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z") "\'") )
+	( STRING              ("\"" (+ (| "\\" "." "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z") ) "\"") )
+
+	( BITMAP              ("[" (* (| "0" "1")) "]") )
+)
+;	( CARTESIAN_PRODUCT   "*" )
+;	( PARTITION           "/" )
+;generate-csharp-tokenizer tokens "" "Surf" "..\\source\\Surf"
+
+
+
+var productions '(
+	( Expression   Set                                             )
+	( Expression   Tuple                                           )
+	( Expression   BOOLEAN                                         )
+	( Expression   INTEGER                                         )
+	( Expression   FLOAT                                           )
+	( Expression   CHARACTER                                       )
+	( Expression   STRING                                          )
+	( Expression   BITMAP                                          )
+	( Expression   (IDENTIFIER ExpressionTail)                     )
+
+	( ExpressionTail   (ASSIGNMENT Expression)                     )
+	( ExpressionTail   (UNION Expression)                          )
+	( ExpressionTail   (INTERSECTION Expression)                   )
+	( ExpressionTail   (DIFFERENCE Expression)                     )
+	( ExpressionTail   (EQUALS Expression)                         )
+	( ExpressionTail   (LEFT_PAREN ExpressionList RIGHT_PAREN)     )
+	( ExpressionTail   EPSILON                                     )
+
+	( Set     (LEFT_CURLY_BRACE ExpressionList RIGHT_CURLY_BRACE) )
+	( Tuple   (LEFT_PAREN ExpressionList RIGHT_PAREN)             )
+
+	( ExpressionList       (Expression ExpressionListTail)        )
+	( ExpressionList       EPSILON                                )
+
+	( ExpressionListTail   (COMMA Expression ExpressionListTail)  )
+	( ExpressionListTail   EPSILON                                )
+)
+generate-csharp-parser tokens productions "" "Surf" "..\\source\\Surf"

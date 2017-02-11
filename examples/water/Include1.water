@@ -1,0 +1,7 @@
+include "Constant.water"
+
+print "Include1.water"
+
+include "Include2.water"
+
+print "(Include1) a = ${a}"

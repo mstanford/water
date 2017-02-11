@@ -1,0 +1,141 @@
+library XmlSql
+library test
+library Bamboo.Query
+library xml
+library filesystem
+
+
+
+test xmlsql._create-query-tree
+	var sql1 "SELECT bookstore.book.category AS Category, bookstore.book.title, bookstore.book.title.lang, bookstore.book.author, bookstore.book.year, bookstore.book.price FROM bookstore"
+	var query-tree1 (xmlsql._create-query-tree (query.parse sql1))
+	var sql2 "SELECT mall.bookstore.book.category AS Category, mall.bookstore.book.title, mall.bookstore.book.title.lang, mall.bookstore.book.author, mall.bookstore.book.year, mall.bookstore.book.price FROM mall WHERE mall.bookstore.book.category = 'WEB'"
+	var query-tree2 (xmlsql._create-query-tree (query.parse sql2))
+	= query-tree2 (list.first query-tree2.Nodes)
+
+;TODO tree.Equals doesn't work.
+;	assert.equals query-tree1 query-tree2
+end_test
+
+test xmlsql._read-xml
+	var xml (file.to-xml "samples\\XmlSql1.xml")
+	var sql "SELECT bookstore.book.category AS Category, bookstore.book.title, bookstore.book.title.lang, bookstore.book.author, bookstore.book.year, bookstore.book.price FROM bookstore"
+	var query-tree (xmlsql._create-query-tree (query.parse sql))
+	var results-tree (xmlsql._read-xml xml query-tree)
+
+;TODO
+;	assert.equals
+end_test
+
+test xmlsql._read-xml
+	var xml (file.to-xml "samples\\XmlSql2.xml")
+	var sql "SELECT mall.bookstore.book.category AS Category, mall.bookstore.book.title, mall.bookstore.book.title.lang, mall.bookstore.book.author, mall.bookstore.book.year, mall.bookstore.book.price FROM mall WHERE mall.bookstore.book.category = 'WEB'"
+	var query-tree (xmlsql._create-query-tree (query.parse sql))
+	var results-tree (xmlsql._read-xml xml query-tree)
+
+;TODO
+;	assert.equals
+end_test
+
+test xmlsql._read-xml xmlsql._write-xml
+	var xml (file.to-xml "samples\\XmlSql1.xml")
+	var sql "SELECT bookstore.book.category AS Category, bookstore.book.title, bookstore.book.title.lang, bookstore.book.author, bookstore.book.year, bookstore.book.price FROM bookstore"
+	var query-tree (xmlsql._create-query-tree (query.parse sql))
+	var results-tree (xmlsql._read-xml xml query-tree)
+	var xml2 (xmlsql._write-xml results-tree query-tree)
+
+;TODO
+;	assert.equals
+end_test
+
+test xmlsql._read-xml xmlsql._write-xml
+	var xml (file.to-xml "samples\\XmlSql2.xml")
+	var sql "SELECT mall.bookstore.book.category AS Category, mall.bookstore.book.title, mall.bookstore.book.title.lang, mall.bookstore.book.author, mall.bookstore.book.year, mall.bookstore.book.price FROM mall WHERE mall.bookstore.book.category = 'WEB'"
+	var query-tree (xmlsql._create-query-tree (query.parse sql))
+	var results-tree (xmlsql._read-xml xml query-tree)
+	var xml2 (xmlsql._write-xml results-tree query-tree)
+
+;TODO
+;	assert.equals
+end_test
+
+test xmlsql._denormalize
+	var xml (string.to-xml "<book><title lang=\"en\">Everyday Italian</title></book>")
+	var sql "SELECT book.title, book.title.lang FROM book"
+	var query (query.parse sql)
+	var query-tree (xmlsql._create-query-tree query)
+	var results-tree (xmlsql._read-xml xml query-tree)
+
+	var table (xmlsql._denormalize (list.first query-tree.Nodes) (list.first results-tree.Nodes))
+;csv.print table
+
+end_test
+
+test xmlsql._denormalize
+	var xml (string.to-xml "<book><author>Giada De Laurentiis</author></book>")
+	var sql "SELECT book.author FROM book"
+	var query (query.parse sql)
+	var query-tree (xmlsql._create-query-tree query)
+	var results-tree (xmlsql._read-xml xml query-tree)
+
+	var table (xmlsql._denormalize (list.first query-tree.Nodes) (list.first results-tree.Nodes))
+;csv.print table
+
+end_test
+
+test xmlsql._denormalize
+	var xml (string.to-xml "<book category=\"COOKING\"><title lang=\"en\">Everyday Italian</title><author>Giada De Laurentiis</author><year>2005</year><price>30.00</price></book>")
+	var sql "SELECT book.category, book.title, book.title.lang, book.author, book.year, book.price FROM book"
+	var query (query.parse sql)
+	var query-tree (xmlsql._create-query-tree query)
+	var results-tree (xmlsql._read-xml xml query-tree)
+
+	var table (xmlsql._denormalize query-tree results-tree)
+;csv.print table
+
+end_test
+
+test xmlsql._denormalize
+	var xml (string.to-xml "<book category=\"WEB\"><title lang=\"en\">XQuery Kick Start</title><author>James McGovern</author><author>Per Bothner</author><author>Kurt Cagle</author><author>James Linn</author><author>Vaidyanathan Nagarajan</author><year>2003</year><price>49.99</price></book>")
+	var sql "SELECT book.category, book.title, book.title.lang, book.author, book.year, book.price FROM book"
+	var query (query.parse sql)
+	var query-tree (xmlsql._create-query-tree query)
+	var results-tree (xmlsql._read-xml xml query-tree)
+
+	var table (xmlsql._denormalize query-tree results-tree)
+;csv.print table
+
+end_test
+
+test xmlsql.to-table
+	var xml (file.to-xml "samples\\XmlSql1.xml")
+	var table (xmlsql.to-table "SELECT bookstore.book.category AS Category, bookstore.book.title, bookstore.book.title.lang, bookstore.book.author, bookstore.book.year, bookstore.book.price FROM bookstore" xml)
+csv.print table
+
+;TODO
+;	assert.equals
+end_test
+
+test xmlsql.to-table
+	var xml (file.to-xml "samples\\XmlSql2.xml")
+	var table (xmlsql.to-table "SELECT mall.bookstore.book.category AS Category, mall.bookstore.book.title, mall.bookstore.book.title.lang, mall.bookstore.book.author, mall.bookstore.book.year, mall.bookstore.book.price FROM mall WHERE mall.bookstore.book.category = 'WEB'" xml)
+csv.print table
+
+;TODO
+;	assert.equals
+end_test
+
+
+
+
+;TODO
+;	SELECT
+;		T.category AS bookstore.book.@category, 
+;		T.title AS bookstore.book.title, 
+;		T.lang AS bookstore.book.title.@lang, 
+;		T.author AS bookstore.book.author, 
+;		T.year AS bookstore.book.year, 
+;		T.price AS bookstore.book.price 
+;	FROM T
+
+

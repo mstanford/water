@@ -1,0 +1,92 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0B2D41FD-58E7-46E5-AFA5-F0F277A394A5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bamboo.Charts</RootNamespace>
+    <AssemblyName>Bamboo.Charts</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AreaGraph.cs" />
+    <Compile Include="Bar.cs" />
+    <Compile Include="Cell.cs" />
+    <Compile Include="CellType.cs" />
+    <Compile Include="ChartBase.cs" />
+    <Compile Include="ColumnGraph.cs" />
+    <Compile Include="Element.cs" />
+    <Compile Include="GraphBase.cs" />
+    <Compile Include="Line.cs" />
+    <Compile Include="LineGraph.cs" />
+    <Compile Include="OHLCBar.cs" />
+    <Compile Include="OHLCGraph.cs" />
+    <Compile Include="Palette.cs" />
+    <Compile Include="PieChart.cs" />
+    <Compile Include="PivotTable.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Range.cs" />
+    <Compile Include="ScatterGraph.cs" />
+    <Compile Include="Slice.cs" />
+    <Compile Include="Table.cs" />
+    <Compile Include="TableBase.cs" />
+    <Compile Include="Tick.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AreaGraph.css" />
+    <Content Include="ColumnGraph.css" />
+    <Content Include="LineGraph.css" />
+    <Content Include="OHLCGraph.css" />
+    <Content Include="PieChart.css" />
+    <Content Include="ScatterGraph.css" />
+    <Content Include="Table.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bamboo.Css\Bamboo.Css.csproj">
+      <Project>{F0F1984A-A85A-40F9-ABD4-DEF8B7232FA7}</Project>
+      <Name>Bamboo.Css</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bamboo.DataStructures\Bamboo.DataStructures.csproj">
+      <Project>{C7230AAE-DC2A-4FF8-954A-0DE335143AE1}</Project>
+      <Name>Bamboo.DataStructures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bamboo.Sql2\Bamboo.Sql2.csproj">
+      <Project>{C2E15E60-B864-480F-B631-F783FBECC751}</Project>
+      <Name>Bamboo.Sql2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

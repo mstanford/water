@@ -1,0 +1,5 @@
+load-method zip (typeof Bamboo.Compression.Zip.Zipper Bamboo.Compression) Zip
+load-method unzip (typeof Bamboo.Compression.Zip.Unzipper Bamboo.Compression) Unzip
+
+load-method bytes.to-gzip (typeof Bamboo.Compression.GZipper Bamboo.Compression) Compress
+load-method gzip.to-bytes (typeof Bamboo.Compression.GZipper Bamboo.Compression) Decompress

@@ -1,0 +1,13 @@
+library math
+
+
+
+print (+ 5 6)
+print (/ 51 5)
+print (% 51 5)
+print (- 5 6)
+print (+ (* (/ 51 5) 5) (% 51 5))
+
+print (+ 5.3 6.3)
+print (/ 51.3 5.3)
+print (- 5.3 6.3)

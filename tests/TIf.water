@@ -1,0 +1,42 @@
+library test
+
+
+
+if true
+	print "TRUE"
+end_if
+
+
+
+if false
+	print "FALSE"
+else
+	print "TRUE"
+end_if
+
+
+
+if false
+	print "FALSE"
+else
+	if false
+		print "FALSE"
+	else
+		print "TRUE"
+	end_if
+end_if
+
+
+
+
+
+if true
+	if false
+		print "FALSE"
+	else
+		print "TRUE"
+	end_if
+else
+	print "FALSE"
+end_if
+

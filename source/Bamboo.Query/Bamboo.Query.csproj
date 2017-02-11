@@ -1,0 +1,273 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D2EC4138-A00E-4C3B-AF98-3B9466A28490}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Bamboo.Query</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Bamboo.Query</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Aggregators\Aggregator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Aggregators\CountAggregator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Aggregators\IncrementAggregator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Aggregators\SumDoubleAggregator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Aggregators\SumIntAggregator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Column.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Database.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Evaluator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Index.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\GroupIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\HashGroupIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\HashJoinIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\Iterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\NestedLoopJoinIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\OrderIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\SelectIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\TableScanIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\TopIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\UnionIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Iterators\WhereIterator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\ColumnCoordinate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\GroupByNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\JoinNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\Node.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\OrderByNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\Planner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\SelectNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\TableScanNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\UnionNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planning\WhereNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Predicates\AndPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Predicates\EqualsPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Predicates\GreaterThanPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Predicates\LessThanPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Predicates\NotEqualsPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Predicates\OrPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Predicates\Predicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\AndPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\Column.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\CompoundPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\EqualsPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\GreaterThanPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\JoinClause.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\LessThanPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\NotEqualsPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\OrderByClause.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\OrderByExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\OrPredicate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\QueryGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\QueryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\SelectStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\Tokenizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\TokenReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\UnionStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Query\WhereClause.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RowComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Table.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

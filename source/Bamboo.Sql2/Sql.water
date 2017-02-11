@@ -1,0 +1,168 @@
+library Parsing
+
+
+
+var tokens '(
+	( COMMA                   "," )
+	( SEMICOLON               ";" )
+	( EQUALS                  "=" )
+	( NOT_EQUALS              (| "!=" "<>") )
+	( GREATER_THAN            ">" )
+	( GREATER_THAN_OR_EQUAL   ">=" )
+	( LESS_THAN               "<" )
+	( LESS_THAN_OR_EQUAL      "<=" )
+	( LEFT_PAREN              "(" )
+	( RIGHT_PAREN             ")" )
+
+	( AND       "AND" )
+	( AS        "AS" )
+	( ASC       "ASC" )
+	( BETWEEN   "BETWEEN" )
+	( BY        "BY" )
+	( DELETE    "DELETE" )
+	( DESC      "DESC" )
+	( FROM      "FROM" )
+	( GROUP     "GROUP" )
+	( HAVING    "HAVING" )
+	( INNER     "INNER" )
+	( INSERT    "INSERT" )
+	( INTO      "INTO" )
+	( JOIN      "JOIN" )
+	( LEFT      "LEFT" )
+	( LIKE      "LIKE" )
+	( NOT       "NOT" )
+	( ON        "ON" )
+	( OR        "OR" )
+	( ORDER     "ORDER" )
+	( OUTER     "OUTER" )
+	( REPLACE   "REPLACE" )
+	( RIGHT     "RIGHT" )
+	( SELECT    "SELECT" )
+	( SET       "SET" )
+	( WHERE     "WHERE" )
+	( UNION     "UNION" )
+	( UPDATE    "UPDATE" )
+	( VALUES    "VALUES" )
+
+	( INTEGER      (| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) )
+	( FLOAT        ((| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) "." (+ (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))) )
+	( IDENTIFIER   (+ (| "[" "]" "*" "." "/" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z") ) )
+
+	( QUOTED_STRING   ("\'" (* (^ "\'") ) "\'") )
+	( DATE            ("#" (* (^ "#") ) "#") )
+)
+generate-csharp-tokenizer tokens "Sql" "Bamboo.Sql2" ".\\"
+
+
+
+var productions '(
+	( Statement   (Select Union StatementTail) )
+	( Statement   (DELETE FROM IDENTIFIER WhereClause StatementTail) )
+	( Statement   (INSERT INTO IDENTIFIER LEFT_PAREN ColumnList RIGHT_PAREN VALUES LEFT_PAREN ValueList RIGHT_PAREN StatementTail) )
+	( Statement   (REPLACE INTO IDENTIFIER LEFT_PAREN ColumnList RIGHT_PAREN VALUES LEFT_PAREN ValueList RIGHT_PAREN StatementTail) )
+	( Statement   (UPDATE IDENTIFIER SET SetList WhereClause StatementTail) )
+
+	( Select   (SELECT SelectList From JoinList WhereClause GroupByClause OrderByClause) )
+
+	( Union   (UNION Select) )
+	( Union   EPSILON )
+
+	( ColumnList   (IDENTIFIER ColumnListTail) )
+
+	( ColumnListTail   (COMMA IDENTIFIER ColumnListTail) )
+	( ColumnListTail   EPSILON )
+
+	( ValueList   (VALUE ValueListTail) )
+
+	( ValueListTail   (COMMA VALUE ValueListTail) )
+	( ValueListTail   EPSILON )
+
+	( SetList   (IDENTIFIER ComparisonOperator VALUE SetListTail) )
+
+	( SetListTail   (COMMA IDENTIFIER ComparisonOperator VALUE SetListTail) )
+	( SetListTail   EPSILON )
+
+	( SelectList   (SelectItem SelectListTail) )
+
+	( SelectItem   (IDENTIFIER SelectItemTail SelectItemAlias) )
+
+	( SelectItemAlias   (AS IDENTIFIER) )
+	( SelectItemAlias   IDENTIFIER )
+	( SelectItemAlias   EPSILON )
+
+	( SelectItemTail   (LEFT_PAREN FunctionParameterList RIGHT_PAREN) )
+	( SelectItemTail   EPSILON )
+
+	( FunctionParameterList   EPSILON )
+	( FunctionParameterList   (VALUE FunctionParameterListTail) )
+
+	( FunctionParameterListTail   (COMMA VALUE FunctionParameterListTail) )
+	( FunctionParameterListTail   EPSILON )
+
+	( SelectListTail   (COMMA SelectItem SelectListTail) )
+	( SelectListTail   EPSILON )
+
+	( From   (FROM TableList) )
+
+	( TableList   (IDENTIFIER TableTail TableListTail) )
+
+	( TableTail   IDENTIFIER )
+	( TableTail   EPSILON )
+
+	( TableListTail   (COMMA IDENTIFIER TableTail TableListTail) )
+	( TableListTail   EPSILON )
+
+	( JoinList   (INNER JOIN IDENTIFIER TableTail ON IDENTIFIER ComparisonOperator IDENTIFIER JoinList) )
+	( JoinList   (LEFT OUTER JOIN IDENTIFIER TableTail ON IDENTIFIER ComparisonOperator IDENTIFIER JoinList) )
+	( JoinList   (RIGHT OUTER JOIN IDENTIFIER TableTail ON IDENTIFIER ComparisonOperator IDENTIFIER JoinList) )
+	( JoinList   EPSILON )
+
+	( WhereClause   (WHERE Predicate) )
+	( WhereClause   EPSILON )
+
+	( GroupByClause   (GROUP BY IDENTIFIER GroupByTail) )
+	( GroupByClause   EPSILON )
+
+	( GroupByTail   (COMMA IDENTIFIER GroupByTail) )
+	( GroupByTail   EPSILON )
+
+	( OrderByClause   (ORDER BY IDENTIFIER AscDesc OrderByTail) )
+	( OrderByClause   EPSILON )
+
+	( OrderByTail   (COMMA IDENTIFIER AscDesc OrderByTail) )
+	( OrderByTail   EPSILON )
+
+	( AscDesc   ASC )
+	( AscDesc   DESC )
+	( AscDesc   EPSILON )
+
+	( Predicate   (IDENTIFIER PredicateIdentifierTail) )
+
+	( PredicateIdentifierTail   (ComparisonOperator VALUE PredicateTail) )
+	( PredicateIdentifierTail   (BETWEEN VALUE AND VALUE PredicateTail) )
+
+	( PredicateTail   (LogicalOperator Predicate) )
+	( PredicateTail   EPSILON )
+
+	( ComparisonOperator   EQUALS )
+	( ComparisonOperator   GREATER_THAN )
+	( ComparisonOperator   GREATER_THAN_OR_EQUAL )
+	( ComparisonOperator   LESS_THAN )
+	( ComparisonOperator   LESS_THAN_OR_EQUAL )
+	( ComparisonOperator   NOT_EQUALS )
+	( ComparisonOperator   LIKE )
+
+	( LogicalOperator   AND )
+	( LogicalOperator   OR )
+	( LogicalOperator   NOT )
+
+	( VALUE   INTEGER )
+	( VALUE   FLOAT )
+	( VALUE   IDENTIFIER )
+	( VALUE   QUOTED_STRING )
+	( VALUE   DATE )
+
+	( StatementTail   SEMICOLON )
+	( StatementTail   EPSILON )
+)
+generate-csharp-parser tokens productions "Sql" "Bamboo.Sql2" ".\\"

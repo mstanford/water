@@ -1,0 +1,238 @@
+library math
+
+
+
+function to-list a
+	var l '()
+	foreach aa in a
+		l.Add aa
+	end_foreach
+	return l
+end_function
+
+module list
+
+	; select the first item from the list.
+	function first list
+		if(== list.Count 0)
+			throw "List is empty."
+		end_if
+
+		return list[0]
+	end_function
+
+	; select everything but the first item from the list.
+	function not-first list
+		if(== list.Count 0)
+			throw "List is empty."
+		end_if
+
+		var child '()
+		if(> list.Count 1)
+			for i from 1 to (- list.Count 1)
+				child.Add list[i]
+			end_for
+		end_if
+		return child
+	end_function
+
+	; select the last item from the list.
+	function last list
+		if(== list.Count 0)
+			throw "List is empty."
+		end_if
+
+		return list[(- list.Count 1)]
+	end_function
+
+	; select everything but the last item from the list.
+	function not-last list
+		if(== list.Count 0)
+			throw "List is empty."
+		end_if
+
+		var child '()
+		for i from 0 to (- list.Count 2)
+			child.Add list[i]
+		end_for
+		return child
+	end_function
+
+	function contains list item
+		foreach entry in list
+			if(== entry item)
+				return true
+			end_if
+		end_foreach
+		return false
+	end_function
+
+	function copy a
+		var b '()
+		foreach item in a
+			b.Add item
+		end_foreach
+		return b
+	end_function
+
+	function sort list
+		var list2 '()
+		foreach item in list
+			list2.Add item
+		end_foreach
+		list2.Sort
+		return list2
+	end_function
+
+	function union a b
+		var c (list.copy a)
+		foreach item in b
+			if(not (list.contains c item))
+				c.Add item
+			end_if
+		end_foreach
+		return c
+	end_function
+
+	function intersection a b
+		var c '()
+		foreach item in a
+			if(list.contains b item)
+				c.Add item
+			end_if
+		end_foreach
+		return c
+	end_function
+
+	function difference a b
+		var c '()
+		foreach item in a
+			if(not (list.contains b item))
+				c.Add item
+			end_if
+		end_foreach
+		return c
+	end_function
+
+	function factor list
+		var results '()
+		var i 0
+		foreach item in list
+			var result '()
+				var j 0
+				foreach item in list
+					if (<= j i)
+						result.Add item
+					end_if
+					= j (+ j 1)
+				end_foreach
+			results.Add result
+			= i (+ i 1)
+		end_foreach
+		return results
+	end_function
+
+	function randomize list
+		for i from 0 to (- list.Count 1)
+			var j (random i list.Count)
+			var a (list.Index i)
+			var b (list.Index j)
+			list.Remove a
+			list.Insert j a
+			list.Remove b
+			list.Insert i b
+		end_for
+	end_function
+
+end_module
+
+function as-list x
+	if(is-list x)
+		return x
+	else
+		return '(,x)
+	end_if
+end_function
+
+function max values
+	var result values[0]
+	for i from 1 to (- values.Count 1)
+		if(> values[i] result)
+			= result values[i]
+		end_if
+	end_for
+	return result
+end_function
+
+function min values
+	var result values[0]
+	for i from 1 to (- values.Count 1)
+		if(< values[i] result)
+			= result values[i]
+		end_if
+	end_for
+	return result
+end_function
+
+function mode sequence
+	sequence.Sort
+	return (_longest-run sequence)
+end_function
+
+function _longest-run sequence
+	var run-count 0
+	var run-value null
+	var longest-run-count 0
+	var longest-run-value null
+	foreach item in sequence
+		if(equals item run-value)
+			= run-count (+ run-count 1)
+		else
+			if(> run-count longest-run-count)
+				= longest-run-count run-count
+				= longest-run-value run-value
+			end_if
+			= run-count 0
+			= run-value item
+		end_if
+	end_foreach
+	if(> run-count longest-run-count)
+		= longest-run-count run-count
+		= longest-run-value run-value
+	end_if
+	return longest-run-value
+end_function
+
+function sizeof ienumerable
+	var i 0
+	foreach item in ienumerable
+		subst i (+ i 1)
+	end_foreach
+	return i
+end_function
+
+; A higher-order function that applies a given 
+; function to a list and returns a list of 
+; results.
+function map operator list
+	var results '()
+	foreach item in list
+		results.Add (operator item)
+	end_foreach
+	return results
+end_function
+
+; A higher-order function that processes a list 
+; in some order to produce a new data structure 
+; containing exactly those elements of the 
+; original list for which a given predicate 
+; returns the boolean value true.
+function filter predicate list
+	var results '()
+	foreach item in list
+		if(predicate item)
+			results.Add item
+		end_if
+	end_foreach
+	return results
+end_function

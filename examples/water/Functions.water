@@ -1,0 +1,41 @@
+function abc
+
+	print "abc"
+
+end_function
+abc
+
+function def
+
+	print "def"
+	return 5
+
+end_function
+print (def)
+
+
+
+;
+; square a number.
+;
+function square a
+	return (multiply a a)
+end_function
+
+;
+; cube a number.
+;
+function cube a
+	return (multiply a (multiply a a))
+end_function
+
+;
+; raise a number to a power.
+;
+function power n x
+	if (equals x 0)
+		return 1
+	else
+		return (multiply n (power n (subtract x 1)))
+	end_if
+end_function

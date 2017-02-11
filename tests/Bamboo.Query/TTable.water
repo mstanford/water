@@ -1,0 +1,11 @@
+library test
+library query
+
+
+
+test Table RefCount
+	var table (query.table '("A" "B" "C"))
+	assert.equals table.Columns.Count 3
+	table.Close
+	assert.equals table.Columns.Count 0
+end_test

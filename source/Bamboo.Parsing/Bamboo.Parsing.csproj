@@ -1,0 +1,86 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5BB51C75-2AB5-4B4D-867E-E979AE727B32}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bamboo.Parsing</RootNamespace>
+    <AssemblyName>Bamboo.Parsing</AssemblyName>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FiniteAutomata\Algorithms.cs" />
+    <Compile Include="FiniteAutomata\Alphabet.cs" />
+    <Compile Include="FiniteAutomata\Counter.cs" />
+    <Compile Include="FiniteAutomata\FiniteAutomaton.cs" />
+    <Compile Include="FiniteAutomata\Token.cs" />
+    <Compile Include="FiniteAutomata\Transition.cs" />
+    <Compile Include="Generators\CPlusPlus\TokenizerGenerator.cs" />
+    <Compile Include="Generators\CPlusPlus\TokenGenerator.cs" />
+    <Compile Include="Generators\CPlusPlus\TokenTypeGenerator.cs" />
+    <Compile Include="Generators\CSharp\NodePrinterGenerator.cs" />
+    <Compile Include="Generators\CSharp\EvaluatorGenerator.cs" />
+    <Compile Include="Generators\CSharp\GeneratorGenerator.cs" />
+    <Compile Include="Generators\CSharp\NodeGenerator.cs" />
+    <Compile Include="Generators\CSharp\NodeTypeGenerator.cs" />
+    <Compile Include="Generators\CSharp\TextReaderGenerator.cs" />
+    <Compile Include="Generators\CSharp\TokenizerGenerator.cs" />
+    <Compile Include="Generators\CSharp\TokenGenerator.cs" />
+    <Compile Include="Generators\CSharp\TokenTypeGenerator.cs" />
+    <Compile Include="Generators\CSharp\ParserGenerator.cs" />
+    <Compile Include="Generators\Operators.cs" />
+    <Compile Include="LL\Algorithms.cs" />
+    <Compile Include="Grammars\Concatenation.cs" />
+    <Compile Include="Grammars\Expression.cs" />
+    <Compile Include="Grammars\Grammar.cs" />
+    <Compile Include="Grammars\Production.cs" />
+    <Compile Include="Grammars\Symbol.cs" />
+    <Compile Include="LL\FollowBuilder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegularExpressions\Alternation.cs" />
+    <Compile Include="RegularExpressions\Concatenation.cs" />
+    <Compile Include="RegularExpressions\Expression.cs" />
+    <Compile Include="RegularExpressions\Literal.cs" />
+    <Compile Include="RegularExpressions\Optional.cs" />
+    <Compile Include="RegularExpressions\Repitition.cs" />
+    <Compile Include="Generators\CPlusPlus\ParserGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\CSharp\TableDrivenTokenizerGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Surf\Surf.csproj">
+      <Project>{907993AA-6B30-4286-8E2E-69E4A04FF925}</Project>
+      <Name>Surf</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

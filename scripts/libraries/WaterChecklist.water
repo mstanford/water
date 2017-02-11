@@ -1,0 +1,108 @@
+function api.is-defined 'command
+	if(is-null (command))
+		print "UNDEFINED: ${command}"
+	end_if
+end_function
+
+
+
+
+
+
+
+; data storage
+api.is-defined var
+api.is-defined const
+
+; conditionals
+api.is-defined if
+api.is-defined switch
+
+; iteration
+api.is-defined for
+api.is-defined foreach
+api.is-defined while
+api.is-defined break
+
+; functions
+api.is-defined function
+api.is-defined return
+
+; modules
+api.is-defined module
+
+; comparison operators
+api.is-defined ==
+api.is-defined !=
+api.is-defined equals
+api.is-defined not-equals
+api.is-defined <
+api.is-defined >
+api.is-defined <=
+api.is-defined >=
+api.is-defined is-null
+api.is-defined not-null
+
+; logical operators
+api.is-defined !
+api.is-defined not
+api.is-defined and
+api.is-defined or
+
+; math
+api.is-defined +
+api.is-defined -
+api.is-defined *
+;api.is-defined /
+api.is-defined %
+api.is-defined ^
+api.is-defined e
+api.is-defined ln
+api.is-defined log10
+api.is-defined sqrt
+
+; set operators
+api.is-defined union
+api.is-defined intersect
+api.is-defined diff
+
+; streams
+api.is-defined stream.flush
+api.is-defined stream.close
+api.is-defined stream.position
+api.is-defined stream.length
+api.is-defined stream.seek
+api.is-defined stream.eof
+api.is-defined stream.read
+api.is-defined stream.write
+
+; strings
+api.is-defined string.left
+api.is-defined string.right
+api.is-defined string.last-left
+api.is-defined string.last-right
+
+; date/time
+api.is-defined now
+api.is-defined utc-now
+api.is-defined date
+api.is-defined date.year
+api.is-defined date.month
+api.is-defined date.day
+api.is-defined time
+api.is-defined time.hours
+api.is-defined time.minutes
+api.is-defined time.seconds
+api.is-defined time.subtract
+
+; type conversion
+api.is-defined to-int
+api.is-defined to-float
+api.is-defined to-double
+api.is-defined to-string
+
+; files
+;api.is-defined file.open
+;api.is-defined file.last-modified
+;api.is-defined file.delete
+;api.is-defined file.move

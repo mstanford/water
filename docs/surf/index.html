@@ -1,0 +1,489 @@
+<html>
+	<head>
+		<style type="text/css">
+		body { font-family:Sans-Serif; }
+		a { color: blue; }
+		a:Visited { color: blue; }
+		</style>
+	</head>
+	<body>
+		<table width=600px>
+			<tr>
+				<td align=center colspan=2>
+					<font size="6">SRF</font>
+					<br />
+					<font size="4">A language of sets, relations, and functions.</font>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					Surf is a language based on set theory. Surf has standard primitive types: boolean,
+					integer, decimal, character, string, and null. Surf also has two composite datatypes:
+					sets and tuples. Sets and tuples can be combined to form other composite datatypes
+					such as: relations and functions.
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Variables</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+Surf supports variables of the following primitive types:  Integer, Double, Boolean, Character, and String.
+<br />
+<br />
+
+To assign a variable: 
+<pre>
+>A := 1
+1
+</pre>
+<br />
+
+To assign one variable from another:
+<pre>
+>A := 1
+1
+>B := A
+1
+</pre>
+<br />
+
+To list all variables:
+<pre>
+>variables()
+{ A, B, C }
+</pre>
+<br />
+
+To view the contents of a variable type the variable name at the command prompt.  The value of the variable will be printed on the next line.
+<pre>
+>A
+{1, 2, 3}
+</pre>
+<br />
+
+You can define a composite type as a function.
+<pre>
+>T := { (Name, string), (Count, integer) }
+</pre>
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Tuples</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+A tuple is an ordered list of values.  Values do not have to be unique within the tuple, and order matters.
+<br />
+<br />
+
+To declare a tuple:
+<pre>
+>B := (1, 2)
+(1, 2)
+</pre>
+<br />
+
+To declare an empty tuple:
+<pre>
+>B := ()
+()
+</pre>
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Sets</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+To declare a set:
+<pre>
+>A := { 1, 2, 3 }
+{ 1, 2, 3 }
+</pre>
+<br />
+
+To declare an empty set:
+<pre>
+>A := { }
+{ }
+</pre>
+<br />
+
+To declare a set of sets:
+<pre>
+>A := { {1,2}, {3,4}, {5,6} }
+{ {1,2}, {3,4}, {5,6} }
+</pre>
+<br />
+
+Union:
+<pre>
+>A := {1, 2, 3}
+{1, 2, 3}
+>B := {2, 3, 4}
+{2, 3, 4}
+>C := A + B
+{1, 2, 3, 4}
+>C := union(A, B)
+{1, 2, 3, 4}
+</pre>
+<br />
+
+Intersection:
+<pre>
+>A := {1, 2, 3}
+{1, 2, 3}
+>B := {2, 3, 4}
+{2, 3, 4}
+>C := intersection(A, B)
+{2, 3}
+</pre>
+<br />
+
+Difference:
+<pre>
+>A := {1, 2, 3}
+{1, 2, 3}
+>B := {2, 3, 4}
+{2, 3, 4}
+>C := A - B
+{1}
+>C := difference(A, B)
+{1}
+</pre>
+<br />
+
+Cartesian product:
+<pre>
+>A := {1, 2, 3}
+{1, 2, 3}
+>B := {"a", "b", "c"}
+{"a", "b", "c"}
+>C := A * B
+{ (1, "a"), (1, "b"), (1, "c"), (2, "a"), (2, "b"), (2, "c"), (3, "a"), (3, "b"), (3, "c") }
+</pre>
+<br />
+
+To test for equality:	
+<pre>
+>A = B
+true
+>equals(A, B)
+true
+>equals(A * B, transpose(B * A))
+true
+</pre>
+<br />
+
+<!--
+To partition a set into subsets:
+<pre>
+>partition(A, fn)
+{ {0}, {1,4}, {2,5}, {3,6} }
+>A / fn
+{ {0}, {1,4}, {2,5}, {3,6} }
+</pre>
+-->
+
+To test for existence in a set:
+<pre>
+>S := {1,2,3}
+{1,2,3}
+>in(S, 1)
+true
+</pre>
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Relations</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+
+To declare a relation:
+<pre>
+>A := { (1, 'a'), (1, 'b'), (2, 'a'), (3, 'c') }
+{ (1, 'a'), (1, 'b'), (2, 'a'), (3, 'c') }
+</pre>
+<br />
+
+Nest a relation:
+<pre>
+>r := { (0, 1), (0, 2), (0, 3) }
+{ (0, 1), (0, 2), (0, 3) }
+>nest(r)
+{ (0 {1, 2, 3}) }
+</pre>
+<br />
+
+Unnest a relation:
+<pre>
+>r := { (0 {1, 2, 3}) }
+{ (0, {1, 2, 3}) }
+>unnest(r)
+{ (0, 1), (0, 2), (0, 3) }
+</pre>
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Functions</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+Functions are one of the most powerful concepts in Surf.  Surf supports 2 types of implementation.  The first is traditional function that takes zero or more arguments and returns a value.  The second is a function in the mathematical sense.  It maps values in one domain to values in another.  This is similar to a hashtable that can take one or more keys.  The consumer of the function is typically not aware of the underlying implementation.
+<br />
+
+A function is a form of binary relation, with the added constraint that the first value of the pair cannot be repeated across the function.
+<br />
+
+To declare a function:
+<pre>
+>f_ascii := { ('a', 97), ('b', 98), ('c', 99) }
+{ ('a', 97), ('b', 98), ('c', 99) }
+</pre>
+<br />
+
+To call a function:
+<pre>
+>f_ascii('a')
+97
+</pre>
+<br />
+
+To declare a function of 2 variables:
+<pre>
+>f := { ((1, 'a'), 2), ((2, 'b'), 3), ((3, 'c'), 4) }
+{ ((1, 'a'), 2), ((2, 'b'), 3), ((3, 'c'), 4) }
+</pre>
+<br />
+
+To declare a function of sets:
+<pre>
+>f := { (1, {'a'}), (2, {'b'}) }
+{ (1, {'a'}), (2, {'b'}) }
+</pre>
+<br />
+
+To get the domain and range of a function:
+<pre>
+>f_ascii := { ('a', 97), ('b', 98), ('c', 99) }
+{ ('a', 97), ('b', 98), ('c', 99) }
+>domain(f_ascii)
+{ 'a', 'b', 'c' }
+>range(f_ascii)
+{ 97, 98, 99 }
+>g := { ((1, 'a'), 2), ((2, 'b'), 3), ((3, 'c'), 4) }
+{ ((1, 'a'), 2), ((2, 'b'), 3), ((3, 'c'), 4) }
+>domain(g)
+{ (1, 'a'), (2, 'b'), (3, 'c') }
+</pre>
+<br />
+
+Union of 2 functions:
+<pre>
+>f_ascii := { ('a', 97), ('b', 98), ('c', 99) }
+{ ('a', 97), ('b', 98), ('c', 99) }
+>g_ascii := { ('b', 98), ('c', 99) , ('d', 100) }
+{ ('b', 98), ('c', 99) , ('d', 100) }
+>f_ascii + g_ascii
+{ ('a', 97), ('b', 98), ('c', 99) , ('d', 100) }
+</pre>
+<br />
+
+Intersection of 2 functions:
+<pre>
+>f_ascii := { ('a', 97), ('b', 98), ('c', 99) }
+{ ('a', 97), ('b', 98), ('c', 99) }
+>g_ascii := { ('b', 98), ('c', 99) , ('d', 100) }
+{ ('b', 98), ('c', 99) , ('d', 100) }
+>f_ascii & g_ascii
+{ ('b', 98), ('c', 99) }
+</pre>
+<br />
+
+Difference of 2 functions:
+<pre>
+>f_ascii := { ('a', 97), ('b', 98), ('c', 99) }
+{ ('a', 97), ('b', 98), ('c', 99) }
+>g_ascii := { ('b', 98), ('c', 99) , ('d', 100) }
+{ ('b', 98), ('c', 99) , ('d', 100) }
+>f_ascii - g_ascii
+{ ('a', 97) }
+</pre>
+<br />
+
+Function composition:
+<pre>
+>h := compose(f, g)
+</pre>
+<br />
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Delayed evaluation</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+Surf evaluates arguments at the last possible moment.  So if you define a variable in terms of 
+another variable and then redefine the other variable the update will be propagated when you reevaluate 
+the variable:
+<pre>
+>A := 1
+1
+>B := A
+1
+>B
+1
+>A := 2
+2
+>B
+2
+</pre>
+<br />
+
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>
+						References</h3>
+					<ul>
+						<li>Applied Mathematics for Database Professionals. Lex de Haan, and Toon Koppelaars.
+							Apress, 2007.</li>
+						<li>Foundations of Computer Science. Alfred V. Aho, and Jeffrey D. Ullman. W. H. Freeman,
+							1994.</li>
+						<li>Database Systems: The Complete Book. Hector Garcia-Molina, Jeffrey D. Ullman, and
+							Jennifer Widom. Prentice Hall, 2001.</li>
+						<li>Database Management Systems. Raghu Ramakrishnan, and Johannes Gehrke. McGraw-Hill,
+							2002.</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div style="font-size: 11">Copyright © 2008 Swampware, Inc.</div>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap width=30px>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,161 @@
+<html>
+	<head>
+		<style type="text/css">
+		body { font-family:Sans-Serif; }
+		a { color: blue; }
+		a:Visited { color: blue; }
+		</style>
+	</head>
+	<body>
+		<table width=600px>
+			<tr>
+				<td align=center colspan=2>
+					<font size="6">Stream</font>
+					<br />
+					<font size="4">Message processing engine.</font>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					Stream is a message processing engine consisting of a single, sequential 
+					message queue and a multiple processors that run in parallel.
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Types</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+Stream supports primitives of the following primitive types:  Integer, Double, Boolean, Character, and String.
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Messages</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+Stream is based on sending messages.
+<br />
+<br />
+
+To send a message: 
+<pre>
+>print("hello")
+"hello"
+>print(5)
+5
+</pre>
+<br />
+
+<!--
+To define a message type: 
+<pre>
+>print := message(string text)
+print defined.
+</pre>
+<br />
+-->
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<h3>Processors</h3>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+Processors handle messages.
+<br />
+<br />
+
+<!--
+To define a processor:
+<pre>
+STDIO := processor(assembly_path, type, method)
+</pre>
+<br />
+-->
+
+<!--
+To subscribe to a message type:
+<pre>
+subscribe(print, STDIO)
++(print, STDIO)
+</pre>
+<br />
+-->
+
+<!--
+To unsubscribe from a message type:
+<pre>
+unsubscribe(print, STDIO)
+-(print, STDIO)
+</pre>
+<br />
+-->
+
+<!--
+To filter a subscription:
+<pre>
++(print, filter(STDIO, text = "hello"))
+</pre>
+<br />
+-->
+
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div style="font-size: 11">Copyright © 2008 Swampware, Inc.</div>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap width=30px>
+					&nbsp;
+				</td>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,16 @@
+function file.to-image path
+	var image ((method (typeof System.Drawing.Image System.Drawing) FromFile) path)
+	return image
+end_function
+
+function image.to-file image image-format path
+	var folder-path (file.get-folder path)
+	if(not (folder.exists folder-path))
+		folder.create folder-path
+	end_if
+	image.Save path image-format
+end_function
+
+function image.get-thumbnail image width height
+	return (image.GetThumbnailImage width height null (field (typeof System.IntPtr) Zero))
+end_function

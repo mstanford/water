@@ -1,0 +1,31 @@
+;Gets the host name of the local computer.
+load-method dns.get-localhost-name (typeof System.Net.Dns System) GetHostName
+
+;Resolves a DNS host name or IP address to an IPHostEntry instance.
+load-method dns.resolve (typeof System.Net.Dns System) Resolve
+
+;Gets DNS host information for an IP address.
+load-method dns.get-host-by-address (typeof System.Net.Dns System) GetHostByAddress
+
+function dns.get-addresses host-name
+	var addresses '()
+	var iphe (dns.resolve host-name)
+	foreach address in iphe.AddressList
+		addresses.Add address
+	end_foreach
+	return addresses
+end_function
+
+function dns.get-aliases host-name
+	var aliases '()
+	var iphe (dns.resolve host-name)
+	foreach alias in iphe.Aliases
+		aliases.Add alias
+	end_foreach
+	return aliases
+end_function
+
+function dns.reverse-lookup address
+	var host (dns.get-host-by-address address)
+	return host.HostName
+end_function

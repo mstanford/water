@@ -1,0 +1,241 @@
+library Water
+library math
+
+
+
+;
+; strings
+;
+module string
+
+	function left input marker
+		var index (input.IndexOf marker)
+		if(== index -1)
+			return input
+		else
+			return (input.Substring 0 index)
+		end_if
+	end_function
+
+	function right input marker
+		var index (input.IndexOf marker)
+		if(== index -1)
+			return input
+		else
+			return (input.Substring (+ index marker.Length))
+		end_if
+	end_function
+
+	function last-left input marker
+		var index (input.LastIndexOf marker)
+		if(== index -1)
+			return input
+		else
+			return (input.Substring 0 index)
+		end_if
+	end_function
+
+	function last-right input marker
+		var index (input.LastIndexOf marker)
+		if(== index -1)
+			return input
+		else
+			return (input.Substring (+ index marker.Length))
+		end_if
+	end_function
+
+	function split s seperator
+		var strings '()
+		var index (s.IndexOf seperator)
+		while(!= (s.IndexOf seperator) -1)
+			strings.Add (string.left s seperator)
+			= s (string.right s seperator)
+		end_while
+		strings.Add s
+		return strings
+	end_function
+
+	function to-lower s
+		return (s.ToLower)
+	end_function
+
+	function to-upper s
+		return (s.ToUpper)
+	end_function
+
+	function trim s
+		return (s.Trim)
+	end_function
+
+	function starts-with s phrase
+		return (s.StartsWith phrase)
+	end_function
+
+	function ends-with s phrase
+		return (s.EndsWith phrase)
+	end_function
+
+	function replace s what with
+		return (s.Replace what with)
+	end_function
+
+	function contains a b
+		return (not (equals (a.IndexOf b) -1))
+	end_function
+
+	function to-bytes s
+		var utf8 (property (typeof System.Text.Encoding) UTF8)
+		return (utf8.GetBytes s)
+	end_function
+
+	function to-stream s
+		var stream (memory-stream)
+		var writer (stream-writer stream)
+		writer.Write s
+		writer.Flush
+		= stream.Position 0
+		return stream
+	end_function
+
+	function to-file s path
+		var writer (file.create-text path)
+		writer.Write s
+		writer.Flush
+		writer.Close
+	end_function
+
+	function no-spaces s
+		return (s.Replace " " "")
+	end_function
+
+	function camel s
+		if(equals s "")
+			return s
+		else
+			var stringbuilder (string-builder)
+			var seperator " "
+			var subinputs (s.Split (seperator.ToCharArray))
+			foreach subinput in subinputs
+				if first
+					foreach ch in (subinput.ToCharArray)
+						if first
+							= ch ((method (typeof System.Char) ToLower) ch)
+						end_if
+						= stringbuilder (stringbuilder.Append ch)
+					end_foreach
+				else
+					foreach ch in (subinput.ToCharArray)
+						if first
+							= ch ((method (typeof System.Char) ToUpper) ch)
+						end_if
+						= stringbuilder (stringbuilder.Append ch)
+					end_foreach
+				end_if
+			end_foreach
+			return (string.no-spaces (stringbuilder.ToString))
+		end_if
+	end_function
+
+	function pascal s
+		if(equals s "")
+			return s
+		else
+			var stringbuilder (string-builder)
+			var seperator " "
+			var subinputs (s.Split (seperator.ToCharArray))
+			foreach subinput in subinputs
+				foreach ch in (subinput.ToCharArray)
+					if first
+						= ch ((method (typeof System.Char) ToUpper) ch)
+					end_if
+					= stringbuilder (stringbuilder.Append ch)
+				end_foreach
+			end_foreach
+			return (string.no-spaces (stringbuilder.ToString))
+		end_if
+	end_function
+
+	function add-spaces s
+		var stringbuilder (string-builder)
+		foreach ch in (s.ToCharArray)
+			if(not first)
+				if((method (typeof System.Char) IsUpper) ch)
+					= stringbuilder (stringbuilder.Append " ")
+				end_if
+			end_if
+			= stringbuilder (stringbuilder.Append ch)
+		end_foreach
+		return (stringbuilder.ToString)
+	end_function
+
+	;TODO this is inefficient
+	function escape s
+		= s (s.Replace "\\" "\\\\")
+		= s (s.Replace "\"" "\\\"")
+		= s (s.Replace "\r" "\\r")
+		= s (s.Replace "\n" "\\n")
+		= s (s.Replace "\t" "\\t")
+		= s (s.Replace "\'" "\\\'")
+		return s
+	end_function
+
+end_module
+
+function string-builder
+	return (new (typeof System.Text.StringBuilder))
+end_function
+
+function string-reader s
+	return (new (typeof System.IO.StringReader) s)
+end_function
+
+function string-writer
+	return (new (typeof System.IO.StringWriter))
+end_function
+
+
+
+module noun
+
+	function singular noun
+		if(noun.EndsWith "ies")
+			var root (noun.Substring 0 (- noun.Length 3))
+			return "${root}y"
+		else_if(noun.EndsWith "s")
+			return (noun.Substring 0 (- noun.Length 1))
+		else
+			throw "Unable to determine singular form of ${noun}."
+		end_if
+	end_function
+
+	function plural noun
+		var pluralnoun "${noun}s"
+		if(noun.EndsWith "s")
+			= pluralnoun "${noun}es"
+		else_if(noun.EndsWith "z")
+			= pluralnoun "${noun}es"
+		else_if(noun.EndsWith "ch")
+			= pluralnoun "${noun}es"
+		else_if(noun.EndsWith "sh")
+			= pluralnoun "${noun}es"
+		else_if(noun.EndsWith "x")
+			= pluralnoun "${noun}es"
+		else_if(noun.EndsWith "y")
+			if(noun.EndsWith "ay")
+			else_if(noun.EndsWith "ey")
+			else_if(noun.EndsWith "iy")
+			else_if(noun.EndsWith "oy")
+			else_if(noun.EndsWith "uy")
+			else
+				var root (noun.Substring 0 (- noun.Length 1))
+				= pluralnoun "${root}ies"
+			end_if
+		end_if
+		return pluralnoun
+	end_function
+
+end_module
+
+function string-array length
+	return ((method (typeof System.Array) CreateInstance) (typeof System.String) (to-int length))
+end_function

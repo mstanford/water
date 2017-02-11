@@ -1,0 +1,391 @@
+library test
+library xml
+library filesystem
+library stream
+
+
+
+test object.to-xml xml.to-object
+	var object '{ Name: "Test" Size: "5" }
+	var xml (object.to-xml "ABC" object)
+	var object2 (xml.to-object xml)
+	assert.equals object object2
+end_test
+
+test object.to-xml xml.to-object
+	var object '{ Name: "Test" Size: "5" Car: { Engine: "V6" Tires: ("1" "2" "3" "4") } }
+	var xml (object.to-xml "ABC" object)
+	var object2 (xml.to-object xml)
+	assert.equals object object2
+end_test
+
+test xml-parser
+	var path "samples/Sample01.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 0 element.Attributes.Count
+	assert.equals 0 element.Elements.Count
+end_test
+
+test xml-parser
+	var path "samples/Sample02.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 0 element.Attributes.Count
+	assert.equals 0 element.Elements.Count
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test
+
+test xml-parser
+	var path "samples/Sample03.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals 0 element.Elements.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test
+
+test xml-parser
+	var path "samples/Sample04.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals 0 element.Elements.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test
+
+test xml-parser
+	var path "samples/Sample05.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals 0 element.Elements.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+end_test
+
+test xml-parser
+	var path "samples/Sample06.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals 0 element.Elements.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+end_test
+
+test xml-parser
+	var path "samples/Sample07.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals 1 element.Elements.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals "Continent" element.Elements[0].Name
+end_test
+
+test xml-parser
+	var path "samples/Sample08.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals 1 element.Elements.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals "Continent" element.Elements[0].Name
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test
+
+test xml-parser
+	var path "samples/Sample09.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals 1 element.Elements.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals "Continent" element.Elements[0].Name
+	assert.equals 1 element.Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Attributes[0].Name
+	assert.equals "b" element.Elements[0].Attributes[0].Value
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test
+
+test xml-parser
+	var path "samples/Sample10.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals 1 element.Elements.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals "Continent" element.Elements[0].Name
+	assert.equals 1 element.Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Attributes[0].Name
+	assert.equals "b" element.Elements[0].Attributes[0].Value
+end_test
+
+test xml-parser
+	var path "samples/Sample11.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals 1 element.Elements.Count
+	assert.equals "Continent" element.Elements[0].Name
+	assert.equals 1 element.Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Attributes[0].Name
+	assert.equals "b" element.Elements[0].Attributes[0].Value
+	assert.equals 1 element.Elements[0].Elements.Count
+	assert.equals "Country" element.Elements[0].Elements[0].Name
+end_test
+
+test xml-parser
+	var path "samples/Sample12.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals 1 element.Elements.Count
+	assert.equals "Continent" element.Elements[0].Name
+	assert.equals 1 element.Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Attributes[0].Name
+	assert.equals "b" element.Elements[0].Attributes[0].Value
+	assert.equals 1 element.Elements[0].Elements.Count
+	assert.equals "Country" element.Elements[0].Elements[0].Name
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test
+
+test xml-parser
+	var path "samples/Sample13.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals 1 element.Elements.Count
+	assert.equals "Continent" element.Elements[0].Name
+	assert.equals 1 element.Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Attributes[0].Name
+	assert.equals "b" element.Elements[0].Attributes[0].Value
+	assert.equals 1 element.Elements[0].Elements.Count
+	assert.equals "Country" element.Elements[0].Elements[0].Name
+	assert.equals 1 element.Elements[0].Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Elements[0].Attributes[0].Name
+	assert.equals "c" element.Elements[0].Elements[0].Attributes[0].Value
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test
+
+test xml-parser
+	var path "samples/Sample14.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals 1 element.Elements.Count
+	assert.equals "Continent" element.Elements[0].Name
+	assert.equals 1 element.Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Attributes[0].Name
+	assert.equals "b" element.Elements[0].Attributes[0].Value
+	assert.equals 1 element.Elements[0].Elements.Count
+	assert.equals "Country" element.Elements[0].Elements[0].Name
+	assert.equals 1 element.Elements[0].Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Elements[0].Attributes[0].Name
+	assert.equals "c" element.Elements[0].Elements[0].Attributes[0].Value
+end_test
+
+test xml-parser
+	var path "samples/Sample15.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals 1 element.Elements.Count
+	assert.equals "Continent" element.Elements[0].Name
+	assert.equals 1 element.Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Attributes[0].Name
+	assert.equals "b" element.Elements[0].Attributes[0].Value
+	assert.equals 1 element.Elements[0].Elements.Count
+	assert.equals "Country" element.Elements[0].Elements[0].Name
+	assert.equals 1 element.Elements[0].Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Elements[0].Attributes[0].Name
+	assert.equals "c" element.Elements[0].Elements[0].Attributes[0].Value
+
+	assert.equals 3 element.Elements[0].Elements[0].Elements.Count
+	assert.equals "State" element.Elements[0].Elements[0].Elements[0].Name
+	assert.equals "Texas" element.Elements[0].Elements[0].Elements[0].Value
+	assert.equals "State" element.Elements[0].Elements[0].Elements[1].Name
+	assert.equals "California" element.Elements[0].Elements[0].Elements[1].Value
+	assert.equals "State" element.Elements[0].Elements[0].Elements[2].Name
+	assert.equals "Florida" element.Elements[0].Elements[0].Elements[2].Value
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test
+
+test xml-parser
+	var path "samples/Sample16.xml"
+	var stream (file.open-read path)
+	var element ((method (typeof Bamboo.Xml.XmlReader Bamboo.Xml) Read) stream)
+	= stream.Position 0
+	var s (stream.to-string stream)
+	stream.Close
+
+	assert.equals "World" element.Name
+	assert.equals "" element.Value
+	assert.equals 1 element.Attributes.Count
+	assert.equals "name" element.Attributes[0].Name
+	assert.equals "a" element.Attributes[0].Value
+	assert.equals 1 element.Elements.Count
+	assert.equals "Continent" element.Elements[0].Name
+	assert.equals 1 element.Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Attributes[0].Name
+	assert.equals "b" element.Elements[0].Attributes[0].Value
+	assert.equals 1 element.Elements[0].Elements.Count
+	assert.equals "Country" element.Elements[0].Elements[0].Name
+	assert.equals 1 element.Elements[0].Elements[0].Attributes.Count
+	assert.equals "name" element.Elements[0].Elements[0].Attributes[0].Name
+	assert.equals "c" element.Elements[0].Elements[0].Attributes[0].Value
+
+	assert.equals 3 element.Elements[0].Elements[0].Elements.Count
+	assert.equals "State" element.Elements[0].Elements[0].Elements[0].Name
+	assert.equals "Texas" element.Elements[0].Elements[0].Elements[0].Value
+	assert.equals "State" element.Elements[0].Elements[0].Elements[1].Name
+	assert.equals "California" element.Elements[0].Elements[0].Elements[1].Value
+	assert.equals "State" element.Elements[0].Elements[0].Elements[2].Name
+	assert.equals "<Florida" element.Elements[0].Elements[0].Elements[2].Value
+
+	;Lossless
+	var writer (new (typeof System.IO.StringWriter))
+	(method (typeof Bamboo.Xml.XmlWriter Bamboo.Xml) Write) element writer
+	assert.equals s (writer.ToString)
+end_test

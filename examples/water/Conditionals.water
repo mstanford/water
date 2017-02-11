@@ -1,0 +1,55 @@
+if TRUE
+	print "TRUE"
+else
+	print "FALSE"
+end_if
+
+
+if FALSE
+	print "FALSE"
+else
+	print "TRUE"
+end_if
+
+
+if (not true)
+	print "FALSE"
+else
+	print "TRUE"
+end_if
+
+
+if (equals "a" "a")
+	print "TRUE"
+else
+	print "FALSE"
+end_if
+
+
+if (equals "a" "b")
+	print "FALSE"
+else
+	print "TRUE"
+end_if
+
+
+if FALSE
+	print "FALSE"
+else_if TRUE
+	print "TRUE"
+else
+	print "FALSE"
+end_if
+
+
+if FALSE
+	print "FALSE"
+else_if (not TRUE)
+	print "FALSE"
+else_if (equals TRUE FALSE)
+	print "FALSE"
+else_if (not (equals TRUE TRUE))
+	print "FALSE"
+else
+	print "TRUE"
+end_if

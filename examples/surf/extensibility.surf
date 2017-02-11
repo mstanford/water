@@ -1,0 +1,3 @@
+method("echo", "Surf.Operators", "Surf", "Echo")
+echo("abc")
+echo(5)

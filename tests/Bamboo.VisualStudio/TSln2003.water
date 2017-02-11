@@ -1,0 +1,345 @@
+library test
+library filesystem
+library string
+
+
+
+test sln2003
+	var path "samples/Sln2003/Client.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Custom Exceptions.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Associating Help with an Application.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Common Dialogs.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Create a Windows System Tray Program.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Create an Explorer-Style Application.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Creating Temporary Resources.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Crystal Reports Print Preview.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Data Binding with Navigation.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/DataGrid Formatting.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/DataGrid Sorting and Filtering.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Do Simple Printing.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Drag and Drop.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Dynamic Control Creation.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Forms Inheritance.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/ListBox And ComboBox.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Menus.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Multiple Top-Level Forms.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Office Automation.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Owner Drawn Menus.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Reading and Writing to Performance Counters.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Reading and Writing with a Text File.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Send Mail.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/ShellEx API Functionality.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Trace Listeners.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Use Format Codes to Format Data in Strings.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Use Regular Expressions.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Use the EventLog.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Using the Clipboard.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Validating TextBoxes.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Work with Console Application.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Working With GDI+ - Pens.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/XP Theme Support.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test sln2003
+	var path "samples/Sln2003/Server.sln.txt"
+
+	var solution ((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2003.Solution.SolutionWriter Bamboo.VisualStudio) Write) solution writer)
+	assert.equals s (writer.ToString)
+end_test

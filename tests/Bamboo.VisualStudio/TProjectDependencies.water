@@ -1,0 +1,163 @@
+library test
+
+
+
+test project-dependencies
+	var projects (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+
+	var projectsToBuild ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects)
+
+	assert.equals 0 projectsToBuild.Count
+end_test
+
+test project-dependencies
+	var projects (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+
+	var project1 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project1.Name "project1"
+	= project1.Guid (guid.new)
+	projects.Add project1
+
+	var projectsToBuild ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects)
+
+	assert.equals 1 projectsToBuild.Count
+	assert.equals project1.Guid projectsToBuild[0].Guid
+end_test
+
+test project-dependencies
+	var projects (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+
+	var project1 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project1.Name "project1"
+	= project1.Guid (guid.new)
+
+	var project2 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project2.Name "project2"
+	= project2.Guid (guid.new)
+
+	var projectDependency (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+	= projectDependency.ProjectGuid project1.Guid
+	project2.Dependencies.Add projectDependency
+
+	projects.Add project1
+	projects.Add project2
+
+	var projectsToBuild ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects)
+
+	assert.equals 2 projectsToBuild.Count
+	assert.equals project1.Guid projectsToBuild[0].Guid
+	assert.equals project2.Guid projectsToBuild[1].Guid
+end_test
+
+test project-dependencies
+	var projects (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+
+	var project1 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project1.Name "project1"
+	= project1.Guid (guid.new)
+
+	var project2 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project2.Name "project2"
+	= project2.Guid (guid.new)
+
+	var projectDependency (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+	= projectDependency.ProjectGuid project1.Guid
+	project2.Dependencies.Add projectDependency
+
+	projects.Add project2
+	projects.Add project1
+
+	var projectsToBuild ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects)
+
+	assert.equals 2 projectsToBuild.Count
+	assert.equals project1.Guid projectsToBuild[0].Guid
+	assert.equals project2.Guid projectsToBuild[1].Guid
+end_test
+
+test project-dependencies
+	var project1 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project1.Name "project1"
+	= project1.Guid (guid.new)
+
+	var project2 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project2.Name "project2"
+	= project2.Guid (guid.new)
+
+	var project3 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project3.Name "project3"
+	= project3.Guid (guid.new)
+
+	var project4 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project4.Name "project4"
+	= project4.Guid (guid.new)
+
+	var projectDependency1 (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+	= projectDependency1.ProjectGuid project2.Guid
+	project1.Dependencies.Add projectDependency1
+
+	var projectDependency2 (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+	= projectDependency2.ProjectGuid project3.Guid
+	project2.Dependencies.Add projectDependency2
+
+	var projectDependency3 (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+	= projectDependency3.ProjectGuid project4.Guid
+	project3.Dependencies.Add projectDependency3
+
+	var projects (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+	projects.Add project1
+	projects.Add project2
+	projects.Add project3
+	projects.Add project4
+
+	var projectsToBuild ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects)
+
+	assert.equals 4 projectsToBuild.Count
+	assert.equals project4.Guid projectsToBuild[0].Guid
+	assert.equals project3.Guid projectsToBuild[1].Guid
+	assert.equals project2.Guid projectsToBuild[2].Guid
+	assert.equals project1.Guid projectsToBuild[3].Guid
+end_test
+
+test project-dependencies
+	var project1 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project1.Name "project1"
+	= project1.Guid (guid.new)
+
+	var project2 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project2.Name "project2"
+	= project2.Guid (guid.new)
+
+	var project3 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project3.Name "project3"
+	= project3.Guid (guid.new)
+
+	var project4 (new (typeof Bamboo.VisualStudio.ProjectDependencies.Project Bamboo.VisualStudio))
+	= project4.Name "project4"
+	= project4.Guid (guid.new)
+
+	var projectDependency1 (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+	= projectDependency1.ProjectGuid project1.Guid
+	project2.Dependencies.Add projectDependency1
+
+	var projectDependency2 (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+	= projectDependency2.ProjectGuid project2.Guid
+	project3.Dependencies.Add projectDependency2
+
+	var projectDependency3 (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependency Bamboo.VisualStudio))
+	= projectDependency3.ProjectGuid project3.Guid
+	project4.Dependencies.Add projectDependency3
+
+	var projects (new (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectCollection Bamboo.VisualStudio))
+	projects.Add project1
+	projects.Add project2
+	projects.Add project3
+	projects.Add project4
+
+	var projectsToBuild ((method (typeof Bamboo.VisualStudio.ProjectDependencies.ProjectDependencyResolver Bamboo.VisualStudio) Resolve) projects)
+
+	assert.equals 4 projectsToBuild.Count
+	assert.equals project1.Guid projectsToBuild[0].Guid
+	assert.equals project2.Guid projectsToBuild[1].Guid
+	assert.equals project3.Guid projectsToBuild[2].Guid
+	assert.equals project4.Guid projectsToBuild[3].Guid
+end_test

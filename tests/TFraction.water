@@ -1,0 +1,74 @@
+library math
+library test
+
+
+
+
+
+test fraction.Add
+	var a (fraction 5 36)
+	var b (fraction 2 15)
+	var c (fraction.add a b)
+
+	assert.equals 49 c.Numerator
+	assert.equals 180 c.Denominator
+end_test
+
+test fraction.Subtract
+	var a (fraction 49 180)
+	var b (fraction 5 36)
+	var c (fraction.subtract a b)
+
+	assert.equals 2 c.Numerator
+	assert.equals 15 c.Denominator
+end_test
+
+test fraction.gcd
+	var c (fraction.gcd 15 30)
+
+	assert.equals 15 c
+end_test
+
+test fraction.gcd
+	var c (fraction.gcd 9 33)
+
+	assert.equals 3 c
+end_test
+
+test fraction.lcm
+	var c (fraction.lcm 15 36)
+
+	assert.equals 180 c
+end_test
+
+test fraction.reduce
+	var a (fraction 15 36)
+	var b (fraction.reduce a)
+
+	assert.equals 5 b.Numerator
+	assert.equals 12 b.Denominator
+end_test
+
+test fraction.compare
+	var a (fraction 5 36)
+	var b (fraction 2 15)
+	var c (fraction.compare a b)
+
+	assert.equals 1 c
+end_test
+
+test fraction.compare
+	var a (fraction 5 36)
+	var b (fraction 2 15)
+	var c (fraction.compare b a)
+
+	assert.equals -1 c
+end_test
+
+test fraction.compare
+	var a (fraction 5 36)
+	var b (fraction 25 180)
+	var c (fraction.compare a b)
+
+	assert.equals 0 c
+end_test

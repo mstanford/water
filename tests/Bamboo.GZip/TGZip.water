@@ -1,0 +1,15 @@
+library test
+library string
+library compression
+library bytes
+
+
+
+test bytes.to-gzip gzip.to-bytes
+	var bytes (string.to-bytes "abc")
+
+	var gzip (bytes.to-gzip bytes)
+	assert.not-equals bytes.Length gzip.Length
+
+	assert.equals (bytes.to-string bytes) (bytes.to-string (gzip.to-bytes gzip))
+end_test

@@ -1,0 +1,74 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F0F1984A-A85A-40F9-ABD4-DEF8B7232FA7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bamboo.Css</RootNamespace>
+    <AssemblyName>Bamboo.Css</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CssEvaluator.cs" />
+    <Compile Include="CssGenerator.cs" />
+    <Compile Include="CssNode.cs" />
+    <Compile Include="CssNodePrinter.cs" />
+    <Compile Include="CssNodeType.cs" />
+    <Compile Include="CssParser.cs" />
+    <Compile Include="CssReader.cs" />
+    <Compile Include="CssTextReader.cs" />
+    <Compile Include="CssToken.cs" />
+    <Compile Include="CssTokenizer.cs" />
+    <Compile Include="CssTokenType.cs" />
+    <Compile Include="CssWriter.cs" />
+    <Compile Include="Font.cs" />
+    <Compile Include="KeyValueStyleRule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StyleDeclaration.cs" />
+    <Compile Include="StyleRule.cs" />
+    <Compile Include="StyleSheet.cs" />
+    <Compile Include="StyleStack.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Css.water" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bamboo.DataStructures\Bamboo.DataStructures.csproj">
+      <Project>{C7230AAE-DC2A-4FF8-954A-0DE335143AE1}</Project>
+      <Name>Bamboo.DataStructures</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

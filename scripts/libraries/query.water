@@ -1,0 +1,51 @@
+function query.parse sql
+	return ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) sql)
+end_function
+
+function query.evaluate query database
+	return ((method (typeof Bamboo.Query.Evaluator Bamboo.Query) Evaluate) query database)
+end_function
+
+function query.table ?columns ?rows
+	if(and (is-null columns) (is-null rows))
+		return (new (typeof Bamboo.Query.Table Bamboo.Query))
+	else_if(is-null rows)
+		return (new (typeof Bamboo.Query.Table Bamboo.Query) columns)
+	else
+		return (new (typeof Bamboo.Query.Table Bamboo.Query) columns rows)
+	end_if
+end_function
+
+function query.index table column
+	return (new (typeof Bamboo.Query.Index Bamboo.Query) table column)
+end_function
+
+function query.database
+	return (new (typeof Bamboo.Query.Database Bamboo.Query))
+end_function
+
+function query.table.print table
+	var writer (string-writer)
+
+	foreach column in table.Columns
+		writer.Write column.Name
+		writer.Write "\t"
+	end_foreach
+	writer.Write "\n"
+
+	foreach column in table.Columns
+		writer.Write "-"
+		writer.Write "\t"
+	end_foreach
+	writer.Write "\n"
+
+	foreach row in table.Rows
+		foreach item in row
+			writer.Write "${item}"
+			writer.Write "\t"
+		end_foreach
+		writer.Write "\n"
+	end_foreach
+
+	print (writer.ToString)
+end_function

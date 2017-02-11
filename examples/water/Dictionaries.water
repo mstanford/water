@@ -1,0 +1,20 @@
+var person { Name: "John" Date: "1/1/01" }
+print person.Name
+print person.Date
+
+
+
+var person {
+   Name: ("John" "Doe")
+   Date: "1/1/01"
+}
+print person.Name
+print person.Date
+
+
+
+
+var person {Name: ("John" "Doe")
+Count:55}
+print person.Name
+print person.Count

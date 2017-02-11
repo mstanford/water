@@ -1,0 +1,29 @@
+library filesystem
+library stream
+library test
+
+
+library reflection
+assembly Bamboo.Bytecode "..\\source\\Bamboo.Bytecode\\bin\\Debug\\Bamboo.Bytecode.dll"
+
+
+
+
+test BinaryWriter BinaryReader
+
+	var stream (memory-stream)
+	var writer (new (typeof Bamboo.Bytecode.BinaryWriter Bamboo.Bytecode) stream)
+	var reader (new (typeof Bamboo.Bytecode.BinaryReader Bamboo.Bytecode) stream)
+
+	writer.Write "ABC"
+	writer.Write 123
+	writer.Flush
+
+	= stream.Position 0
+
+	assert.equals (reader.Read) "ABC"
+	assert.equals (reader.Read) 123
+
+	stream.Close
+
+end_test

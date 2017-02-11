@@ -1,0 +1,45 @@
+;library Parsing
+include "..\\scripts\\libraries\\Parsing.water"
+
+
+assembly Bamboo.Parsing "..\\source\\Bamboo.Parsing\\bin\\Debug\\Bamboo.Parsing.dll"
+
+
+
+; COMMENT				//[^\n]*
+; MULTILINECOMMENT		/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/
+; STRING				"([^"\\]|\\.)*"
+
+var tokens '(
+	( LEFT_CURLY_BRACE     "{" )
+	( RIGHT_CURLY_BRACE    "}" )
+	( LEFT_PAREN           "(" )
+	( RIGHT_PAREN          ")" )
+	( COMMA                "," )
+	( SEMICOLON            ";" )
+	( COLON                ":" )
+	( PERIOD               "." )
+	( LEFT_BRACKET         "[" )
+	( RIGHT_BRACKET        "]" )
+
+	( EQUALS               "=" )
+	( DOUBLEEQUALS         "==" )
+	( NOTEQUALS            "!=" )
+	( LESSTHAN             "<" )
+	( LESSTHANEQUALS       "<=" )
+	( GREATERTHAN          ">" )
+	( GREATERTHANEQUALS    ">=" )
+
+	( BOOLEAN             (| "true" "false") )
+
+	( IDENTIFIER          (+ (| "_" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z") ) )
+
+	( INTEGER             (| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) )
+	( FLOAT               ((| "0" ((| "1" "2" "3" "4" "5" "6" "7" "8" "9") (* (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9")))) "." (+ (| "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))) )
+
+	( COMMENT              ("/" "/" (* (^ "\r" "\n")) (? "\r") (? "\n")) )
+	( MULTILINECOMMENT     ("/" "*" (* (| (^ "*") ("\r" "\n") ((+ "*") (| (^ "*" "/") ("\r" "\n"))))) (+ "*") "/") )
+
+	( STRING               ("\"" (* (| (^ "\"" "\\") ("\\" (.)) ) ) "\"") )
+)
+generate-csharp-tokenizer tokens "CSharp" "Bamboo.CSharp.Parser" "..\\source\\Bamboo.CSharp\\Parser"

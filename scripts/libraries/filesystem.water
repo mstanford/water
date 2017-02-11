@@ -1,0 +1,228 @@
+library reflection
+library Water
+library stream
+
+
+
+constant DIRECTORY_SEPARATOR (to-string (field (typeof System.IO.Path) DirectorySeparatorChar))
+
+function CROSS_PLATFORM path
+	if(== DIRECTORY_SEPARATOR "\\")
+		return (path.Replace "/" "\\")
+	else_if(== DIRECTORY_SEPARATOR "/")
+		return (path.Replace "\\" "/")
+	else
+		throw "Invalid directory seperator: ${DIRECTORY_SEPARATOR}"
+	end_if
+end_function
+
+function current-directory
+	return (property (typeof System.Environment) CurrentDirectory)
+end_function
+
+module folder
+
+	function copy source target
+		= source (CROSS_PLATFORM source)
+		= target (CROSS_PLATFORM target)
+
+		if(! (source.EndsWith DIRECTORY_SEPARATOR))
+			= source "${source}${DIRECTORY_SEPARATOR}"
+		end_if
+
+		if(! (target.EndsWith DIRECTORY_SEPARATOR))
+			= target "${target}${DIRECTORY_SEPARATOR}"
+		end_if
+
+		if(! (folder.exists target))
+			folder.create target
+		end_if
+
+		foreach folder in (folder.get-folders source)
+			var name (folder.get-name folder)
+			folder.copy "${source}${name}" "${target}${name}"
+		end_foreach
+
+		foreach file in (folder.get-files source)
+			var name (file.get-name file)
+			file.copy "${source}${name}" "${target}${name}"
+		end_foreach
+
+	end_function
+
+	function create target
+		= target (CROSS_PLATFORM target)
+		var ignore ((method (typeof System.IO.Directory) CreateDirectory) target)
+		(method (typeof System.Threading.Thread) Sleep) 100
+	end_function
+
+	function delete target
+		= target (CROSS_PLATFORM target)
+		if(folder.exists target)
+			(method (typeof System.IO.Directory) Delete) target true
+		end_if
+	end_function
+
+	function exists path
+		return ((method (typeof System.IO.Directory) Exists) (CROSS_PLATFORM path))
+	end_function
+
+	function get-files path
+		= path (CROSS_PLATFORM path)
+		var files '()
+		foreach file in ((method (typeof System.IO.Directory) GetFiles) path)
+			files.Add file
+		end_foreach
+		return files
+	end_function
+
+	function get-folders path
+		= path (CROSS_PLATFORM path)
+		var folders '()
+		foreach folder in ((method (typeof System.IO.Directory) GetDirectories) path)
+			folders.Add folder
+		end_foreach
+		return folders
+	end_function
+
+	function get-name path
+		= path (CROSS_PLATFORM path)
+		var directoryInfo (new (typeof System.IO.DirectoryInfo) path)
+		return directoryInfo.Name
+	end_function
+
+	function move source target
+		= source (CROSS_PLATFORM source)
+		= target (CROSS_PLATFORM target)
+		(method (typeof System.IO.Directory) Move) source target
+	end_function
+
+end_module
+
+module file
+
+	function copy source target
+		= source (CROSS_PLATFORM source)
+		= target (CROSS_PLATFORM target)
+		var fileInfo (new (typeof System.IO.FileInfo) target)
+		if(! fileInfo.Directory.Exists)
+			fileInfo.Directory.Create
+		end_if
+		(method (typeof System.IO.File) Copy) source target true
+	end_function
+
+	function create target
+		= target (CROSS_PLATFORM target)
+		var fileInfo (new (typeof System.IO.FileInfo) target)
+		if(! fileInfo.Directory.Exists)
+			fileInfo.Directory.Create
+		end_if
+		return ((method (typeof System.IO.File) Create) target)
+	end_function
+
+	function create-text target
+		= target (CROSS_PLATFORM target)
+		var fileInfo (new (typeof System.IO.FileInfo) target)
+		if(! fileInfo.Directory.Exists)
+			fileInfo.Directory.Create
+		end_if
+		return ((method (typeof System.IO.File) CreateText) target)
+	end_function
+
+	function delete path
+		= path (CROSS_PLATFORM path)
+		(method (typeof System.IO.File) Delete) path
+	end_function
+
+	function exists path
+		= path (CROSS_PLATFORM path)
+		return ((method (typeof System.IO.File) Exists) path)
+	end_function
+
+	function get-name path
+		= path (CROSS_PLATFORM path)
+		var fileInfo (new (typeof System.IO.FileInfo) path)
+		return fileInfo.Name
+	end_function
+
+	function get-extension path
+		= path (CROSS_PLATFORM path)
+		var fileInfo (new (typeof System.IO.FileInfo) path)
+		var name fileInfo.Name
+		var extension fileInfo.Extension
+		return (name.Substring (+ (- name.Length extension.Length) 1))
+	end_function
+
+	function get-name-without-extension path
+		= path (CROSS_PLATFORM path)
+		var fileInfo (new (typeof System.IO.FileInfo) path)
+		var name fileInfo.Name
+		var extension fileInfo.Extension
+		return (name.Substring 0 (- name.Length extension.Length))
+	end_function
+
+	function get-folder path
+		= path (CROSS_PLATFORM path)
+		var fileInfo (new (typeof System.IO.FileInfo) path)
+		var directoryName fileInfo.DirectoryName
+		if(! (directoryName.EndsWith DIRECTORY_SEPARATOR))
+			= directoryName "${directoryName}${DIRECTORY_SEPARATOR}"
+		end_if
+		return directoryName
+	end_function
+
+	function move source target
+		= source (CROSS_PLATFORM source)
+		= target (CROSS_PLATFORM target)
+		if (file.exists target)
+			file.delete target
+		end_if
+		(method (typeof System.IO.File) Move) source target
+	end_function
+
+	function open-read path
+		= path (CROSS_PLATFORM path)
+		return ((method (typeof System.IO.File) OpenRead) path)
+	end_function
+
+	function open-write path
+		= path (CROSS_PLATFORM path)
+		var fileInfo (new (typeof System.IO.FileInfo) path)
+		if (! fileInfo.Directory.Exists)
+			fileInfo.Directory.Create
+		end_if
+		return ((method (typeof System.IO.File) OpenWrite) path)
+	end_function
+
+	function open-text path
+		= path (CROSS_PLATFORM path)
+		var fileInfo (new (typeof System.IO.FileInfo) path)
+		if (! fileInfo.Directory.Exists)
+			fileInfo.Directory.Create
+		end_if
+		return ((method (typeof System.IO.File) OpenText) path)
+	end_function
+
+	function to-bytes path
+		var stream (file.open-read path)
+		var bytes (stream.to-bytes stream)
+		stream.Close
+		return bytes
+	end_function
+
+	function to-stream path
+		var stream (file.open-read path)
+		var temp (stream.copy stream)
+		= temp.Position 0
+		stream.Close
+		return temp
+	end_function
+
+	function to-string path
+		var stream (file.open-read path)
+		var s (stream.to-string stream)
+		stream.Close
+		return s
+	end_function
+
+end_module

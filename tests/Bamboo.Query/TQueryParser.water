@@ -1,0 +1,42 @@
+library test
+library query
+
+
+
+test QueryParser
+	var query "SELECT R.A FROM R"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	assert.equals queryObject.Select[0].Identifier "R.A"
+end_test
+
+test QueryParser
+	var query "SELECT A FROM R"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	assert.equals queryObject.Select[0].Identifier "R.A"
+end_test
+
+test QueryParser
+	var query "SELECT [A] FROM R"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	assert.equals queryObject.Select[0].Identifier "R.A"
+end_test
+
+test QueryParser
+	var query "SELECT [R].[A] FROM R"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+	assert.equals queryObject.Select[0].Identifier "R.A"
+end_test
+
+test QueryParser
+	var query "SELECT [R].[A] FROM [R]"
+	var queryObject ((method (typeof Bamboo.Query.Query.QueryParser Bamboo.Query) Parse) query)
+
+print queryObject
+
+	assert.equals queryObject.Select[0].Identifier "R.A"
+	assert.equals queryObject.From "R"
+end_test

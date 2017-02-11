@@ -1,0 +1,134 @@
+library test
+library list
+library math
+
+
+
+test list.factor
+	var list '(a b c)
+
+	var sublists (list.factor list)
+	assert.equals sublists[0] '(a)
+	assert.equals sublists[1] '(a b)
+	assert.equals sublists[2] '(a b c)
+end_test
+
+test list.randomize
+	var list '(a b c)
+
+	for i from 1 to 10
+		list.randomize list
+		print "${list}"
+	end_for
+end_test
+
+test list.create list.add list.clear
+	var a '( 1 )
+	assert.equals 1 a.Count
+	a.Add 2
+	assert.equals 2 a.Count
+	a.add 3
+	assert.equals 3 a.Count
+	a.clear
+	assert.equals 0 a.Count
+end_test
+
+test list.copy
+	var a '()
+	var b (a.Copy)
+	b.Add 1
+	assert.not-equals a b
+end_test
+
+test list.remove
+	var a '()
+	a.Add 1
+	assert.equals 1 a.Count
+	a.Add 2
+	assert.equals 2 a.Count
+	a.Remove 2
+	assert.equals 1 a.Count
+	a.Remove 1
+	assert.equals 0 a.Count
+end_test
+
+test list.first
+	var a '()
+	a.Add 1
+	a.Add 2
+	a.Add 3
+	assert.equals 1 (a.First)
+end_test
+
+test list.last
+	var a '()
+	a.Add 1
+	a.Add 2
+	a.Add 3
+	assert.equals 3 (a.Last)
+end_test
+
+test list.not-first
+	var a '()
+	a.Add 1
+	a.Add 2
+	a.Add 3
+	var b (a.NotFirst)
+	assert.equals 2 b[0]
+	assert.equals 3 b[1]
+end_test
+
+test list.not-last
+	var a '()
+	a.Add 1
+	a.Add 2
+	a.Add 3
+	var b (a.NotLast)
+	assert.equals 1 b[0]
+	assert.equals 2 b[1]
+end_test
+
+test list.sort
+	var a '()
+	a.Add 3
+	a.Add 2
+	a.Add 1
+	a.Sort
+	assert.equals 1 a[0]
+	assert.equals 2 a[1]
+	assert.equals 3 a[2]
+end_test
+
+test list.merge
+	var a '()
+	a.Add 1
+	a.Add 2
+	a.Add 3
+	var b '()
+	b.Add 4
+	b.Add 5
+	b.Add 6
+	var c (a.Merge b)
+	assert.equals 1 c[0]
+	assert.equals 2 c[1]
+	assert.equals 3 c[2]
+	assert.equals 4 c[3]
+	assert.equals 5 c[4]
+	assert.equals 6 c[5]
+
+	= a '()
+	a.Add 1
+	a.Add 2
+	a.Add 3
+	= b '()
+	b.Add 4
+	b.Add 5
+	b.Add 6
+	= c (b.Merge a)
+	assert.equals 4 c[0]
+	assert.equals 5 c[1]
+	assert.equals 6 c[2]
+	assert.equals 1 c[3]
+	assert.equals 2 c[4]
+	assert.equals 3 c[5]
+end_test

@@ -1,0 +1,111 @@
+library test
+library query
+
+
+
+test EqualsPredicate
+	var index 0
+	var value true
+	var EqualsPredicate (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) index value)
+	assert.true (EqualsPredicate.Match '( true ))
+end_test
+
+test EqualsPredicate
+	var index 0
+	var value true
+	var EqualsPredicate (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) index value)
+	assert.false (EqualsPredicate.Match '( false ))
+end_test
+
+test EqualsPredicate
+	var index 1
+	var value 11
+	var EqualsPredicate (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) index value)
+	assert.true (EqualsPredicate.Match '( 1 11 111 ))
+end_test
+
+test NotEqualsPredicate
+	var index 0
+	var value true
+	var EqualsPredicate (new (typeof Bamboo.Query.Predicates.NotEqualsPredicate Bamboo.Query) index value)
+	assert.false (EqualsPredicate.Match '( true ))
+end_test
+
+test NotEqualsPredicate
+	var index 0
+	var value true
+	var EqualsPredicate (new (typeof Bamboo.Query.Predicates.NotEqualsPredicate Bamboo.Query) index value)
+	assert.true (EqualsPredicate.Match '( false ))
+end_test
+
+test NotEqualsPredicate
+	var index 1
+	var value 11
+	var EqualsPredicate (new (typeof Bamboo.Query.Predicates.NotEqualsPredicate Bamboo.Query) index value)
+	assert.false (EqualsPredicate.Match '( 1 11 111 ))
+end_test
+
+test GreaterThanPredicate
+	var index 0
+	var value 0
+	var GreaterThanPredicate (new (typeof Bamboo.Query.Predicates.GreaterThanPredicate Bamboo.Query) index value)
+	assert.false (GreaterThanPredicate.Match '( 1 ))
+end_test
+
+test GreaterThanPredicate
+	var index 0
+	var value 1
+	var GreaterThanPredicate (new (typeof Bamboo.Query.Predicates.GreaterThanPredicate Bamboo.Query) index value)
+	assert.false (GreaterThanPredicate.Match '( 1 ))
+end_test
+
+test GreaterThanPredicate
+	var index 0
+	var value 2
+	var GreaterThanPredicate (new (typeof Bamboo.Query.Predicates.GreaterThanPredicate Bamboo.Query) index value)
+	assert.true (GreaterThanPredicate.Match '( 1 ))
+end_test
+
+test LessThanPredicate
+	var index 0
+	var value 0
+	var LessThanPredicate (new (typeof Bamboo.Query.Predicates.LessThanPredicate Bamboo.Query) index value)
+	assert.true (LessThanPredicate.Match '( 1 ))
+end_test
+
+test LessThanPredicate
+	var index 0
+	var value 1
+	var LessThanPredicate (new (typeof Bamboo.Query.Predicates.LessThanPredicate Bamboo.Query) index value)
+	assert.false (LessThanPredicate.Match '( 1 ))
+end_test
+
+test LessThanPredicate
+	var index 0
+	var value 2
+	var LessThanPredicate (new (typeof Bamboo.Query.Predicates.LessThanPredicate Bamboo.Query) index value)
+	assert.false (LessThanPredicate.Match '( 1 ))
+end_test
+
+test AndPredicate
+	var a (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 0 "A")
+	var b (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 1 "AA")
+	var AndPredicate (new (typeof Bamboo.Query.Predicates.AndPredicate Bamboo.Query) a b)
+	assert.true (AndPredicate.Match '( "A" "AA" "AAA" ))
+end_test
+
+test AndPredicate
+	var a (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 0 "A")
+	var b (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 1 "AA")
+	var AndPredicate (new (typeof Bamboo.Query.Predicates.AndPredicate Bamboo.Query) a b)
+	assert.false (AndPredicate.Match '( "A" "A" "A" ))
+end_test
+
+test OrPredicate
+	var a (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 0 "A")
+	var b (new (typeof Bamboo.Query.Predicates.EqualsPredicate Bamboo.Query) 0 "B")
+	var OrPredicate (new (typeof Bamboo.Query.Predicates.OrPredicate Bamboo.Query) a b)
+	assert.true (OrPredicate.Match '( "A" ))
+	assert.true (OrPredicate.Match '( "B" ))
+	assert.false (OrPredicate.Match '( "C" ))
+end_test

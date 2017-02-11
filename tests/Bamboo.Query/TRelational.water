@@ -1,0 +1,266 @@
+library test
+library query
+library string
+
+
+
+; TODO assert table.equals and do lossless parsing/generation.
+
+test Table
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	query.table.print a
+	assert.equals a.Columns.Count 3
+	assert.equals a.Rows.Count 3
+end_test
+
+test Query Project
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	var database (query.database)
+	database.Add "Table1" a
+	var results (query.evaluate "SELECT A FROM Table1" database)
+	query.table.print results
+	assert.equals results.Columns.Count 1
+	assert.equals results.Rows.Count 3
+end_test
+
+test Query Project
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	var database (query.database)
+	database.Add "Table1" a
+	var results (query.evaluate "SELECT A FROM Table1" database)
+	query.table.print results
+	assert.equals results.Columns.Count 1
+	assert.equals results.Rows.Count 3
+end_test
+
+test Query Project
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	var database (query.database)
+	database.Add "Table1" a
+	var results (query.evaluate "SELECT Table1.A, Table1.C, Table1.B, Table1.C FROM Table1" database)
+	query.table.print results
+	assert.equals results.Columns.Count 4
+	assert.equals results.Rows.Count 3
+end_test
+
+test Query Project Join
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	var b (query.table 
+		'("D", "E", "F") 
+		'((1 1a 1aa) (2 2b 2bb) (3 3c 3cc))
+	)
+	var database (query.database)
+	database.Add "Table1" a
+	database.Add "Table2" b
+	var results (query.evaluate "SELECT Table1.A, Table1.B, Table1.C, Table2.D, Table2.E, Table2.F FROM Table1 JOIN Table2 ON Table1.A = Table2.D" database)
+	query.table.print results
+	assert.equals results.Columns.Count 6
+	assert.equals results.Rows.Count 3
+end_test
+
+test Query Project Join
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	var b (query.table 
+		'("D", "E", "F") 
+		'((1 1a 1aa) (2 2b 2bb) (3 3c 3cc))
+	)
+	var database (query.database)
+	database.Add "Table1" a
+	database.Add "Table2" b
+	var results (query.evaluate "SELECT Table1.A AS AA, Table1.B AS BB, Table1.C AS CC, Table2.D AS DD, Table2.E AS EE, Table2.F AS FF FROM Table1 JOIN Table2 ON Table1.A = Table2.D" database)
+	query.table.print results
+	assert.equals results.Columns.Count 6
+	assert.equals results.Rows.Count 3
+end_test
+
+test Query Project Join
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	var b (query.table 
+		'("A", "B", "C") 
+		'((1 1a 1aa) (2 2b 2bb) (3 3c 3cc))
+	)
+	var database (query.database)
+	database.Add "Table1" a
+	database.Add "Table2" b
+	var results (query.evaluate "SELECT Table1.A AS A, Table1.B AS B, Table1.C AS C, Table2.A AS D, Table2.B AS E, Table2.C AS F FROM Table1 JOIN Table2 ON Table1.A = Table2.A" database)
+	query.table.print results
+	assert.equals results.Columns.Count 6
+	assert.equals results.Rows.Count 3
+
+	var a2 (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	var b2 (query.table 
+		'("D", "E", "F") 
+		'((1 1a 1aa) (2 2b 2bb) (3 3c 3cc))
+	)
+	var database2 (query.database)
+	database2.Add "Table1" a2
+	database2.Add "Table2" b2
+	var results2 (query.evaluate "SELECT Table1.A AS A, Table1.B AS B, Table1.C AS C, Table2.D AS D, Table2.E AS E, Table2.F AS F FROM Table1 JOIN Table2 ON Table1.A = Table2.D" database2)
+	query.table.print results2
+	assert.equals results2.Columns.Count 6
+	assert.equals results2.Rows.Count 3
+end_test
+
+test Query Project Union
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+	var b (query.table 
+		'("D", "E", "F") 
+		'((4 44 444) (5 55 555) (6 66 666))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+	database.Add "Table2" b
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 UNION SELECT D, E, F FROM Table2" database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 6
+end_test
+
+test Query Project Filter
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 WHERE A = '1'" database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 1
+end_test
+
+test Query Project Filter
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 WHERE A = '1' OR A = '2'" database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 2
+end_test
+
+test Query Project Filter
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 WHERE A = '1' AND A = '2'" database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 0
+end_test
+
+test Query Project Filter
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 33 111) (2 22 222) (3 11 333))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 WHERE A = '1' AND B = '11' OR A = '2' OR A = '3' ORDER BY B DESC" database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 2
+end_test
+
+test Query Project Filter
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 WHERE A > '2'" database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 1
+end_test
+
+test Query Project Filter
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 WHERE A < '2' " database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 1
+end_test
+
+test Query Project Filter
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 WHERE A = '1' AND (B = '11' OR A = '2' OR A = '3') ORDER BY B DESC" database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 1
+end_test
+
+test Query Project Filter
+	var a (query.table 
+		'("A", "B", "C") 
+		'((1 11 111) (2 22 222) (3 33 333))
+	)
+
+	var database (query.database)
+	database.Add "Table1" a
+
+	var results (query.evaluate "SELECT A, B, C FROM Table1 WHERE (A = '1' AND B = '11') AND (A = '2') ORDER BY B DESC" database)
+	query.table.print results
+	assert.equals results.Columns.Count 3
+	assert.equals results.Rows.Count 0
+end_test

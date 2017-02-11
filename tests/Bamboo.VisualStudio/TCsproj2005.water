@@ -1,0 +1,245 @@
+library test
+library filesystem
+library string
+
+
+
+test csproj2005
+	var path "samples/Csproj2005/ACLChange.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/AsynchronousTasks.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/ClientConfiguration.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/Compression.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/ConsoleSample.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/CreatingMasterDetails.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/DriveInfoSample.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/FTPSample.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/GenericsSample.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/NetworkSample.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/PlayingSounds.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/RegularExpressions.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/StopwatchSample.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/Transactions.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingBindingNavigator.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingBindingSource.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingClickOnce.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingDataGridView.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingLayoutPanels.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingMaskedTextBox.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingMenusStatusStripsToolStrips.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingSplitContainer.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/UsingWebBrowser.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test
+
+test csproj2005
+	var path "samples/Csproj2005/WindowsApplication1.csproj.txt"
+
+	var project ((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectReader Bamboo.VisualStudio) Read) path)
+	var s (file.to-string path)
+	var writer (string-writer)
+	((method (typeof Bamboo.VisualStudio.VisualStudio2005.CSharpProject.ProjectWriter Bamboo.VisualStudio) Write) project writer)
+	assert.equals s (writer.ToString)
+end_test

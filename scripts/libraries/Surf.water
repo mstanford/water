@@ -1,0 +1,79 @@
+library reflection
+
+
+
+module surf
+
+	function set ?items
+		if(is-null items)
+			return (new (typeof Surf.Set Surf))
+		else
+			return (new (typeof Surf.Set Surf) items)
+		end_if
+	end_function
+
+	function tuple items
+		return (new (typeof Surf.Tuple Surf) items)
+	end_function
+
+	function _compare a b
+		var comparer (new (typeof Surf.Comparer Surf))
+		return (comparer.Compare a b)
+	end_function
+
+	function print a
+		var writer (string-writer)
+		((method (typeof Surf.Printer Surf) Print) a writer)
+		writer.Flush
+		return (writer.ToString)
+	end_function
+
+	;
+	; Operators
+	;
+
+	function union a b
+		return (a.Union b)
+	end_function
+
+	function intersection a b
+		return (a.Intersection b)
+	end_function
+
+	function difference a b
+		return (a.Difference b)
+	end_function
+
+	function domain a
+		return (a.Domain)
+	end_function
+
+	function range a
+		return (a.Range)
+	end_function
+
+	function apply fn key
+		return (fn.Apply key)
+	end_function
+
+	function is-defined fn key
+		return (fn.IsDefined key)
+	end_function
+
+	function transpose a
+		return (a.Transpose)
+	end_function
+
+	function compose a b
+		return (a.Compose b)
+	end_function
+
+	function nest a
+		return (a.Nest)
+	end_function
+
+	function unnest a
+		return (a.Unnest)
+	end_function
+
+end_module

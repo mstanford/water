@@ -1,0 +1,24 @@
+library math
+
+
+;
+; Tower of Hanoi
+;
+; 5/10/07
+;
+
+print "usage: hanoi.play 4 \"a\" \"b\" \"c\""
+
+function hanoi.play n from to spare
+	if(> n 0)
+		hanoi.play (- n 1) from spare to
+		if(not(equals from to))
+			hanoi.move n from to
+		end_if
+		hanoi.play (- n 1) spare to from
+	end_if
+end_function
+
+function hanoi.move n from to
+	print "MOVE ${n} ${from} ${to}"
+end_function

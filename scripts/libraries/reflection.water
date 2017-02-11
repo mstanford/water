@@ -1,0 +1,65 @@
+library string
+
+
+
+
+
+function assembly-folder path
+	((method (typeof Water.AssemblyCache Water) AddAssemblyFolder) path)
+end_function
+
+function assembly 'name path-or-bytes
+	((method (typeof Water.AssemblyCache Water) Add) "${name}" path-or-bytes)
+end_function
+
+function enum type 'value
+	return ((method (typeof System.Enum) Parse) type "${value}")
+end_function
+
+function field type 'field-name
+	var fieldInfo (type.GetField "${field-name}")
+	return (fieldInfo.GetValue null)
+end_function
+	
+function is value 'name
+	return (_is "${name}" (value.GetType))
+end_function
+
+function _is name type
+	if(or (== type.FullName name) (== type.Name name))
+		return true
+	end_if
+
+	var interfaces (type.GetInterfaces)
+	foreach interface in interfaces
+		if(_is name interface)
+			return true
+		end_if
+	end_foreach
+
+	if(not-null type.BaseType)
+		return (_is name type.BaseType)
+	end_if
+
+	return false
+end_function
+
+function get-properties o
+	var properties ((method (typeof System.ComponentModel.TypeDescriptor) GetProperties) o)
+
+	var propertyNames (string-array properties.Count)
+	for i from 0 to (- properties.Count 1)
+		= propertyNames[i] properties[i].Name
+	end_for
+
+	return propertyNames
+end_function
+
+function get-type o
+	return (o.GetType)
+end_function
+
+function property type 'property-name
+	var propertyInfo (type.GetProperty "${property-name}")
+	return (propertyInfo.GetValue null null)
+end_function

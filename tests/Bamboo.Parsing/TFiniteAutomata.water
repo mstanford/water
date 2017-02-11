@@ -1,0 +1,662 @@
+library reflection
+library test
+
+assembly Surf "..\\..\\source\\Surf\\bin\\Debug\\Surf.dll"
+assembly Bamboo.Parsing "..\\..\\source\\Bamboo.Parsing\\bin\\Debug\\Bamboo.Parsing.dll"
+
+include "..\\..\\scripts\\libraries\\Parsing.water"
+include "..\\..\\scripts\\libraries\\Surf.water"
+
+
+
+
+
+; EAC p.29
+test Literal FiniteAutomaton
+
+	var fa (dfa (nfa (literal "FEE" "fee")))
+
+	assert.equals fa.States.Length 4
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+	assert.equals fa.States[3] 3
+
+	assert.equals fa.Alphabet.Length 2
+	assert.equals fa.Alphabet[0] (to-char "e")
+	assert.equals fa.Alphabet[1] (to-char "f")
+
+	assert.equals fa.Transitions.Length 3
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "f")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "e")
+	assert.equals fa.Transitions[1].ToState 2
+	assert.equals fa.Transitions[2].FromState 2
+	assert.equals fa.Transitions[2].Character (to-char "e")
+	assert.equals fa.Transitions[2].ToState 3
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 3
+
+	assert.equals fa.Tokens.Length 1
+	assert.equals fa.Tokens[0].Name "FEE"
+	assert.equals fa.Tokens[0].Number 3
+
+end_test
+
+; EAC p.30
+test Literal FiniteAutomaton
+
+	var fa (dfa (nfa (literal "WHILE" "while")))
+
+	assert.equals fa.States.Length 6
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+	assert.equals fa.States[3] 3
+	assert.equals fa.States[4] 4
+	assert.equals fa.States[5] 5
+
+	assert.equals fa.Alphabet.Length 5
+	assert.equals fa.Alphabet[0] (to-char "e")
+	assert.equals fa.Alphabet[1] (to-char "h")
+	assert.equals fa.Alphabet[2] (to-char "i")
+	assert.equals fa.Alphabet[3] (to-char "l")
+	assert.equals fa.Alphabet[4] (to-char "w")
+
+	assert.equals fa.Transitions.Length 5
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "w")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "h")
+	assert.equals fa.Transitions[1].ToState 2
+	assert.equals fa.Transitions[2].FromState 2
+	assert.equals fa.Transitions[2].Character (to-char "i")
+	assert.equals fa.Transitions[2].ToState 3
+	assert.equals fa.Transitions[3].FromState 3
+	assert.equals fa.Transitions[3].Character (to-char "l")
+	assert.equals fa.Transitions[3].ToState 4
+	assert.equals fa.Transitions[4].FromState 4
+	assert.equals fa.Transitions[4].Character (to-char "e")
+	assert.equals fa.Transitions[4].ToState 5
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 5
+
+	assert.equals fa.Tokens.Length 1
+	assert.equals fa.Tokens[0].Name "WHILE"
+	assert.equals fa.Tokens[0].Number 5
+
+end_test
+
+; EAC p.30
+test Alternation FiniteAutomaton
+
+	var fa (dfa (nfa (alternation "" (literal "FEE" "fee") (literal "FIE" "fie"))))
+
+	assert.equals fa.States.Length 6
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+	assert.equals fa.States[3] 3
+	assert.equals fa.States[4] 4
+	assert.equals fa.States[5] 5
+
+	assert.equals fa.Alphabet.Length 3
+	assert.equals fa.Alphabet[0] (to-char "e")
+	assert.equals fa.Alphabet[1] (to-char "f")
+	assert.equals fa.Alphabet[2] (to-char "i")
+
+	assert.equals fa.Transitions.Length 5
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "f")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "e")
+	assert.equals fa.Transitions[1].ToState 2
+	assert.equals fa.Transitions[2].FromState 1
+	assert.equals fa.Transitions[2].Character (to-char "i")
+	assert.equals fa.Transitions[2].ToState 4
+	assert.equals fa.Transitions[3].FromState 2
+	assert.equals fa.Transitions[3].Character (to-char "e")
+	assert.equals fa.Transitions[3].ToState 3
+	assert.equals fa.Transitions[4].FromState 4
+	assert.equals fa.Transitions[4].Character (to-char "e")
+	assert.equals fa.Transitions[4].ToState 5
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 2
+	assert.equals fa.FinalStates[0] 3
+	assert.equals fa.FinalStates[1] 5
+
+	assert.equals fa.Tokens.Length 2
+	assert.equals fa.Tokens[0].Name "FEE"
+	assert.equals fa.Tokens[0].Number 3
+	assert.equals fa.Tokens[1].Name "FIE"
+	assert.equals fa.Tokens[1].Number 5
+
+end_test
+
+; EAC p.31
+test Alternation FiniteAutomaton
+
+	var fa (dfa (nfa (alternation "" (alternation "" (literal "FEE" "fee") (literal "FIE" "fie")) (literal "WHILE" "while"))))
+
+	assert.equals fa.States.Length 11
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+	assert.equals fa.States[3] 3
+	assert.equals fa.States[4] 4
+	assert.equals fa.States[5] 5
+	assert.equals fa.States[6] 6
+	assert.equals fa.States[7] 7
+	assert.equals fa.States[8] 8
+	assert.equals fa.States[9] 9
+	assert.equals fa.States[10] 10
+
+	assert.equals fa.Alphabet.Length 6
+	assert.equals fa.Alphabet[0] (to-char "e")
+	assert.equals fa.Alphabet[1] (to-char "f")
+	assert.equals fa.Alphabet[2] (to-char "h")
+	assert.equals fa.Alphabet[3] (to-char "i")
+	assert.equals fa.Alphabet[4] (to-char "l")
+	assert.equals fa.Alphabet[5] (to-char "w")
+
+	assert.equals fa.Transitions.Length 10
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "f")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 0
+	assert.equals fa.Transitions[1].Character (to-char "w")
+	assert.equals fa.Transitions[1].ToState 6
+	assert.equals fa.Transitions[2].FromState 1
+	assert.equals fa.Transitions[2].Character (to-char "e")
+	assert.equals fa.Transitions[2].ToState 2
+	assert.equals fa.Transitions[3].FromState 1
+	assert.equals fa.Transitions[3].Character (to-char "i")
+	assert.equals fa.Transitions[3].ToState 4
+	assert.equals fa.Transitions[4].FromState 2
+	assert.equals fa.Transitions[4].Character (to-char "e")
+	assert.equals fa.Transitions[4].ToState 3
+	assert.equals fa.Transitions[5].FromState 4
+	assert.equals fa.Transitions[5].Character (to-char "e")
+	assert.equals fa.Transitions[5].ToState 5
+	assert.equals fa.Transitions[6].FromState 6
+	assert.equals fa.Transitions[6].Character (to-char "h")
+	assert.equals fa.Transitions[6].ToState 7
+	assert.equals fa.Transitions[7].FromState 7
+	assert.equals fa.Transitions[7].Character (to-char "i")
+	assert.equals fa.Transitions[7].ToState 8
+	assert.equals fa.Transitions[8].FromState 8
+	assert.equals fa.Transitions[8].Character (to-char "l")
+	assert.equals fa.Transitions[8].ToState 9
+	assert.equals fa.Transitions[9].FromState 9
+	assert.equals fa.Transitions[9].Character (to-char "e")
+	assert.equals fa.Transitions[9].ToState 10
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 3
+	assert.equals fa.FinalStates[0] 3
+	assert.equals fa.FinalStates[1] 5
+	assert.equals fa.FinalStates[2] 10
+
+	assert.equals fa.Tokens.Length 3
+	assert.equals fa.Tokens[0].Name "FEE"
+	assert.equals fa.Tokens[0].Number 3
+	assert.equals fa.Tokens[1].Name "FIE"
+	assert.equals fa.Tokens[1].Number 5
+	assert.equals fa.Tokens[2].Name "WHILE"
+	assert.equals fa.Tokens[2].Number 10
+
+end_test
+
+; EAC p.34
+test FiniteAutomaton
+
+	var fa (dfa 
+		(nfa 
+			(alternation "" 
+				(literal "" "0") 
+				(concatenation "" 
+					(alternation "" (literal "" "1") (alternation "" (literal "" "2") (alternation "" (literal "" "3") (alternation "" (literal "" "4") (alternation "" (literal "" "5") (alternation "" (literal "" "6") (alternation "" (literal "" "7") (alternation "" (literal "" "8") (literal "" "9")))))))))
+					(repitition "" (alternation "" (literal "" "0") (alternation "" (literal "" "1") (alternation "" (literal "" "2") (alternation "" (literal "" "3") (alternation "" (literal "" "4") (alternation "" (literal "" "5") (alternation "" (literal "" "6") (alternation "" (literal "" "7") (alternation "" (literal "" "8") (literal "" "9")))))))))))
+				)
+			)
+		)
+	)
+
+	assert.equals fa.States.Length 3
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+
+	assert.equals fa.Alphabet.Length 10
+	assert.equals fa.Alphabet[0] (to-char "0")
+	assert.equals fa.Alphabet[1] (to-char "1")
+	assert.equals fa.Alphabet[2] (to-char "2")
+	assert.equals fa.Alphabet[3] (to-char "3")
+	assert.equals fa.Alphabet[4] (to-char "4")
+	assert.equals fa.Alphabet[5] (to-char "5")
+	assert.equals fa.Alphabet[6] (to-char "6")
+	assert.equals fa.Alphabet[7] (to-char "7")
+	assert.equals fa.Alphabet[8] (to-char "8")
+	assert.equals fa.Alphabet[9] (to-char "9")
+
+	assert.equals fa.Transitions.Length 20
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "0")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 0
+	assert.equals fa.Transitions[1].Character (to-char "1")
+	assert.equals fa.Transitions[1].ToState 2
+	assert.equals fa.Transitions[2].FromState 0
+	assert.equals fa.Transitions[2].Character (to-char "2")
+	assert.equals fa.Transitions[2].ToState 2
+	assert.equals fa.Transitions[3].FromState 0
+	assert.equals fa.Transitions[3].Character (to-char "3")
+	assert.equals fa.Transitions[3].ToState 2
+	assert.equals fa.Transitions[4].FromState 0
+	assert.equals fa.Transitions[4].Character (to-char "4")
+	assert.equals fa.Transitions[4].ToState 2
+	assert.equals fa.Transitions[5].FromState 0
+	assert.equals fa.Transitions[5].Character (to-char "5")
+	assert.equals fa.Transitions[5].ToState 2
+	assert.equals fa.Transitions[6].FromState 0
+	assert.equals fa.Transitions[6].Character (to-char "6")
+	assert.equals fa.Transitions[6].ToState 2
+	assert.equals fa.Transitions[7].FromState 0
+	assert.equals fa.Transitions[7].Character (to-char "7")
+	assert.equals fa.Transitions[7].ToState 2
+	assert.equals fa.Transitions[8].FromState 0
+	assert.equals fa.Transitions[8].Character (to-char "8")
+	assert.equals fa.Transitions[8].ToState 2
+	assert.equals fa.Transitions[9].FromState 0
+	assert.equals fa.Transitions[9].Character (to-char "9")
+	assert.equals fa.Transitions[9].ToState 2
+	assert.equals fa.Transitions[10].FromState 2
+	assert.equals fa.Transitions[10].Character (to-char "0")
+	assert.equals fa.Transitions[10].ToState 2
+	assert.equals fa.Transitions[11].FromState 2
+	assert.equals fa.Transitions[11].Character (to-char "1")
+	assert.equals fa.Transitions[11].ToState 2
+	assert.equals fa.Transitions[12].FromState 2
+	assert.equals fa.Transitions[12].Character (to-char "2")
+	assert.equals fa.Transitions[12].ToState 2
+	assert.equals fa.Transitions[13].FromState 2
+	assert.equals fa.Transitions[13].Character (to-char "3")
+	assert.equals fa.Transitions[13].ToState 2
+	assert.equals fa.Transitions[14].FromState 2
+	assert.equals fa.Transitions[14].Character (to-char "4")
+	assert.equals fa.Transitions[14].ToState 2
+	assert.equals fa.Transitions[15].FromState 2
+	assert.equals fa.Transitions[15].Character (to-char "5")
+	assert.equals fa.Transitions[15].ToState 2
+	assert.equals fa.Transitions[16].FromState 2
+	assert.equals fa.Transitions[16].Character (to-char "6")
+	assert.equals fa.Transitions[16].ToState 2
+	assert.equals fa.Transitions[17].FromState 2
+	assert.equals fa.Transitions[17].Character (to-char "7")
+	assert.equals fa.Transitions[17].ToState 2
+	assert.equals fa.Transitions[18].FromState 2
+	assert.equals fa.Transitions[18].Character (to-char "8")
+	assert.equals fa.Transitions[18].ToState 2
+	assert.equals fa.Transitions[19].FromState 2
+	assert.equals fa.Transitions[19].Character (to-char "9")
+	assert.equals fa.Transitions[19].ToState 2
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 2
+	assert.equals fa.FinalStates[0] 1
+	assert.equals fa.FinalStates[1] 2
+
+end_test
+
+; EAC p.41
+test Literal FiniteAutomaton
+
+	var 0-9 (alternation "" (literal "" "0") (alternation "" (literal "" "1") (alternation "" (literal "" "2") (alternation "" (literal "" "3") (alternation "" (literal "" "4") (alternation "" (literal "" "5") (alternation "" (literal "" "6") (alternation "" (literal "" "7") (alternation "" (literal "" "8") (literal "" "9"))))))))))
+	var fa (dfa (nfa (concatenation "" (literal "" "r") (concatenation "" 0-9 (repitition "" 0-9)))))
+
+	assert.equals fa.States.Length 3
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+
+	assert.equals fa.Alphabet.Length 11
+	assert.equals fa.Alphabet[0] (to-char "0")
+	assert.equals fa.Alphabet[1] (to-char "1")
+	assert.equals fa.Alphabet[2] (to-char "2")
+	assert.equals fa.Alphabet[3] (to-char "3")
+	assert.equals fa.Alphabet[4] (to-char "4")
+	assert.equals fa.Alphabet[5] (to-char "5")
+	assert.equals fa.Alphabet[6] (to-char "6")
+	assert.equals fa.Alphabet[7] (to-char "7")
+	assert.equals fa.Alphabet[8] (to-char "8")
+	assert.equals fa.Alphabet[9] (to-char "9")
+	assert.equals fa.Alphabet[10] (to-char "r")
+
+	assert.equals fa.Transitions.Length 21
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "r")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "0")
+	assert.equals fa.Transitions[1].ToState 2
+	assert.equals fa.Transitions[2].FromState 1
+	assert.equals fa.Transitions[2].Character (to-char "1")
+	assert.equals fa.Transitions[2].ToState 2
+	assert.equals fa.Transitions[3].FromState 1
+	assert.equals fa.Transitions[3].Character (to-char "2")
+	assert.equals fa.Transitions[3].ToState 2
+	assert.equals fa.Transitions[4].FromState 1
+	assert.equals fa.Transitions[4].Character (to-char "3")
+	assert.equals fa.Transitions[4].ToState 2
+	assert.equals fa.Transitions[5].FromState 1
+	assert.equals fa.Transitions[5].Character (to-char "4")
+	assert.equals fa.Transitions[5].ToState 2
+	assert.equals fa.Transitions[6].FromState 1
+	assert.equals fa.Transitions[6].Character (to-char "5")
+	assert.equals fa.Transitions[6].ToState 2
+	assert.equals fa.Transitions[7].FromState 1
+	assert.equals fa.Transitions[7].Character (to-char "6")
+	assert.equals fa.Transitions[7].ToState 2
+	assert.equals fa.Transitions[8].FromState 1
+	assert.equals fa.Transitions[8].Character (to-char "7")
+	assert.equals fa.Transitions[8].ToState 2
+	assert.equals fa.Transitions[9].FromState 1
+	assert.equals fa.Transitions[9].Character (to-char "8")
+	assert.equals fa.Transitions[9].ToState 2
+	assert.equals fa.Transitions[10].FromState 1
+	assert.equals fa.Transitions[10].Character (to-char "9")
+	assert.equals fa.Transitions[10].ToState 2
+	assert.equals fa.Transitions[11].FromState 2
+	assert.equals fa.Transitions[11].Character (to-char "0")
+	assert.equals fa.Transitions[11].ToState 2
+	assert.equals fa.Transitions[12].FromState 2
+	assert.equals fa.Transitions[12].Character (to-char "1")
+	assert.equals fa.Transitions[12].ToState 2
+	assert.equals fa.Transitions[13].FromState 2
+	assert.equals fa.Transitions[13].Character (to-char "2")
+	assert.equals fa.Transitions[13].ToState 2
+	assert.equals fa.Transitions[14].FromState 2
+	assert.equals fa.Transitions[14].Character (to-char "3")
+	assert.equals fa.Transitions[14].ToState 2
+	assert.equals fa.Transitions[15].FromState 2
+	assert.equals fa.Transitions[15].Character (to-char "4")
+	assert.equals fa.Transitions[15].ToState 2
+	assert.equals fa.Transitions[16].FromState 2
+	assert.equals fa.Transitions[16].Character (to-char "5")
+	assert.equals fa.Transitions[16].ToState 2
+	assert.equals fa.Transitions[17].FromState 2
+	assert.equals fa.Transitions[17].Character (to-char "6")
+	assert.equals fa.Transitions[17].ToState 2
+	assert.equals fa.Transitions[18].FromState 2
+	assert.equals fa.Transitions[18].Character (to-char "7")
+	assert.equals fa.Transitions[18].ToState 2
+	assert.equals fa.Transitions[19].FromState 2
+	assert.equals fa.Transitions[19].Character (to-char "8")
+	assert.equals fa.Transitions[19].ToState 2
+	assert.equals fa.Transitions[20].FromState 2
+	assert.equals fa.Transitions[20].Character (to-char "9")
+	assert.equals fa.Transitions[20].ToState 2
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 2
+
+end_test
+
+; EAC p.46
+test Literal FiniteAutomaton
+
+	var fa (dfa (nfa (concatenation "" (repitition "" (literal "" "a")) (concatenation "" (literal "" "a") (literal "" "b")))))
+
+	assert.equals fa.States.Length 3
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+
+	assert.equals fa.Alphabet.Length 2
+	assert.equals fa.Alphabet[0] (to-char "a")
+	assert.equals fa.Alphabet[1] (to-char "b")
+
+	assert.equals fa.Transitions.Length 3
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "a")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "a")
+	assert.equals fa.Transitions[1].ToState 1
+	assert.equals fa.Transitions[2].FromState 1
+	assert.equals fa.Transitions[2].Character (to-char "b")
+	assert.equals fa.Transitions[2].ToState 2
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 2
+
+end_test
+
+; EAC p.47
+test Literal FiniteAutomaton
+
+	var fa (dfa (nfa (concatenation "" (literal "" "a") (concatenation "" (repitition "" (literal "" "a")) (literal "" "b")))))
+
+	assert.equals fa.States.Length 3
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+
+	assert.equals fa.Alphabet.Length 2
+	assert.equals fa.Alphabet[0] (to-char "a")
+	assert.equals fa.Alphabet[1] (to-char "b")
+
+	assert.equals fa.Transitions.Length 3
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "a")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "a")
+	assert.equals fa.Transitions[1].ToState 1
+	assert.equals fa.Transitions[2].FromState 1
+	assert.equals fa.Transitions[2].Character (to-char "b")
+	assert.equals fa.Transitions[2].ToState 2
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 2
+
+end_test
+
+; EAC p.49
+test Literal FiniteAutomaton
+
+	var fa (dfa (nfa (concatenation "" (literal "" "a") (repitition "" (alternation "" (literal "" "b") (literal "" "c"))))))
+
+	assert.equals fa.States.Length 2
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+
+	assert.equals fa.Alphabet.Length 3
+	assert.equals fa.Alphabet[0] (to-char "a")
+	assert.equals fa.Alphabet[1] (to-char "b")
+	assert.equals fa.Alphabet[2] (to-char "c")
+
+	assert.equals fa.Transitions.Length 3
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "a")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "b")
+	assert.equals fa.Transitions[1].ToState 1
+	assert.equals fa.Transitions[2].FromState 1
+	assert.equals fa.Transitions[2].Character (to-char "c")
+	assert.equals fa.Transitions[2].ToState 1
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 1
+
+end_test
+
+test Literal FiniteAutomaton
+
+	var fa (dfa (nfa (literal "FIE" "fie")))
+
+	assert.equals fa.States.Length 4
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+	assert.equals fa.States[3] 3
+
+	assert.equals fa.Alphabet.Length 3
+	assert.equals fa.Alphabet[0] (to-char "e")
+	assert.equals fa.Alphabet[1] (to-char "f")
+	assert.equals fa.Alphabet[2] (to-char "i")
+
+	assert.equals fa.Transitions.Length 3
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "f")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "i")
+	assert.equals fa.Transitions[1].ToState 2
+	assert.equals fa.Transitions[2].FromState 2
+	assert.equals fa.Transitions[2].Character (to-char "e")
+	assert.equals fa.Transitions[2].ToState 3
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 3
+
+end_test
+
+test Concatenation FiniteAutomaton
+
+	var fa (dfa (nfa (concatenation "" (concatenation "" (literal "" "f") (literal "" "e")) (literal "" "e"))))
+
+	assert.equals fa.States.Length 4
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+	assert.equals fa.States[3] 3
+
+	assert.equals fa.Alphabet.Length 2
+	assert.equals fa.Alphabet[0] (to-char "e")
+	assert.equals fa.Alphabet[1] (to-char "f")
+
+	assert.equals fa.Transitions.Length 3
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "f")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "e")
+	assert.equals fa.Transitions[1].ToState 2
+	assert.equals fa.Transitions[2].FromState 2
+	assert.equals fa.Transitions[2].Character (to-char "e")
+	assert.equals fa.Transitions[2].ToState 3
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 3
+
+end_test
+
+test Repitition FiniteAutomaton
+
+	var fa (dfa (nfa (repitition "" (literal "" "A"))))
+
+	assert.equals fa.States.Length 1
+	assert.equals fa.States[0] 0
+
+	assert.equals fa.Alphabet.Length 1
+	assert.equals fa.Alphabet[0] (to-char "A")
+
+	assert.equals fa.Transitions.Length 1
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "A")
+	assert.equals fa.Transitions[0].ToState 0
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 0
+
+end_test
+
+test Repitition FiniteAutomaton
+
+	var fa (dfa (nfa (repitition "" (concatenation "" (literal "" "A") (literal "" "B")))))
+
+	assert.equals fa.States.Length 2
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+
+	assert.equals fa.Alphabet.Length 2
+	assert.equals fa.Alphabet[0] (to-char "A")
+	assert.equals fa.Alphabet[1] (to-char "B")
+
+	assert.equals fa.Transitions.Length 2
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "A")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 1
+	assert.equals fa.Transitions[1].Character (to-char "B")
+	assert.equals fa.Transitions[1].ToState 0
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 1
+	assert.equals fa.FinalStates[0] 0
+
+end_test
+
+test Repitition FiniteAutomaton
+
+	var fa (dfa (nfa (alternation "" (literal "" "a") (repitition "" (literal "" "b")))))
+
+	assert.equals fa.States.Length 3
+	assert.equals fa.States[0] 0
+	assert.equals fa.States[1] 1
+	assert.equals fa.States[2] 2
+
+	assert.equals fa.Alphabet.Length 2
+	assert.equals fa.Alphabet[0] (to-char "a")
+	assert.equals fa.Alphabet[1] (to-char "b")
+
+	assert.equals fa.Transitions.Length 3
+	assert.equals fa.Transitions[0].FromState 0
+	assert.equals fa.Transitions[0].Character (to-char "a")
+	assert.equals fa.Transitions[0].ToState 1
+	assert.equals fa.Transitions[1].FromState 0
+	assert.equals fa.Transitions[1].Character (to-char "b")
+	assert.equals fa.Transitions[1].ToState 2
+	assert.equals fa.Transitions[2].FromState 2
+	assert.equals fa.Transitions[2].Character (to-char "b")
+	assert.equals fa.Transitions[2].ToState 2
+
+	assert.equals fa.StartState 0
+
+	assert.equals fa.FinalStates.Length 3
+	assert.equals fa.FinalStates[0] 0
+	assert.equals fa.FinalStates[1] 1
+	assert.equals fa.FinalStates[2] 2
+
+end_test

@@ -1,0 +1,98 @@
+// ------------------------------------------------------------------------------
+// 
+// Copyright (C) 2005-2006 Swampware, Inc.
+// 
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// 
+// ------------------------------------------------------------------------------
+using System;
+using NUnit.Framework;
+
+namespace Swampware.BambooShoot.Differences.Tests
+{
+	/// <summary>
+	/// Summary description for TDiffer.
+	/// </summary>
+	[TestFixture]
+	public class TDiffer
+	{
+
+		public TDiffer()
+		{
+		}
+
+		[Test]
+		public void Diff1()
+		{
+			PRINT(Resources.RES_1A, Resources.RES_1A);
+
+			System.IO.StreamReader reader1 = new System.IO.StreamReader( READ(Resources.RES_1A) );
+			System.IO.StreamReader reader2 = new System.IO.StreamReader( READ(Resources.RES_1A) );
+
+			Assert.AreEqual(reader1.ReadToEnd(), reader2.ReadToEnd());
+		}
+
+		[Test]
+		public void Diff2()
+		{
+			PRINT(Resources.RES_1A, Resources.RES_1B);
+		}
+
+		private void PRINT(string resource1, string resource2)
+		{
+			System.Console.WriteLine(":PRINT " + resource1 + " diff " + resource2);
+
+			System.IO.StreamReader reader1 = new System.IO.StreamReader( READ(resource1) );
+			System.IO.StreamReader reader2 = new System.IO.StreamReader( READ(resource2) );
+
+			Swampware.BambooShoot.Differences.DiffList diffList = Differ.Diff(reader1, reader2);
+
+			foreach(Swampware.BambooShoot.Differences.DiffItem diffItem in diffList)
+			{
+				switch(diffItem.Status)
+				{
+					case Swampware.BambooShoot.Differences.DiffStatus.Inserted :
+					{
+						System.Console.Write("+");
+						System.Console.Write("\t");
+						System.Console.Write(diffItem.Position);
+						System.Console.Write("\t");
+						System.Console.WriteLine(diffItem.Value.ToString());
+						break;
+					}
+					case Swampware.BambooShoot.Differences.DiffStatus.Deleted :
+					{
+						System.Console.Write("-");
+						System.Console.Write("\t");
+						System.Console.Write(diffItem.Position);
+						System.Console.Write("\t");
+						System.Console.WriteLine(diffItem.Value.ToString());
+						break;
+					}
+				}
+
+			}
+
+			System.Console.WriteLine();
+			System.Console.WriteLine();
+		}
+
+		public static System.IO.Stream READ(string resource)
+		{
+			return typeof(Resources).Assembly.GetManifestResourceStream(resource);
+		}
+
+	}
+}
